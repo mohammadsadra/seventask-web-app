@@ -1,0 +1,273 @@
+<div class="list-container d-flex flex-column" [style.height]="height + 'px'">
+
+  <div class="p-2 page-info">
+    <div class="page-info-logo">
+      <span style="font-size: 25px" class="seventask-icon-pages-my-tasks"></span>
+    </div>
+    <div class="page-info-title">
+      {{'Task.myTasks' | translate}}
+    </div>
+    <div class="page-number-title d-flex flex-row justify-content-center">
+
+      <mat-spinner *ngIf="showSpinner"
+        class="mat-spinner-small mat-spinner-showNumber ml-1 mr-1"
+        strokeWidth="3" [diameter]="20">
+      </mat-spinner>
+
+      <span *ngIf="!showSpinner"
+        class="ml-1 mr-1" style="color: #1EC1C3">{{taskNumber | numToArabic}}
+      </span>
+      <span *ngIf="taskNumber> 1"> {{'Task.tasksToDo' | translate}}</span>
+      <span *ngIf="taskNumber<= 1"> {{'Task.taskToDo' | translate}}</span>
+    </div>
+  </div>
+
+  <div *ngIf="!showGetTeamsAndProjectsLoading && !isGanttSelected" class="all-item-list-container p-2 d-flex flex-column">
+
+    <div (click)="openAllTasks($event);" class="p-2 all-items d-flex flex-row item-name-hover">
+      <div style="overflow-y: hidden" class="p-2 text"
+        [ngClass]="activeTab == 'all' ? 'active-tab' : 'tab'">{{'Task.allTasks' | translate}}</div>
+      <div *ngIf="activeTab == 'all'" class="selected-pointer" style="margin-inline-start: auto"
+        [style.border-radius]="direction == 'ltr' ? '10px 0px 0px 10px' : '0px 10px 10px 0px'"></div>
+    </div>
+
+    <div class="items-list p-2 d-flex flex-column">
+      <div (click)="openPersonalTasks($event);"
+        class="item-title d-flex flex-row p-2 item-name-hover">
+        <div style="overflow-y: hidden" class="p-2 text"
+          [ngClass]="activeTab =='personal-Tasks' ? 'active-tab' : 'tab'">{{'Task.personalTasks' | translate}}</div>
+        <div *ngIf="activeTab == 'personal-Tasks'" class="selected-pointer" style="margin-inline-start: auto"
+          [style.border-radius]="direction == 'ltr' ? '10px 0px 0px 10px' : '0px 10px 10px 0px'"></div>
+      </div>
+    </div>
+
+    <div class="items-list p-2 d-flex flex-column">
+      <div class="item-title d-flex flex-row p-2 item-name-hover">
+        <div (click)="openPersonalProjectTasks($event)" style="overflow-y: hidden" class="p-2 text"
+          [ngClass]="activeTab == 'personal' ? 'active-tab' : 'tab'">{{'Task.personalProjects'| translate}}</div>
+        <div class="selected-pointer" style="margin-inline-start: auto" *ngIf="activeTab == 'personal'"
+          [style.border-radius]="direction == 'ltr' ? '10px 0px 0px 10px' : '0px 10px 10px 0px'"></div>
+      </div>
+      <div *ngFor="let project of activeProjects">
+        <div class="item-name" *ngIf="null == project.teamId">
+          <div class="item-name-hover d-flex flex-row">
+            <div class="p-2 text" style="overflow-y: hidden" (click)="openProjectTasks(project,$event)"
+              [ngClass]="activeTab == project.id.toString() + 'project' ? 'active-tab' : 'tab'">{{project.name}}</div>
+            <div class="selected-pointer" style="margin-inline-start: auto"
+              *ngIf="activeTab == project.id.toString() + 'project'"
+              [style.border-radius]="direction == 'ltr' ? '10px 0px 0px 10px' : '0px 10px 10px 0px'"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="items-list p-2 d-flex flex-column" *ngFor="let team of teams">
+      <div class="item-title d-flex flex-row p-2 item-name-hover"
+        (click)="openTeamTasks(team,$event)">
+        <div class="p-2 text" style="overflow-y: hidden"
+          [ngClass]="activeTab == team.id.toString() ? 'active-tab' : 'tab'">
+          {{team.name}}
+        </div>
+        <div class="selected-pointer" style="margin-inline-start: auto" *ngIf="activeTab == team.id.toString()"
+          [style.border-radius]="direction == 'ltr' ? '10px 0px 0px 10px' : '0px 10px 10px 0px'"></div>
+      </div>
+      <div *ngFor="let project of activeProjects">
+        <div class="item-name" *ngIf="team.id == project.teamId">
+          <div class="item-name-hover d-flex flex-row">
+            <div class="p-2 text" style="overflow-y: hidden" (click)="openProjectTasks(project,$event)"
+              [ngClass]="activeTab == project.id.toString() + 'project' ? 'active-tab' : 'tab'">{{project.name}}</div>
+            <div class="selected-pointer" style="margin-inline-start: auto"
+              *ngIf="activeTab == project.id.toString() + 'project'"
+              [style.border-radius]="direction == 'ltr' ? '10px 0px 0px 10px' : '0px 10px 10px 0px'"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+
+  <div *ngIf="!showGetTeamsAndProjectsLoading && isGanttSelected" id="left-panel" class="gantt-chart-left-panel" (scroll)="scrollHandler($event)">
+
+    <div class="items-list p-2 d-flex flex-column">
+      <div class="item-title d-flex flex-row p-2 justify-content-around align-items-center">
+        <div class="expand-button-container"
+              [@fadeInOut]="((projectsTasks[null] && projectsTasks[null].length !== 0) || (projectsNoDateTasks[null] && projectsNoDateTasks[null].length !== 0)) ? 'show' : 'hide'">
+              <div class="expand-button"
+              *ngIf="((projectsTasks[null] && projectsTasks[null].length !== 0) || (projectsNoDateTasks[null] && projectsNoDateTasks[null].length !== 0))"
+              (click)="showTasksOfProject[null]=!showTasksOfProject[null]; updateShowingTimelinesOfProjects(null)">
+                <span class="seventask-icon-calendar-back expand-icon"
+                [style]="'transform: rotate(' + (showTasksOfProject[null] ? 90 : 270) + 'deg);'"></span>
+              </div>
+        </div>
+        <div class="project-name">
+          <div class="text team-title">{{'Task.personalTasks'| translate}}</div>
+        </div>
+      </div>
+      <div class="tasks-container" *ngIf="showTasksOfProject[null]" [@listAnimation]>
+        <div class="task" *ngFor="let task of projectsTasks[null]">
+          <div class="expand-button-container"></div>
+          <div [id]="task.id" class="task-title text" dir="auto">
+            {{ task.title }}
+          </div>
+        </div>
+      </div>
+      <div class="tasks-container" *ngIf="showNoDateTasksOfProject[null] && showTasksOfProject[null]" [@listAnimation]>
+        <div class="task" *ngFor="let task of projectsNoDateTasks[null]">
+          <div class="expand-button-container"></div>
+          <div [id]="task.id" class="task-title text" dir="auto">
+            {{ task.title }}
+          </div>
+        </div>
+      </div>
+      <div class="show-hide-tasks-button" *ngIf="showTasksOfProject[null] && projectsNoDateTasks[null] && projectsNoDateTasks[null].length !== 0"
+      (click)="showNoDateTasksOfProject[null]=!showNoDateTasksOfProject[null]; updateShowingTimelinesOfProjects(null)">
+        <div class="expand-button-container"></div>
+        {{ showNoDateTasksOfProject[null] ? ('Task.hideNoDateTasks' | translate) : ('Task.showNoDateTasks' | translate) }}
+      </div>
+    </div>
+
+    <div class="items-list p-2 d-flex flex-column">
+      <div class="item-title d-flex flex-row p-2 justify-content-around align-items-center">
+        <div class="expand-button-container"></div>
+        <div class="project-name">
+          <div class="text team-title">{{'Task.personalProjects'| translate}}</div>
+        </div>
+      </div>
+      <div *ngFor="let project of activeProjects">
+        <div class="gantt-item-name" *ngIf="null == project.teamId">
+          <div class="d-flex flex-row justify-content-around align-items-center">
+            <div class="expand-button-container"
+              [@fadeInOut]="((projectsTasks[project.id] && projectsTasks[project.id].length !== 0) || (projectsNoDateTasks[project.id] && projectsNoDateTasks[project.id].length !== 0)) ? 'show' : 'hide'">
+              <div class="expand-button"
+              *ngIf="((projectsTasks[project.id] && projectsTasks[project.id].length !== 0) || (projectsNoDateTasks[project.id] && projectsNoDateTasks[project.id].length !== 0))"
+              (click)="showTasksOfProject[project.id]=!showTasksOfProject[project.id]; updateShowingTimelinesOfProjects(project.id)">
+                <span class="seventask-icon-calendar-back expand-icon"
+                [style]="'transform: rotate(' + (showTasksOfProject[project.id] ? 90 : 270) + 'deg);'"></span>
+              </div>
+            </div>
+            <div class="project-name">
+              <div class="text">{{project.name}}</div>
+            </div>
+          </div>
+          <div class="tasks-container" *ngIf="showTasksOfProject[project.id]" [@listAnimation]>
+            <div class="task" *ngFor="let task of projectsTasks[project.id]">
+              <div class="expand-button-container"></div>
+              <div [id]="task.id" class="task-title text" dir="auto">
+                {{ task.title }}
+              </div>
+            </div>
+          </div>
+          <div class="tasks-container" *ngIf="showNoDateTasksOfProject[project.id] && showTasksOfProject[project.id]" [@listAnimation]>
+            <div class="task" *ngFor="let task of projectsNoDateTasks[project.id]">
+              <div class="expand-button-container"></div>
+              <div [id]="task.id" class="task-title text" dir="auto">
+                {{ task.title }}
+              </div>
+            </div>
+          </div>
+          <div class="show-hide-tasks-button" *ngIf="showTasksOfProject[project.id] && projectsNoDateTasks[project.id] && projectsNoDateTasks[project.id].length !== 0"
+          (click)="showNoDateTasksOfProject[project.id]=!showNoDateTasksOfProject[project.id]; updateShowingTimelinesOfProjects(project.id)">
+            <div class="expand-button-container"></div>
+            {{ showNoDateTasksOfProject[project.id] ? ('Task.hideNoDateTasks' | translate) : ('Task.showNoDateTasks' | translate) }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="items-list p-2 d-flex flex-column" *ngFor="let team of teams">
+      <div class="item-title d-flex flex-row p-2 justify-content-around align-items-center">
+        <div class="expand-button-container"></div>
+        <div class="project-name">
+          <div class="text team-title">{{team.name}}</div>
+        </div>
+      </div>
+      <div *ngFor="let project of activeProjects">
+        <div class="gantt-item-name" *ngIf="team.id == project.teamId">
+          <div class="d-flex flex-row align-items-center justify-content-end">
+            <div class="expand-button-container"
+              [@fadeInOut]="((projectsTasks[project.id] && projectsTasks[project.id].length !== 0) || (projectsNoDateTasks[project.id] && projectsNoDateTasks[project.id].length !== 0)) ? 'show' : 'hide'">
+              <div class="expand-button"
+              *ngIf="((projectsTasks[project.id] && projectsTasks[project.id].length !== 0) || (projectsNoDateTasks[project.id] && projectsNoDateTasks[project.id].length !== 0))"
+              (click)="showTasksOfProject[project.id]=!showTasksOfProject[project.id]; updateShowingTimelinesOfProjects(project.id)">
+                <span class="seventask-icon-calendar-back expand-icon"
+                [style]="'transform: rotate(' + (showTasksOfProject[project.id] ? 90 : 270) + 'deg);'"></span>
+              </div>
+            </div>
+            <div class="project-name">
+              <div class="text">{{project.name}}</div>
+            </div>
+          </div>
+          <div class="tasks-container" *ngIf="showTasksOfProject[project.id]" [@listAnimation]>
+            <div class="task" *ngFor="let task of projectsTasks[project.id]">
+              <div class="expand-button-container"></div>
+              <div [id]="task.id" class="task-title text" dir="auto">
+                {{ task.title }}
+              </div>
+            </div>
+          </div>
+          <div class="tasks-container" *ngIf="showNoDateTasksOfProject[project.id] && showTasksOfProject[project.id]" [@listAnimation]>
+            <div class="task" *ngFor="let task of projectsNoDateTasks[project.id]">
+              <div class="expand-button-container"></div>
+              <div [id]="task.id" class="task-title text" dir="auto">
+                {{ task.title }}
+              </div>
+            </div>
+          </div>
+          <div class="show-hide-tasks-button" *ngIf="showTasksOfProject[project.id] && projectsNoDateTasks[project.id] && projectsNoDateTasks[project.id].length !== 0"
+          (click)="showNoDateTasksOfProject[project.id]=!showNoDateTasksOfProject[project.id]; updateShowingTimelinesOfProjects(project.id)">
+            <div class="expand-button-container"></div>
+            {{ showNoDateTasksOfProject[project.id] ? ('Task.hideNoDateTasks' | translate) : ('Task.showNoDateTasks' | translate) }}
+          </div>
+        </div>
+      </div>
+      <div class="gantt-item-name" *ngIf="(teamsWithoutProjectsTasks[team.id] && teamsWithoutProjectsTasks[team.id].length !== 0) || (teamsWithoutProjectsNoDateTasks[team.id] && teamsWithoutProjectsNoDateTasks[team.id].length !== 0)">
+        <div class="d-flex flex-row justify-content-around align-items-center">
+          <div class="expand-button-container"
+            [@fadeInOut]="(teamsWithoutProjectsTasks[team.id] && teamsWithoutProjectsTasks[team.id].length !== 0) || (teamsWithoutProjectsNoDateTasks[team.id] && teamsWithoutProjectsNoDateTasks[team.id].length !== 0) ? 'show' : 'hide'">
+            <div class="expand-button"
+            *ngIf="(teamsWithoutProjectsTasks[team.id] && teamsWithoutProjectsTasks[team.id].length !== 0) || (teamsWithoutProjectsNoDateTasks[team.id] && teamsWithoutProjectsNoDateTasks[team.id].length !== 0)"
+            (click)="showTasksOfTeam[team.id]=!showTasksOfTeam[team.id]; updateShowingTimelinesOfTeams(team.id)">
+              <span class="seventask-icon-calendar-back expand-icon"
+              [style]="'transform: rotate(' + (showTasksOfTeam[team.id] ? 90 : 270) + 'deg);'"></span>
+            </div>
+          </div>
+          <div class="project-name">
+            <div class="text">{{'Task.noProjectTasks' | translate}}</div>
+          </div>
+        </div>
+        <div class="tasks-container" *ngIf="showTasksOfTeam[team.id]" [@listAnimation]>
+          <div class="task" *ngFor="let task of teamsWithoutProjectsTasks[team.id]">
+            <div class="expand-button-container"></div>
+            <div [id]="task.id" class="task-title text" dir="auto">
+              {{ task.title }}
+            </div>
+          </div>
+        </div>
+        <div class="tasks-container" *ngIf="showNoDateTasksOfTeam[team.id] && showTasksOfTeam[team.id]" [@listAnimation]>
+          <div class="task" *ngFor="let task of teamsWithoutProjectsNoDateTasks[team.id]">
+            <div class="expand-button-container"></div>
+            <div [id]="task.id" class="task-title text" dir="auto">
+              {{ task.title }}
+            </div>
+          </div>
+        </div>
+        <div class="show-hide-tasks-button" *ngIf="showTasksOfTeam[team.id] && teamsWithoutProjectsNoDateTasks[team.id] && teamsWithoutProjectsNoDateTasks[team.id].length !== 0"
+        (click)="showNoDateTasksOfTeam[team.id]=!showNoDateTasksOfTeam[team.id]; updateShowingTimelinesOfTeams(team.id)">
+          <div class="expand-button-container"></div>
+          {{ showNoDateTasksOfTeam[team.id] ? ('Task.hideNoDateTasks' | translate) : ('Task.showNoDateTasks' | translate) }}
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+
+  <div *ngIf="showGetTeamsAndProjectsLoading" class="loading-container">
+    <seventask-spinner></seventask-spinner>
+    <!--    <div style="margin-top: 10px">-->
+    <!--      {{'Task.loadingLeftNavBarOfTasks' | translate}}-->
+    <!--    </div>-->
+  </div>
+
+</div>

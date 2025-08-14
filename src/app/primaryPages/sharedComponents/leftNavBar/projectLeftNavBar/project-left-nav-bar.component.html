@@ -1,0 +1,73 @@
+<div class="list-container d-flex flex-column" [style.height]="height + 'px'" dir="auto">
+
+  <div class="p-2 page-info">
+    <div class="page-info-logo">
+      <span style="font-size: 25px" class="seventask-icon-pages-my-projects"></span>
+    </div>
+    <div class="page-info-title">
+      {{ 'Project.myProjectTitle' | translate}}
+    </div>
+    <div class="page-number-title d-flex flex-row justify-content-center">
+
+      <mat-spinner *ngIf="showSpinner"
+        class="mat-spinner-small mat-spinner-showNumber ml-1 mr-1"
+        strokeWidth="3" [diameter]="20">
+      </mat-spinner>
+
+      <span *ngIf="!showSpinner"
+        class="ml-1 mr-1" style="color: #1EC1C3">
+        {{activeProjects.length | numToArabic}}</span>
+      <span *ngIf="activeProjects.length> 1" > {{ 'Project.openProjectTitle' | translate}}</span>
+      <span *ngIf="activeProjects.length<=1"> {{ 'Project.openProject' | translate}}</span>
+    </div>
+  </div>
+
+  <div *ngIf="!showTeamsAndProjectsLoading" class="all-item-list-container p-2 d-flex flex-column">
+
+    <div class="p-2 all-items d-flex flex-row item-name-hover" (click)="openAllProject();changeViewer('all')"
+      [ngClass]="activeTab == 'all' ? 'active-tab' : 'tab'">
+      <div style="overflow-y: hidden;" class="p-2 text">{{ 'Project.allProjectTitle' | translate}}</div>
+      <div class="selected-pointer" style="margin-inline-start: auto" *ngIf="activeTab == 'all'"
+        [style.border-radius]="direction == 'ltr' ? '10px 0px 0px 10px' : '0px 10px 10px 0px'"></div>
+    </div>
+
+    <div class="items-list p-2 d-flex flex-column">
+      <div class="item-title d-flex flex-row p-2 item-name-hover" (click)="changeViewer('personal')"
+        [ngClass]="activeTab == 'personal' ? 'active-tab' : 'tab'">
+        <div style="overflow-y: hidden;" class="p-2 text">{{ 'Project.personalProjectTitle' | translate}}</div>
+        <div class="selected-pointer" style="margin-inline-start: auto" *ngIf="activeTab == 'personal'"
+          [style.border-radius]="direction == 'ltr' ? '10px 0px 0px 10px' : '0px 10px 10px 0px'"></div>
+      </div>
+      <div *ngFor="let project of activeProjects">
+        <div class="item-name" *ngIf="project.teamId == null" (click)="openAllProject();changeViewer('personal')">
+          <div class="item-name-hover text" (click)="openProjectOverview(project.id)">
+            {{project.name}}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="items-list p-2 d-flex flex-column" *ngFor="let team of teams">
+      <div class="item-title d-flex flex-row p-2 item-name-hover" (click)="openAllProject();changeViewer(team.id.toString())"
+        [ngClass]="activeTab == team.id.toString() ? 'active-tab' : 'tab'">
+        <div style="overflow-y: hidden;" class="p-2 text">{{team.name}}</div>
+        <div class="selected-pointer" style="margin-inline-start: auto" *ngIf="activeTab == team.id.toString()"
+          [style.border-radius]="direction == 'ltr' ? '10px 0px 0px 10px' : '0px 10px 10px 0px'"></div>
+      </div>
+      <div *ngFor="let project of activeProjects">
+        <div class="item-name" *ngIf="team.id == project.teamId" (click)="openProjectOverview(project.id)">
+          <div class="item-name-hover text">
+            {{project.name}}
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div *ngIf="showTeamsAndProjectsLoading" class="loading-container">
+    <seventask-spinner [loadingType]="1"></seventask-spinner>
+    <!--    <div style="margin-top: 10px;color: #2E4A77;">{{'Project.loadingLeftNavBarOfProjects' | translate}}</div>-->
+  </div>
+
+</div>

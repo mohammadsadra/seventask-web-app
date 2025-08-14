@@ -1,0 +1,466 @@
+<div style="margin-bottom: 50px;">
+  <div [ngSwitch]="selectedView">
+    <div *ngSwitchCase="'day'">
+      <div class="week-day-nav-container">
+        <div class="week-day-nav">
+          <div class="week-navigator" (click)="addToCurrentDay(-1, 'day')">
+          <span class="seventask-icon-calendar-back week-navigator-icon"
+                [style]="'transform: rotate(' + navIconRotateDegree + 'deg)'"></span>
+          </div>
+          <div style="width: 90%;" [@valueChange]="visibleDates">
+            <div style="width: 100% !important;" class="week-day-nav-item-container">
+              <div [ngSwitch]="calendarData.firstCalendar" class="week-day-nav-item">
+                <div *ngSwitchCase="calendarType.GEORGIAN">
+                  {{ selectedDayAbbr + ' ' +
+                (visibleDates[0].momentDate.toDate()|date:'d')}}
+                </div>
+                <div *ngSwitchCase="calendarType.JALALI">
+                  {{ selectedDayAbbr + ' ' +
+                (visibleDates[0].momentDate.toDate() | getJalaliDate:'D') }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="week-navigator" (click)="addToCurrentDay(1, 'day')">
+          <span class="seventask-icon-calendar-back week-navigator-icon"
+                [style]="'transform: rotate(' + (180-navIconRotateDegree) + 'deg);'"></span>
+          </div>
+        </div>
+
+        <div class="week-row all-day">
+          <div class="all-day-text" [style.height.px]="allDaySectionHeight + 10">
+            {{ 'Calendar.NewEvent.allDay' | translate }}
+          </div>
+          <div class="calendar-day" *ngFor="let day of visibleDates; index as i" [style.height.px]="allDaySectionHeight + 10">
+            <div *ngFor="let event of allDayEvents[i]" class="all-day-event" 
+                 (click)="selectEvent(event.event)"
+                 [ngStyle]="event.event.color ? {'background-color': event.event.color} : {}"
+                 [style.height.px]="event.height"
+                 [style.width.%]="event.width"
+                 [style.top.px]="event.yOffset"
+                 [style.right.px]="event.right"
+                 [style.left.px]="event.left">
+                 <div class="title smaller-font">
+                    <span class="event-type-icon seventask-icon-pages-my-calender-free-color"
+                          [style.color]="'white'"></span>
+                    <span class="calendar-day-event-title week-event-title"
+                          [style.color]="'white'">{{event.event.title}}</span>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="calendar-week-main-container" id="day-view-container">
+        <div class="now-bar" *ngIf="containingToday" [style.top.px]="currentTimeOffset">
+          <div class="now-time">{{ currentTime }}</div>
+          <div class="now"></div>
+        </div>
+        <div class="week-row" *ngFor="let h of hours; index as hourIndex">
+          <div class="hour" [style.height.px]="dayFieldHeight"
+               [style.opacity]="((currentTimeOffset % dayFieldHeight <= 12 && todayDate.hours() == hourIndex && containingToday) ||
+          ((dayFieldHeight - currentTimeOffset % dayFieldHeight) <= 12 && todayDate.hours()+1 == hourIndex && containingToday)) ? 0 : 1">
+            {{ h }}
+          </div>
+          <div class="calendar-day" [style.height.px]="dayFieldHeight">
+            <div [@listAnimation]="classifiedEventsListWeekDay[0]" [@.disabled]="animationDisabled">
+              <div *ngIf="hourIndex === 0" (mouseenter)="mouseEnterWeekDay($event, 0)">
+                <div class="calendar-weekday-event"
+                     [style.background-color]="rangeEvent.event.color ? hexToRgbA(rangeEvent.event.color, 0.2) : ''"
+                     [style.border-color]="rangeEvent.event.color"
+                     [class.calendar-weekday-event-not-starting]="!rangeEvent.isStartingAtCurrentDay"
+                     [class.calendar-weekday-event-not-ending]="!rangeEvent.isEndingAtCurrentDay"
+                     [class.calendar-weekday-event-all-day]="!rangeEvent.isEndingAtCurrentDay && !rangeEvent.isStartingAtCurrentDay"
+                     [style.top.px]="rangeEvent.yOffset"
+                     [style.height.px]="rangeEvent.length"
+                     [style.width.%]="rangeEvent.width"
+                     [style.left.%]="rangeEvent.xOffset"
+                     [style.z-index]="classifiedEventsListWeekDay[0].indexOf(rangeEvent)+1"
+                     (contextmenu)="onContextMenu($event, rangeEvent, 0)"
+                     (click)="selectEvent(rangeEvent.event)"
+                     (mouseleave)="isEventDraggable[rangeEvent.event.id]=false;this.draggingElement=null"
+                     (mousemove)="addOrRemoveResizeCursor($event, rangeEvent)"
+                     (mousedown)="eventMouseDown($event, rangeEvent)"
+                     *ngFor="let rangeEvent of classifiedEventsListWeekDay[0]">
+                  <div [class.height.px]="eventCardMinimumHeight" class="weekday-event-details"
+                       *ngIf="rangeEvent.isStartingAtCurrentDay && eventCardMinimumHeight * 0.5 <= rangeEvent.length">
+                    <div class="title" dir="auto" *ngIf="eventCardMinimumHeight * 0.5 <= rangeEvent.length">
+                      <span class="event-type-icon"
+                            [className]="rangeEvent.event.color ? 'seventask-icon-pages-my-calender-free-color' : 'seventask-icon-pages-my-calender'"
+                            [style.color]="rangeEvent.event.color"></span>
+                      <span class="calendar-day-event-title"
+                            [style.color]="rangeEvent.event.color">{{rangeEvent.event.title}}</span>
+                    </div>
+                    <div class="time" *ngIf="eventCardMinimumHeight <= rangeEvent.length">
+                      <span>{{ rangeEvent.event.startTime | date : 'shortTime' }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngSwitchCase="'week'">
+      <div class="week-day-nav-container">
+        <div class="week-day-nav">
+          <div class="week-navigator" (click)="addToCurrentDay(-1, 'week')">
+          <span class="seventask-icon-calendar-back week-navigator-icon"
+                [style]="'transform: rotate(' + navIconRotateDegree + 'deg)'"></span>
+          </div>
+          <div class="week-day-nav-item-container" [@listAnimation]="visibleDates">
+            <div *ngFor="let weekday of weekdays; index as i" class="week-day-nav-item">
+              <div [ngSwitch]="calendarData.firstCalendar"
+                   [class.calendar-today]="visibleDates[i].momentDate.diff(todayDate, 'day') == 0 &&
+                  visibleDates[i].momentDate.day() == todayDate.day()">
+                <div *ngSwitchCase="calendarType.GEORGIAN">
+                  {{weekday.abbr + ' ' + (visibleDates[i].momentDate.toDate() | date:'d')}}
+                </div>
+                <div *ngSwitchCase="calendarType.JALALI">
+                  {{weekday.abbr + ' ' + (visibleDates[i].momentDate.toDate() | getJalaliDate: 'D')}}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="week-navigator" (click)="addToCurrentDay(1, 'week')">
+          <span class="seventask-icon-calendar-back week-navigator-icon"
+                [style]="'transform: rotate(' + (180-navIconRotateDegree) + 'deg);'"></span>
+          </div>
+        </div>
+        <div class="week-row all-day">
+          <div class="all-day-text" [style.min-height.px]="allDaySectionHeight + 10">
+            {{ 'Calendar.NewEvent.allDay' | translate }}
+          </div>
+          <div class="calendar-week-day" *ngFor="let day of visibleDates; index as i"
+              [style.min-height.px]="allDaySectionHeight + 10">
+            <div *ngFor="let event of allDayEvents[i]" class="all-day-event"
+                 (click)="selectEvent(event.event)"
+                 [ngStyle]="event.event.color ? {'background-color': event.event.color} : {}"
+                 [style.height.px]="event.height"
+                 [style.width.%]="event.width"
+                 [style.top.px]="event.yOffset"
+                 [style.right.px]="event.right"
+                  [style.left.px]="event.left">
+                 <div class="title smaller-font">
+                    <span class="event-type-icon seventask-icon-pages-my-calender-free-color"
+                          [style.color]="'white'"></span>
+                    <span class="calendar-day-event-title week-event-title"
+                          [style.color]="'white'">{{event.event.title}}</span>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="calendar-week-main-container" id="week-view-container">
+        <div class="now-bar" *ngIf="containingToday" [style.top.px]="currentTimeOffset">
+          <div class="now-time">{{ currentTime }}</div>
+          <div class="now"></div>
+        </div>
+        <div class="week-row" *ngFor="let h of hours; index as hourIndex">
+          <div class="hour"
+               [style.height.px]="dayFieldHeight"
+               [style.opacity]="((currentTimeOffset % dayFieldHeight <= 12 && todayDate.hours() == hourIndex && containingToday) ||
+          ((dayFieldHeight - currentTimeOffset % dayFieldHeight) <= 12 && todayDate.hours()+1 == hourIndex && containingToday)) ? 0 : 1">
+            {{ h }}
+          </div>
+          <div class="calendar-week-day"
+               [style.height.px]="dayFieldHeight"
+               (mouseenter)="mouseEnterWeekDay($event, dayIndex)"
+               *ngFor="let day of visibleDates; index as dayIndex">
+            <div *ngIf="hourIndex === 0">
+              <div [@listAnimation]="classifiedEventsListWeekDay[dayIndex]" [@.disabled]="animationDisabled">
+                <div class="calendar-weekday-event"
+                     [style.background-color]="rangeEvent.event.color ? hexToRgbA(rangeEvent.event.color, 0.2) : ''"
+                     [style.border-color]="rangeEvent.event.color"
+                     [class.calendar-weekday-event-not-starting]="!rangeEvent.isStartingAtCurrentDay"
+                     [class.calendar-weekday-event-not-ending]="!rangeEvent.isEndingAtCurrentDay"
+                     [class.calendar-weekday-event-all-day]="!rangeEvent.isEndingAtCurrentDay && !rangeEvent.isStartingAtCurrentDay"
+                     [style.top.px]="rangeEvent.yOffset"
+                     [style.height.px]="rangeEvent.length"
+                     [style.width.%]="rangeEvent.width"
+                     [style.left.%]="rangeEvent.xOffset"
+                     [style.z-index]="classifiedEventsListWeekDay[dayIndex].indexOf(rangeEvent)+1"
+                     (contextmenu)="onContextMenu($event, rangeEvent, dayIndex)"
+                     (click)="selectEvent(rangeEvent.event)"
+                     (mouseleave)="isEventDraggable[rangeEvent.event.id]=false;this.draggingElement=null"
+                     (mousedown)="eventMouseDown($event, rangeEvent)"
+                     (mousemove)="addOrRemoveResizeCursor($event, rangeEvent)"
+                     *ngFor="let rangeEvent of classifiedEventsListWeekDay[dayIndex]">
+                  <div [class.height.px]="eventCardMinimumHeight" class="weekday-event-details smaller-font"
+                       *ngIf="rangeEvent.isStartingAtCurrentDay && eventCardMinimumHeight * 0.5 <= rangeEvent.length">
+                    <div class="title" dir="auto" *ngIf="eventCardMinimumHeight * 0.5 <= rangeEvent.length">
+                      <span class="event-type-icon"
+                            [className]="rangeEvent.event.color ? 'seventask-icon-pages-my-calender-free-color' : 'seventask-icon-pages-my-calender'"
+                            [style.color]="rangeEvent.event.color"></span>
+                      <span class="calendar-day-event-title week-event-title"
+                            [style.color]="rangeEvent.event.color">{{rangeEvent.event.title}}</span>
+                    </div>
+                    <div class="time" *ngIf="eventCardMinimumHeight <= rangeEvent.length">
+                      <span>{{ rangeEvent.event.startTime | date : 'shortTime' }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div *ngSwitchCase="'month'">
+      <div class="week-day-nav-container">
+        <div class="week-day-nav">
+          <div class="week-navigator" (click)="addToCurrentDay(-1, 'months')">
+          <span class="seventask-icon-calendar-back week-navigator-icon"
+                [style]="'transform: rotate(' + navIconRotateDegree + 'deg)'"></span>
+          </div>
+          <div class="week-day-nav-item-container">
+            <div class="week-day-nav-item" *ngFor="let weekday of weekdays">
+              {{weekday.abbr}}
+            </div>
+          </div>
+          <div class="week-navigator" (click)="addToCurrentDay(1, 'months')">
+          <span class="seventask-icon-calendar-back week-navigator-icon"
+                [style]="'transform: rotate(' + (180-navIconRotateDegree) + 'deg);'"></span>
+          </div>
+        </div>
+      </div>
+      <br>
+      <br>
+
+      <div class="calendar-main-container">
+        <div class="calendar-month-day"
+             (dblclick)="createMonthEvent($event, dayIndex)"
+             *ngFor="let day of visibleDates; let dayIndex = index;">
+          
+          <div class="full-month-events-container"
+               (dblclick)="$event.stopPropagation()"
+               [style.width.%]="fullMonthEventsWidth"
+               [style.left.%]="fullMonthEventsOffset"
+               [style.top.%]="classifiedFullEventsList[dayIndex] ? (100 - (20 + (monthEventHeight / monthEventsSectionHeight) * 100 * classifiedFullEventsList[dayIndex].length)) / 2 : undefined"
+               [style.height.%]="classifiedFullEventsList[dayIndex] ? 20 + (monthEventHeight / monthEventsSectionHeight) * 100 * classifiedFullEventsList[dayIndex].length : undefined"
+               [style.visibility]="showFullEventsOfDay === dayIndex ? 'visible' : 'hidden'">
+               <div class="full-events-date d-flex">
+                <div style="flex: 1;" *ngIf="!calendarData.isSecondCalendarEnabled">
+                  <span [ngSwitch]="calendarData.firstCalendar">
+                    <span *ngSwitchCase="calendarType.GEORGIAN">{{day.momentDate.toDate()|date:'d'}}</span>
+                    <span
+                      *ngSwitchCase="calendarType.JALALI">
+                      {{day.momentDate.toDate()
+                      |getJalaliDate:'D'
+                      |getArabicNum}}
+                    </span>
+                  </span>
+                </div>
+                <div style="flex: 1;" *ngIf="calendarData.isSecondCalendarEnabled">
+                  <span [ngSwitch]="calendarData.firstCalendar">
+                    <span *ngSwitchCase="calendarType.GEORGIAN">
+                      <span [ngSwitch]="calendarData.secondCalendar">
+                        <span *ngSwitchCase="calendarType.GEORGIAN">{{day.momentDate.toDate()|date:'d'}}</span>
+                        <span *ngSwitchCase="calendarType.JALALI">{{day.momentDate.toDate()|date:'d'}}
+                          ({{day.momentDate.toDate()
+                            |getJalaliDate:'D'
+                            |getArabicNum}})</span>
+                      </span>
+                    </span>
+                    <span *ngSwitchCase="calendarType.JALALI">
+                      <span [ngSwitch]="calendarData.secondCalendar">
+                        <span
+                          *ngSwitchCase="calendarType.GEORGIAN">{{day.momentDate.toDate()
+                          |getJalaliDate:'D'
+                          |getArabicNum}}
+                          ({{day.momentDate.toDate()|date:'d'}})</span>
+                        <span
+                          *ngSwitchCase="calendarType.JALALI">{{day.momentDate.toDate()
+                          | getJalaliDate:'D'
+                          |getArabicNum}}</span>
+                      </span>
+                    </span>
+                  </span>
+                </div>
+                <div style="align-self: center; margin: 3px; cursor: pointer;" class="close-button seventask-icon-edit-cancel-narrow" (click)="showFullEventsOfDay=null"></div>
+              </div>
+
+              <div style="width: 100%; height: 100%; position: relative">
+                <div class="full-month-event smaller-font handle-overflow" *ngFor="let event of classifiedFullEventsList[dayIndex]"
+                  (dblclick)="$event.stopPropagation()"  
+                  [ngStyle]="event.event.color ? {'background-color': event.event.color} : {}"
+                  [style.height.px]="event.height"
+                  [style.width.%]="event.width"
+                  [style.top.px]="event.yOffset"
+                  [style.right.px]="event.right"
+                  [style.left.px]="event.left"
+                  (click)="selectEvent(event.event)">
+                  <span class="event-type-icon seventask-icon-pages-my-calender-free-color"
+                    [style.color]="'white'"></span>
+                  <span class="calendar-day-event-title" dir="auto" [style.color]="'white'">{{event.event.title}}</span>
+                </div>
+              </div>
+          </div>
+
+          <div class="calendar-day-events-container" [@listAnimation]="classifiedEventsList[dayIndex]" [style.height.px]="monthEventsSectionHeight">
+            <div (contextmenu)="onContextMenu($event, event.event, dayIndex)"
+                 *ngFor="let event of classifiedEventsListMonthDay[dayIndex]" class="calendar-day-event">
+              <div *ngIf="event.singleDay" style="position: absolute; padding: 0 5px;" class="smaller-font handle-overflow"
+                  (dblclick)="$event.stopPropagation()"
+                  [style.height.px]="event.height"
+                  [style.width.%]="event.width"
+                  [style.top.px]="event.yOffset"
+                  [style.right.px]="event.right"
+                  [style.left.px]="event.left"
+                  (click)="selectEvent(event.event)">
+                <span class="event-type-icon"
+                    [className]="event.event.color ? 'seventask-icon-pages-my-calender-free-color' : 'seventask-icon-pages-my-calender'"
+                    [style.color]="event.event.color"></span>
+                <span class="calendar-day-event-title" dir="auto" [style.color]="event.event.color">{{event.event.title}}</span>
+              </div>
+              <div class="month-event smaller-font handle-overflow" *ngIf="!event.singleDay" style="width: 100%;"
+                  (dblclick)="$event.stopPropagation()"    
+                  [ngStyle]="event.event.color ? {'background-color': event.event.color} : {}"
+                  [style.height.px]="event.height"
+                  [style.width.%]="event.width"
+                  [style.top.px]="event.yOffset"
+                  [style.right.px]="event.right"
+                  [style.left.px]="event.left"
+                  (click)="selectEvent(event.event)">
+                <span class="event-type-icon seventask-icon-pages-my-calender-free-color"
+                    [style.color]="'white'"></span>
+                <span class="calendar-day-event-title" dir="auto" [style.color]="'white'">{{event.event.title}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="calendar-month-day-footer">
+            <div class="calendar-footer-month-num-container">
+              <div [@listAnimation]="visibleDates"
+                   [class.calendar-day-num-main]="day.hasMainStyle"
+                   [class.calendar-day-num]="!day.hasMainStyle"
+                   [class.calendar-weekend]="calendarData.weekends.includes(day.momentDate.day()) && day.hasMainStyle"
+                   [class.calendar-today]="day.momentDate.diff(todayDate, 'day') == 0 &&
+            day.momentDate.day() == todayDate.day()">
+            <span class="month-day-number">
+              <span *ngIf="!calendarData.isSecondCalendarEnabled">
+                <span [ngSwitch]="calendarData.firstCalendar">
+                  <span *ngSwitchCase="calendarType.GEORGIAN">{{day.momentDate.toDate()|date:'d'}}</span>
+                  <span
+                    *ngSwitchCase="calendarType.JALALI">
+                    {{day.momentDate.toDate()
+                    |getJalaliDate:'D'
+                    |getArabicNum}}
+                  </span>
+                </span>
+              </span>
+              <span *ngIf="calendarData.isSecondCalendarEnabled">
+                <span [ngSwitch]="calendarData.firstCalendar">
+                  <span *ngSwitchCase="calendarType.GEORGIAN">
+                    <span [ngSwitch]="calendarData.secondCalendar">
+                      <span *ngSwitchCase="calendarType.GEORGIAN">{{day.momentDate.toDate()|date:'d'}}</span>
+                      <span *ngSwitchCase="calendarType.JALALI">{{day.momentDate.toDate()|date:'d'}}
+                        ({{day.momentDate.toDate()
+                          |getJalaliDate:'D'
+                          |getArabicNum}})</span>
+                    </span>
+                  </span>
+                  <span *ngSwitchCase="calendarType.JALALI">
+                    <span [ngSwitch]="calendarData.secondCalendar">
+                      <span
+                        *ngSwitchCase="calendarType.GEORGIAN">{{day.momentDate.toDate()
+                        |getJalaliDate:'D'
+                        |getArabicNum}}
+                        ({{day.momentDate.toDate()|date:'d'}})</span>
+                      <span
+                        *ngSwitchCase="calendarType.JALALI">{{day.momentDate.toDate()
+                        | getJalaliDate:'D'
+                        |getArabicNum}}</span>
+                    </span>
+                  </span>
+                </span>
+              </span>
+            </span>
+              </div>
+            </div>
+            <div class="more-events-container"
+                 [class.calendar-day-num-main]="day.hasMainStyle"
+                 [class.calendar-day-num]="!day.hasMainStyle"
+                 [class.calendar-weekend]="calendarData.weekends.includes(day.momentDate.day()) && day.hasMainStyle"
+                 *ngIf="numberOfOverflowedEvents[dayIndex]"
+                 (click)="$event.stopPropagation(); showFullEventsOfDay=dayIndex">
+              {{ (numberOfOverflowedEvents[dayIndex] | numToArabic) + ' ' + ('Calendar.moreEvents' | translate) }}
+            </div>
+            <div class="calendar-footer-add-button-container" style="flex-basis: 0 !important;">
+              <div *ngIf="addingEventOnDay[day.momentDate.toDate().toDateString()]"
+                   class="calendar-add-event-button"
+                   (click)="createEvent(day.momentDate.toDate(), 0)">
+                <span class="calendar-add-event-button-icon seventask-icon-add-add"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngSwitchCase="'year'">
+      <div class="week-day-nav-container">
+        <div class="week-day-nav">
+          <div class="week-navigator" (click)="addToCurrentDay(-1, 'year')">
+          <span class="seventask-icon-calendar-back week-navigator-icon"
+                [style]="'transform: rotate(' + navIconRotateDegree + 'deg)'"></span>
+          </div>
+          <div style="width: 90%; height: 100%;" [@valueChange]="visibleDates">
+            <div style="width: 100%;" class="week-day-nav-item-container">
+              <div class="week-day-nav-item">
+                <div [ngSwitch]="calendarData.firstCalendar" class="year-header">
+                  <div *ngSwitchCase="calendarType.GEORGIAN">
+                    {{(visibleDates[1].momentDate.toDate() | date:'y')}}
+                  </div>
+                  <div *ngSwitchCase="calendarType.JALALI">
+                    {{(visibleDates[1].momentDate.toDate() | getJalaliDate: 'y' | getArabicNum)}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="week-navigator" (click)="addToCurrentDay(1, 'year')">
+          <span class="seventask-icon-calendar-back week-navigator-icon"
+                [style]="'transform: rotate(' + (180-navIconRotateDegree) + 'deg);'"></span>
+          </div>
+        </div>
+      </div>
+      <br>
+      <br>
+      <div class="calendar-main-container" [@listAnimation]="visibleDates">
+        <div *ngFor="let day of monthDays; index as i" class="tiny-calendar">
+          <app-tiny-calendar
+            [id]="i"
+            (selectedDayToShowEvents)="showDayEventsOf=$event"
+            (selectEvent)="onContextMenu($event[0], $event[1], 0)"
+            [showDayEvents]="showDayEventsOf"
+            [headerOn]="true"
+            [navigatorOn]="false"
+            [events]="classifiedEventsList"
+            [defaultCurrentDate]="day"
+            [showSecondCalendarData]="true"
+            [showEvents]="true">
+          </app-tiny-calendar>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+  <br>
+  <br>
+</div>
+
+<div style="visibility: hidden; position: fixed;"
+     [style.left]="contextMenuPosition.x"
+     [style.top]="contextMenuPosition.y"
+     [matMenuTriggerFor]="contextMenu">
+</div>
+<mat-menu #contextMenu="matMenu" class="custom">
+  <div matMenuContent>
+    <div mat-menu-item (click)="handleDeleteEvent()" class="context-menu-item">
+      <span style="color: #ff5051"><span>{{'Calendar.deleteEvent' | translate}}</span></span>
+      <span style="color: #ff5051!important;" class="seventask-icon-task-header-trash inside-logo"></span>
+    </div>
+  </div>
+</mat-menu>

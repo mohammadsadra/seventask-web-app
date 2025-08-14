@@ -1,0 +1,7 @@
+<div class="d-flex flex-lg-column bg-white h-100 p-2" dir="auto">
+    <div dir="auto">{{ 'DialogMessage.deleteDepartment' | translate }} </div>
+    <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close>{{ 'Project.cancel' | translate }}</button>
+        <button mat-button [mat-dialog-close]="true" cdkFocusInitial>{{ 'Project.delete' | translate }}</button>
+    </mat-dialog-actions>
+</div>

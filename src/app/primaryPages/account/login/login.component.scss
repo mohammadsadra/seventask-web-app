@@ -1,0 +1,236 @@
+@import 'variables';
+
+.wrapper {
+    height: 100%;
+}
+
+.main-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-height: 100%;
+    background-color: #F8FBFD;
+    height: 100%;
+}
+
+.form-container {
+    width: 600px;
+    height: 676px;
+    background-color: white;
+    border-radius: 20px;
+    border: 1px solid #F0F4F4;
+    padding: 5px 10px;
+    max-width: 100%;
+    max-height: 95%;
+}
+
+.form {
+    margin: auto;
+    padding: 37px 50px 0;
+    overflow-y: auto;
+    height: 100%;
+}
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-title {
+    cursor: default;
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 36px;
+    text-align: center;
+    color: #2E4A77;
+}
+
+.language {
+    color: #4278DF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    //line-height: 30px;
+    text-align: center;
+}
+
+.new-language {
+    margin-inline-start: 8px;
+    cursor: pointer;
+    color: #a7afbd;
+}
+
+.new-language:hover {
+    color: #4278DF;
+    opacity: 0.8;
+}
+
+.mobile-view-warn {
+    display: none;
+}
+
+@media screen and (max-width: 600px) {
+    .form-title {
+        font-size: 20px;
+        margin-top: 10px;
+    }
+
+    .form {
+        padding: 10px;
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    .user-input {
+        padding: 5px !important;
+    }
+
+    .mobile-view-warn {
+        top: 0;
+        padding: 5px;
+        font-size: 14px;
+        position: absolute;
+        background-color: rgba(241, 219, 80, 0.3);
+        display: block;
+        text-align: center;
+    }
+
+    .logo-container {
+        margin-top: 20px;
+    }
+
+    .login-guide {
+        line-height: 20px !important;
+    }
+}
+
+.login-guide {
+    cursor: default;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 30px;
+    text-align: center;
+    color: #A7AFBD;
+}
+
+.not-registered {
+    color: #4278DF;
+}
+
+.login-form {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.input-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: center;
+    padding: 15px;
+    flex-direction: row;
+    height: 50px;
+    border-radius: 10px;
+    border: 1px solid #F0F4F4;
+    background-color: #F8FBFD;
+    margin-bottom: 20px;
+}
+
+.user-input {
+    background-color: #F8FBFD;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    flex-basis: 90%;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 19px;
+    color: #2E4A77;
+    padding: 10px;
+}
+
+.input-icon {
+    opacity: 0.3;
+    margin-inline-end: 10px;
+    flex-basis: 5%;
+}
+
+.forget-password {
+    display: flex;
+    justify-content: flex-end;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 19px;
+    text-align: end;
+    color: #4278DF;
+}
+
+.submit-login-form-button:not(:disabled) {
+    @include seventask-button-style-5;
+}
+
+.submit-login-form-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: #4278DF;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    height: 50px;
+    margin-top: 40px;
+}
+
+.submit-login-form-button:disabled {
+    opacity: 0.5;
+}
+
+.submit-login-form-button-text {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 22px;
+    text-align: center;
+    color: #FFFFFF;
+}
+
+.login-with-google-button {
+    @include seventask-button-style-5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: white;
+    border: 1.5px solid #4278DF;
+    box-sizing: border-box;
+    border-radius: 10px;
+    outline: none;
+    height: 50px;
+    margin-top: 15px;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 22px;
+    color: #4278DF;
+}
+
+.input-error {
+    border: 1px solid orangered;
+}

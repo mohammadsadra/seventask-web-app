@@ -1,0 +1,1339 @@
+<div *ngIf="this.allTasks.length >= 0 && !(isAllTasksSelected && toDoView === 'Board')" class="main-container"
+     id="main-container" [style.height.px]="this.allTasks.length != 0 ?columnHeight - 120 : 0">
+
+  <div *ngIf="!showGetTasksLoading" cdkDropList cdkDropListOrientation="horizontal" style="overflow-x: auto; padding-top: 5px;"
+       (cdkDropListDropped)="dropStatus($event)" [cdkDropListData]="showingStatuses">
+    <div cdkDropListGroup *ngIf="toDoView === 'Board' && !isPersonalProjectSelected &&
+      !isAllTasksSelected &&(selectedProject != null || selectedTeam != null
+      ||
+      isPersonalSelected === true)" class="main-container-board example-list">
+      <!--  --  -->
+      <div *ngFor="let status of showingStatuses|sortStatus;let m= index" cdkDragBoundary=".page-content" cdkDrag>
+        <div [style.height.px]="columnHeight - 120" class="column-container">
+          <div class="column-header">
+            <div class="column-header-title">
+              <input dir="auto" autofocus #newTitle
+                     (keyup.enter)="isEditingStatusTitle[m]=false;updateStatusTitle(status.id,newTitle.value,status.title);"
+                     (blur)="isEditingStatusTitle[m]= false;updateStatusTitle(status.id,newTitle.value,status.title);"
+                     class="column-header-title-input"
+                     *ngIf="isEditingStatusTitle[m]" value="{{status.title}}">
+              <div class="status-title" #title (click)="isEditingStatusTitle[m]= true"
+                   *ngIf="!isEditingStatusTitle[m]">{{status.title}}</div>
+            </div>
+            <div class="move-handler"></div>
+            <div class="column-header-button">
+              <span (click)="openDialog(status)" style="font-size: 12px;"
+                    class="seventask-icon-task-header-add column-header-button-image smooth-square"></span>
+            </div>
+            <div style="text-align: end;justify-content: flex-end" class="column-header-button">
+              <div [matMenuTriggerFor]="statusMenu" class="column-header-button-image" style="color: #a7afbd">
+                <span style="font-size: 4px;" class="seventask-icon-tools-others smooth-square"></span>
+              </div>
+              <mat-menu class="more-menu" #statusMenu="matMenu" yPosition="above">
+                <div class="d-flex align-items-center" *ngIf="dropLists.get(status.id).length === 0"
+                     (click)="openDeleteStatusDialog(status)" mat-menu-item>
+                  <span class="seventask-icon-task-header-trash" style="margin-inline-end: 10px;font-size: 18px"></span>
+                  <span style="color:#2e4a77;">{{'Task.deleteStatus' | translate}} "{{status.title}}"</span>
+                </div>
+                <div class="d-flex align-items-center" *ngIf="dropLists.get(status.id).length> 0"
+                     (click)="openArchiveStatusTasksDialog(status)" mat-menu-item>
+                  <img style="margin-inline-end: 10px;font-size: 20px;width: 20px;height: 20px"
+                       src="../../../assets/icons/archive.svg">
+                  <span>{{'Task.archiveTasksIn' |translate}} "{{status.title}}"</span>
+                </div>
+              </mat-menu>
+
+            </div>
+          </div>
+
+          <div [@.disabled]="isListAnimationDisabled" [@listAnimation]="dropLists.get(status.id).length"
+               [style.height.px]="columnHeight - 215" cdkDropList [id]="status.id"
+               [cdkDropListData]="dropLists.get(status.id)" class="mostly-customized-scrollbar task-list example-list"
+               appAutoScrollToTask [selectedTaskId]="selectedTask !== null ? selectedTask.id : -1"
+               [dropped]="taskDropped" (cdkDropListDropped)="dropTask($event);">
+
+            <!--            <div class="no-task" style="opacity: 0.3;"-->
+            <!--              *ngIf="(showingTasks |search:searchValue).length-->
+            <!--            <= 0 || (showingTasks|filter: enabledFilters:-->
+            <!--              andOr).length <=0">-->
+            <!--              <img style="width: 15%;height: 15%"-->
+            <!--                src="../../../assets/noDataImages/task.svg">-->
+            <!--              <div style="margin-top: 20px">{{-->
+            <!--                'Task.noTaskFound' | translate}}</div>-->
+            <!--            </div>-->
+
+            <div class="example-box" style="border-radius: 20px;" *ngFor="let item of dropLists.get(status.id)
+              |sortTask:sortName : isAscending
+              |search:searchValue
+              |filter: enabledFilters: andOr" [cdkDragData]="item" cdkDrag cdkDragBoundary=".page-content"
+                 [id]="'Task'+item.id" (mousedown)="showInspector(item.guid)" (blur)="unselectSelectedTask()">
+
+              <div *ngIf="item.isUrgent" class="task-badge-container">
+                <div *ngIf="item.isUrgent" class="task-badge">
+                  {{ 'Task.urgent' | translate}}
+                </div>
+              </div>
+
+              <div [class.selected-card]="selectedTask != null && item.guid ===selectedTask.guid" class="task-box">
+                <div style="max-width: 100%">
+                  <div style="max-width: 100%" (blur)="unselectSelectedTask()" (click)="showInspector(item.guid)">
+                    <div class="task-title" dir="auto">
+                      {{item.title}}
+                    </div>
+                    <div class="task-deadline-label-color">
+                      <div class="task-deadline">
+                        {{item.endDate | seventaskDatePipe:'YYYY/M/D' | async}}
+                      </div>
+                      <!--                <div class="task-label-color">-->
+                      <!--                  lables-->
+                      <!--                </div>-->
+                    </div>
+
+                    <div class="task-label-user">
+                      <div class="labels">
+                        <div *ngIf="item.priorityId ==
+                          5" [class]="item.priorityId
+                          === 5 ?
+                          'label-high':(item.priorityId
+                          === 3 ? 'label-medium' :
+                          'label-low')">
+                          <img style="margin-inline-end:
+                            5px" src="../../../assets/icons/Task/label-high.svg"> {{item.priorityTitle}}
+                        </div>
+                        <div *ngIf="item.priorityId ==3" [class]="item.priorityId
+                          === 5 ?
+                          'label-high':(item.priorityId
+                          === 3 ? 'label-medium' :
+                          'label-low')">
+                          <img style="margin-inline-end:
+                            5px" src="../../../assets/icons/Task/label-medium.svg"> {{item.priorityTitle}}
+                        </div>
+                        <div *ngIf="item.priorityId ==
+                          1" [class]="item.priorityId
+                          === 5 ?
+                          'label-high':(item.priorityId
+                          === 3 ? 'label-medium' :
+                          'label-low')">
+                          <img style="margin-inline-end:
+                            5px" src="../../../assets/icons/Task/label-low.svg"> {{item.priorityTitle}}
+                        </div>
+                      </div>
+                      <div>
+
+                        <div class="task-row-users">
+
+                          <div style="width: 100%;"
+                               class="d-flex flex-row justify-content-start align-items-center"
+                               *ngIf="item.usersAssignedTo != null && item.usersAssignedTo.length > 0 && item.usersAssignedTo.length <= 3">
+                            <div *ngFor="let user of item.usersAssignedTo"
+                                 style="text-align:center;padding-inline-start: 15px">
+                      <span #tooltip="matTooltip" [matTooltip]="user.nickName" [matTooltipPosition]="'below'"
+                            matTooltipHideDelay="100" *ngIf="user.profileImageGuid == null"
+                            style="background-color:#86A8E7" class="member-without-image">
+                                  {{user.nickName.charAt(0)}}
+                      </span>
+                              <img #tooltip="matTooltip" [matTooltip]="user.nickName" [matTooltipPosition]="'below'"
+                                   matTooltipHideDelay="100" *ngIf="user.profileImageGuid != null"
+                                   [src]="domainName + '/en-US/file/get?id=' + user.profileImageGuid + '&quality=100'"
+                                   style="background-color: #86A8E7"
+                                   class="member">
+                            </div>
+                          </div>
+
+                          <div style="width: 100%;"
+                               class="d-flex flex-row justify-content-start align-items-center"
+                               *ngIf="item.usersAssignedTo != null && item.usersAssignedTo.length > 0 && item.usersAssignedTo.length > 3">
+
+                            <div style="text-align:center;padding-inline-start: 15px">
+                      <span #tooltip="matTooltip" [matTooltip]="item.usersAssignedTo[0].nickName"
+                            [matTooltipPosition]="'below'" matTooltipHideDelay="100"
+                            *ngIf="item.usersAssignedTo[0].profileImageGuid == null"
+                            style="background-color:#86A8E7" class="member-without-image">
+                                  {{item.usersAssignedTo[0].nickName.charAt(0)}}
+                                </span>
+                              <img #tooltip="matTooltip" [matTooltip]="item.usersAssignedTo[0].nickName"
+                                   [matTooltipPosition]="'below'" matTooltipHideDelay="100"
+                                   *ngIf="item.usersAssignedTo[0].profileImageGuid != null"
+                                   [src]="domainName + '/en-US/file/get?id=' + item.usersAssignedTo[0].profileImageGuid + '&quality=100'"
+                                   style="background-color: #86A8E7" class="member">
+                            </div>
+
+                            <div style="text-align:center;padding-inline-start: 15px">
+                      <span #tooltip="matTooltip" [matTooltip]="item.usersAssignedTo[1].nickName"
+                            [matTooltipPosition]="'below'" matTooltipHideDelay="100"
+                            *ngIf="item.usersAssignedTo[1].profileImageGuid == null"
+                            style="background-color:#86A8E7" class="member-without-image">
+                                   {{item.usersAssignedTo[1].nickName.charAt(0)}}
+                                </span>
+                              <img #tooltip="matTooltip" [matTooltip]="item.usersAssignedTo[1].nickName"
+                                   [matTooltipPosition]="'below'" matTooltipHideDelay="100"
+                                   *ngIf="item.usersAssignedTo[1].profileImageGuid != null"
+                                   [src]="domainName + '/en-US/file/get?id=' + item.usersAssignedTo[1].profileImageGuid + '&quality=100'"
+                                   style="background-color: #86A8E7" class="member">
+                            </div>
+
+                            <div style="text-align:center;padding-inline-start: 15px">
+                      <span style="background-color:#86A8E7" class="member-without-image">
+                          +{{item.usersAssignedTo.length - 2}}
+                      </span>
+                            </div>
+
+                          </div>
+
+                        </div>
+
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div class="task-icon-list">
+                    <span style="font-size: 17px" #tooltip="matTooltip" matTooltip="{{'Task.noTeam' |translate}}"
+                          [matTooltipPosition]="'below'" matTooltipHideDelay="100" *ngIf="item.teamId == null"
+                          class="seventask-icon-task-card-disable-team icon-opacity-40"></span>
+                    <span style="font-size: 19px" #tooltip="matTooltip" [matTooltip]="item.teamName"
+                          [matTooltipPosition]="'below'" matTooltipHideDelay="100" *ngIf="item.teamId != null"
+                          class="seventask-icon-task-card-enable-team"></span>
+                    <span style="font-size: 17px" #tooltip="matTooltip" matTooltip="{{'Task.noProject' |translate}}"
+                          [matTooltipPosition]="'below'" matTooltipHideDelay="100" *ngIf="item.projectId == null"
+                          class="seventask-icon-task-card-disable-project icon-opacity-40"></span>
+                    <span style="font-size: 19px" #tooltip="matTooltip" [matTooltip]="item.projectName"
+                          [matTooltipPosition]="'below'" matTooltipHideDelay="100" *ngIf="item.projectId != null"
+                          class="seventask-icon-task-card-enable-project"></span>
+                    <!--                <span style="font-size: 17px" #tooltip="matTooltip"-->
+                    <!--                      matTooltip="{{'Task.list' | translate}}"-->
+                    <!--                      [matTooltipPosition]="'below'"-->
+                    <!--                      matTooltipHideDelay="100"-->
+                    <!--                      class="seventask-icon-task-card-disable-list"></span>-->
+                    <!--                <span style="font-size: 17px" #tooltip="matTooltip"-->
+                    <!--                      matTooltip="{{'Task.calendar' | translate}}"-->
+                    <!--                      [matTooltipPosition]="'below'"-->
+                    <!--                      matTooltipHideDelay="100"-->
+                    <!--                      class="seventask-icon-task-card-disable-calender"></span>-->
+                    <span style="font-size: 17px" #tooltip="matTooltip"
+                          matTooltip="{{'Task.timeTrackNotStarted'| translate}}" [matTooltipPosition]="'below'"
+                          matTooltipHideDelay="100" *ngIf="!isRunning(item.id)"
+                          class="seventask-icon-task-card-disable-timeTrack icon-opacity-40"></span>
+                    <span style="font-size: 17px" #tooltip="matTooltip"
+                          matTooltip="{{'Task.timeTrackStarted' | translate}}" [matTooltipPosition]="'below'"
+                          matTooltipHideDelay="100" *ngIf="isRunning(item.id)"
+                          class="seventask-icon-task-card-enable-timeTrack"></span>
+                    <span style="font-size: 17px" #tooltip="matTooltip" matTooltip="{{'Task.reminder' | translate}}"
+                          [matTooltipPosition]="'below'" matTooltipHideDelay="100"
+                          class="seventask-icon-task-card-disable-reminder icon-opacity-40"></span>
+                    <span style="font-size: 17px" #tooltip="matTooltip" matTooltip="{{'Task.noDescription'| translate}}"
+                          [matTooltipPosition]="'below'" matTooltipHideDelay="100" *ngIf="item.description == null"
+                          class="seventask-icon-task-card-disable-description icon-opacity-40"></span>
+                    <span style="font-size: 17px" *ngIf="item.description != null"
+                          class="seventask-icon-task-card-enable-description"
+                          [appTooltip]="(item.description | textAnalysis : 'description')" placement="bottom"
+                          delay="100">
+                    </span>
+                    <span style="font-size: 17px" #tooltip="matTooltip" matTooltip="{{'Task.estimatedTime'| translate}}"
+                          [matTooltipPosition]="'below'" matTooltipHideDelay="100"
+                          class="seventask-icon-task-card-disable-progressbar icon-opacity-40"></span>
+                    <span style="font-size: 17px" #tooltip="matTooltip" matTooltip="{{'Task.checklist' | translate}}"
+                          [matTooltipPosition]="'below'" matTooltipHideDelay="100"
+                          *ngIf="item.checkListItems.length <= 0"
+                          class="seventask-icon-task-card-disable-checkList icon-opacity-40"></span>
+                    <span style="font-size: 17px" *ngIf="item.checkListItems.length> 0"
+                          class="seven seventask-icon-task-card-enable-checkList"
+                          [appTooltip]="(item.checkListItems | textAnalysis : 'checklist')" placement="top"
+                          delay="500"></span>
+                  </div>
+
+                </div>
+              </div>
+
+              <div [class.activated-board]="selectedTask != null && selectedTask.guid === item.guid"
+                   class="selected-task">
+
+                <div style="width: 100%" class="d-flex flex-row align-items-center"
+                     *ngIf="selectedTask != null && item.guid === selectedTask.guid">
+                  <div style="width: 50%;" class="d-flex flex-row">
+
+                    <div *ngIf="isRunning(item.id)" class="selected-task-time-track">
+                      <button (click)="stopTimeTracker(item)" class="selected-task-time-track-button">
+                        <span
+                          class="seventask-icon-time-tracker-stop selected-task-time-track-icon"
+                          src="../../../assets/Icons/stop.svg"></span>
+                        <span
+                          class="selected-task-time-track-button-text">{{
+                          'Task.stopTimeTrackerBoard'
+                            | translate}}</span>
+                      </button>
+                    </div>
+
+                    <div *ngIf="!isRunning(item.id)|| isPaused(item.id)"
+                         class="selected-task-time-track">
+                      <button (click)="startTimeTracker(item)" class="selected-task-time-track-button">
+                        <span class="seventask-icon-time-tracker-start selected-task-time-track-icon"></span>
+                        <span *ngIf="!isRunning(item.id)"
+                              class="selected-task-time-track-button-text">{{
+                          'Task.startTimeTracker'
+                            | translate}}</span>
+                        <span *ngIf="isPaused(item.id)"
+                              class="selected-task-time-track-button-text">{{
+                          'Task.startTimeTrackerBoard'
+                            | translate}}</span>
+                      </button>
+                    </div>
+
+                    <div *ngIf="isRunning(item.id)
+                      &&
+                      !isPaused(item.id)" class="selected-task-time-track">
+                      <button (click)="pauseTimeTracker(item)" class="selected-task-time-track-button">
+                        <span
+                          class="seventask-icon-time-tracker-pause selected-task-time-track-icon"
+                          src="../../../assets/Icons/pause.svg"></span>
+                        <span
+                          class="selected-task-time-track-button-text">{{'Task.pause'
+                          | translate}}</span>
+                      </button>
+                    </div>
+
+                  </div>
+
+                  <div class="task-card-icon-container">
+                    <img *ngIf="isFollowed(item.id)" style="margin-inline-start: 0;cursor: auto"
+                         src="assets/icons/following.svg" class="selected-task-control">
+                    <!--                    <img style="visibility: hidden"-->
+                    <!--                         src="../../../assets/icons/markAsDone.svg"-->
+                    <!--                         class="selected-task-control">-->
+                    <img (click)="openDeleteDialog(item)" src="../../../assets/icons/Task/deleteTask.svg"
+                         class="selected-task-control">
+                    <img style="margin-inline-end: 22px" [matMenuTriggerFor]="selectedTaskMenu"
+                         src="../../../assets/icons/Task/selectedTaskMore.svg" class="selected-task-control">
+                  </div>
+
+                  <mat-menu class="more-menu" #selectedTaskMenu="matMenu" yPosition="below">
+
+                    <div (click)="activateInspector()" mat-menu-item>
+                      <img class="more-menu-icon-img" src="../../../assets/icons/edit.svg">
+                      <span class="font-color">{{ 'Settings.edit' | translate}}</span>
+                    </div>
+
+                    <div *ngIf="!item.isUrgent" (click)="updateUrgent(item, true)" mat-menu-item>
+                      <img class="more-menu-icon-img" src="../../../assets/icons/alarm-light-outline.svg">
+                      <span class="font-color">{{ 'Task.makeUrgent' | translate}}</span>
+                    </div>
+
+                    <div *ngIf="item.isUrgent" (click)="updateUrgent(item, false)" mat-menu-item>
+                      <img class="more-menu-icon-img" src="../../../assets/icons/alarm-light-off-outline.svg">
+                      <span class="font-color">{{ 'Task.removeUrgent' |
+                        translate}}</span>
+                    </div>
+
+                    <div (click)="archiveTask(item)" mat-menu-item>
+                      <img class="more-menu-icon-img" src="../../../assets/icons/archive.svg">
+                      <span class="font-color">{{ 'Task.archive' | translate}}</span>
+                    </div>
+
+                    <div class="d-flex align-items-center" (click)="duplicateTask(item)" mat-menu-item>
+                      <img src="assets/icons/duplicate.svg" class="more-menu-icon-img">
+                      <span class="font-color">{{ 'Task.duplicate' | translate}}</span>
+                    </div>
+
+                    <div #tooltip="matTooltip" matTooltip="{{'Tooltip.followTask'| translate}}"
+                         [matTooltipPosition]="'below'" matTooltipHideDelay="100" class="d-flex align-items-center"
+                         *ngIf="!isFollowed(item.id)" (click)="followTask(item)" mat-menu-item>
+                      <img class="more-menu-icon-img" src="assets/icons/follow.svg">
+                      <span class="font-color">{{ 'Task.follow' | translate}}</span>
+                    </div>
+
+                    <div #tooltip="matTooltip" matTooltip="{{'Tooltip.unfollowTask'| translate}}"
+                         [matTooltipPosition]="'below'" matTooltipHideDelay="100" class="d-flex align-items-center"
+                         *ngIf="isFollowed(item.id)" (click)="unfollowTask(item)" mat-menu-item>
+                      <img class="more-menu-icon-img" src="assets/icons/unfollow.svg">
+                      <span class="font-color">{{ 'Task.unfollow' | translate}}</span>
+                    </div>
+
+                  </mat-menu>
+                </div>
+
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div [style.height.px]="columnHeight - 120" s tyle="min-width: 350px" class="column-container">
+
+        <div class="column-header">
+          <!--        <div class="column-header-title">-->
+          <!--          hi-->
+          <!--        </div>-->
+          <!--        <div  class="column-header-button">-->
+          <!--          <img style="margin-inline-start: 10px !important;" class="column-header-button-image" src="assets/icons/add.svg">-->
+          <!--        </div>-->
+          <!--        <div style="text-align: end" class="column-header-button">-->
+          <!--          <img class="column-header-button-image" src="assets/icons/more.svg">-->
+          <!--        </div>-->
+        </div>
+
+        <div [formGroup]="addStatusForm" cdkDropList class="no-status-task-list" [style.height.px]="columnHeight - 200">
+          <div style="color: #2E4A77;">{{ 'Task.addNewStatusMessage' | translate}}</div>
+          <input [class.placeholder-rtl]="iconRotationDegree == 180"
+                 (keyup.enter)="addStatusForm.controls.Title.invalid ? '' :addStatus(newStatus.value);addStatusForm.controls.Title.reset()"
+                 dir="auto" formControlName="Title" required #newStatus placeholder="{{ 'Placeholders.enterNewStatusTitle' |
+            translate}}" style="margin-top: 20px" class="column-header-title-input">
+          <button class="seventask-theme-background-color add-status-button"
+                  [disabled]="addStatusForm.controls.Title.invalid"
+                  (click)="addStatus(newStatus.value);addStatusForm.controls.Title.reset()">
+            +
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <div *ngIf="toDoView === 'List'" class="main-container-list">
+
+    <div class="no-task" style="opacity: 1;" *ngIf="((showingTasks |search:searchValue).length <= 0 ||
+      (showingTasks|filter: enabledFilters: andOr).length <=0) && !showGetTasksLoading">
+      <img style="width: 15%;height: 15%" src="../../../assets/noDataImages/task.svg">
+      <div style="margin-top: 20px; opacity: 0.3;">{{ 'Task.noTaskFound' | translate}}</div>
+    </div>
+
+    <div [@listAnimation]="showingTasks.length">
+      <div class="list-row" *ngFor="let item of showingTasks
+        |sortTask:sortName:isAscending
+        |search:searchValue
+        |filter:enabledFilters:andOr;let j=index">
+
+        <div class="task-badge-container">
+          <div *ngIf="item.isUrgent" class="task-badge">
+            {{ 'Task.urgent' | translate}}
+          </div>
+        </div>
+
+        <div [class.selected-list]="selectedTask != null && item.guid === selectedTask.guid"
+             (blur)="unselectSelectedTask()" (click)="showInspector(item.guid)" class="task-row">
+          <div>
+            <div class="task-row-details">
+              <div class="task-row-title" dir="auto">
+                {{item.title}}
+              </div>
+              <div class="task-row-right">
+                <div [style.color]="setColorForStatus(item.statusTitle)[1]"
+                     [style.background-color]="setColorForStatus(item.statusTitle)[0]" class="task-row-status">
+                  <!--              <img style="margin-inline-end: 5px" src="assets/icons/Task/status-list.svg">-->
+                  {{item.statusTitle}}
+                </div>
+                <div class="task-row-priority">
+                  <div *ngIf="item.priorityId == 5" class="label-high">
+                    <img style="margin-inline-end: 5px"
+                         src="../../../assets/icons/Task/label-high.svg"> {{item.priorityTitle}}
+                  </div>
+                  <div *ngIf="item.priorityId == 3" class="label-medium">
+                    <img style="margin-inline-end: 5px"
+                         src="../../../assets/icons/Task/label-medium.svg"> {{item.priorityTitle}}
+                  </div>
+                  <div *ngIf="item.priorityId == 1" class="label-low">
+                    <img style="margin-inline-end: 5px"
+                         src="../../../assets/icons/Task/label-low.svg"> {{item.priorityTitle}}
+                  </div>
+                </div>
+                <!--            <div *ngIf="item.usersAssignedTo.length > 3 " class="task-row-users">-->
+                <!--              <div *ngFor="let user of item.usersAssignedTo.splice(2,item.usersAssignedTo.length - 2)"-->
+                <!--                   style="text-align: center; padding-left: 30px">-->
+                <!--                <span *ngIf="user.profileImageGuid == null" class="member-without-image"-->
+                <!--                      style="background-color: #1EC1C3">{{user.nickName.charAt(0)}}</span>-->
+                <!--                <img #tooltip="matTooltip"-->
+                <!--                     [matTooltip]="user.nickName"-->
+                <!--                     [matTooltipPosition]="'below'"-->
+                <!--                     matTooltipHideDelay="100" *ngIf="user.profileImageGuid != null"-->
+                <!--                     [src]="domainName + '/en-US/file/get?id=' + user.profileImageGuid"-->
+                <!--                     style="background-color: #86A8E7" class="member">-->
+                <!--              </div>-->
+                <!--            </div>-->
+
+                <!--            *ngIf="item.usersAssignedTo.length <= 3 "-->
+                <div class="task-row-users">
+
+                  <div style="width: 100%;"
+                       class="d-flex flex-row justify-content-start align-items-center"
+                       *ngIf="item.usersAssignedTo != null && item.usersAssignedTo.length > 0 && item.usersAssignedTo.length <= 3">
+                    <div *ngFor="let user of item.usersAssignedTo" style="text-align:center;padding-inline-start: 15px">
+                      <span #tooltip="matTooltip" [matTooltip]="user.nickName" [matTooltipPosition]="'below'"
+                            matTooltipHideDelay="100" *ngIf="user.profileImageGuid == null"
+                            style="background-color:#86A8E7" class="member-without-image">
+                                  {{user.nickName.charAt(0)}}
+                      </span>
+                      <img #tooltip="matTooltip" [matTooltip]="user.nickName" [matTooltipPosition]="'below'"
+                           matTooltipHideDelay="100" *ngIf="user.profileImageGuid != null"
+                           [src]="domainName + '/en-US/file/get?id=' + user.profileImageGuid + '&quality=100'"
+                           style="background-color: #86A8E7"
+                           class="member">
+                    </div>
+                  </div>
+
+                  <div style="width: 100%;"
+                       class="d-flex flex-row justify-content-start align-items-center"
+                       *ngIf="item.usersAssignedTo != null && item.usersAssignedTo.length > 0 && item.usersAssignedTo.length > 3">
+
+                    <div style="text-align:center;padding-inline-start: 15px">
+                      <span #tooltip="matTooltip" [matTooltip]="item.usersAssignedTo[0].nickName"
+                            [matTooltipPosition]="'below'" matTooltipHideDelay="100"
+                            *ngIf="item.usersAssignedTo[0].profileImageGuid == null"
+                            style="background-color:#86A8E7" class="member-without-image">
+                                  {{item.usersAssignedTo[0].nickName.charAt(0)}}
+                                </span>
+                      <img #tooltip="matTooltip" [matTooltip]="item.usersAssignedTo[0].nickName"
+                           [matTooltipPosition]="'below'" matTooltipHideDelay="100"
+                           *ngIf="item.usersAssignedTo[0].profileImageGuid != null"
+                           [src]="domainName + '/en-US/file/get?id=' + item.usersAssignedTo[0].profileImageGuid + '&quality=100'"
+                           style="background-color: #86A8E7" class="member">
+                    </div>
+
+                    <div style="text-align:center;padding-inline-start: 15px">
+                      <span #tooltip="matTooltip" [matTooltip]="item.usersAssignedTo[1].nickName"
+                            [matTooltipPosition]="'below'" matTooltipHideDelay="100"
+                            *ngIf="item.usersAssignedTo[1].profileImageGuid == null"
+                            style="background-color:#86A8E7" class="member-without-image">
+                                   {{item.usersAssignedTo[1].nickName.charAt(0)}}
+                                </span>
+                      <img #tooltip="matTooltip" [matTooltip]="item.usersAssignedTo[1].nickName"
+                           [matTooltipPosition]="'below'" matTooltipHideDelay="100"
+                           *ngIf="item.usersAssignedTo[1].profileImageGuid != null"
+                           [src]="domainName + '/en-US/file/get?id=' + item.usersAssignedTo[1].profileImageGuid + '&quality=100'"
+                           style="background-color: #86A8E7" class="member">
+                    </div>
+
+                    <div style="text-align:center;padding-inline-start: 15px">
+                      <span style="background-color:#86A8E7" class="member-without-image">
+                          +{{item.usersAssignedTo.length - 2}}
+                      </span>
+                    </div>
+
+                  </div>
+
+                </div>
+
+                <div class="task-row-date">
+                  {{item.endDate | seventaskDatePipe: 'YYYY/M/D' | async}}
+                </div>
+
+              </div>
+            </div>
+
+            <div class="task-row-icon-list">
+              <span style="font-size: 17px" #tooltip="matTooltip" matTooltip="{{'Task.noTeam' | translate}}"
+                    [matTooltipPosition]="'below'" matTooltipHideDelay="100" *ngIf="item.teamId == null"
+                    class="icon seventask-icon-task-card-disable-team icon-opacity-40"></span>
+              <div class="icon d-flex align-items-center" *ngIf="item.teamId != null">
+                <span style="font-size: 15px;margin-inline-end: 7px" #tooltip="matTooltip" [matTooltip]="item.teamName"
+                      [matTooltipPosition]="'below'" matTooltipHideDelay="100"
+                      class="seventask-icon-task-card-disable-team"></span>
+                <span class="disable-icon-text">{{item.teamName}}</span>
+              </div>
+              <span style="font-size: 17px" #tooltip="matTooltip" matTooltip="{{'Task.noProject' | translate}}"
+                    [matTooltipPosition]="'below'" matTooltipHideDelay="100" class="icon" *ngIf="item.projectId == null"
+                    class="icon seventask-icon-task-card-disable-project icon-opacity-40"></span>
+              <div *ngIf="item.projectId != null" class="icon d-flex align-items-center">
+                <span style="font-size: 15px;margin-inline-end: 7px" #tooltip="matTooltip"
+                      [matTooltip]="item.projectName" [matTooltipPosition]="'below'" matTooltipHideDelay="100"
+                      class="seventask-icon-task-card-disable-project"></span>
+                <span class="disable-icon-text">{{item.projectName}}</span>
+              </div>
+              <!--          <span style="font-size: 17px" #tooltip="matTooltip"-->
+              <!--                matTooltip="{{'Task.list' | translate}}"-->
+              <!--                [matTooltipPosition]="'below'"-->
+              <!--                matTooltipHideDelay="100"-->
+              <!--                class="icon seventask-icon-task-card-disable-list"></span>-->
+              <!--          <span style="font-size: 17px" #tooltip="matTooltip"-->
+              <!--                matTooltip="{{'Task.calendar' | translate}}"-->
+              <!--                [matTooltipPosition]="'below'"-->
+              <!--                matTooltipHideDelay="100"-->
+              <!--                class="icon seventask-icon-task-card-disable-calender"></span>-->
+              <span style="font-size: 17px" #tooltip="matTooltip" matTooltip="{{'Task.timeTrackNotStarted' |translate}}"
+                    [matTooltipPosition]="'below'" matTooltipHideDelay="100" *ngIf="!isRunning(item.id)"
+                    class="icon seventask-icon-task-card-disable-timeTrack icon-opacity-40"></span>
+              <span style="font-size: 17px" #tooltip="matTooltip" matTooltip="{{'Task.timeTrackStarted' |
+                translate}}" [matTooltipPosition]="'below'" matTooltipHideDelay="100" *ngIf="isRunning(item.id)"
+                    class="icon seventask-icon-task-card-enable-timeTrack"></span>
+              <span style="font-size: 17px" #tooltip="matTooltip" matTooltip="{{'Task.reminder' | translate}}"
+                    [matTooltipPosition]="'below'" matTooltipHideDelay="100"
+                    class="icon seventask-icon-task-card-disable-reminder icon-opacity-40"></span>
+              <span style="font-size: 17px" #tooltip="matTooltip" matTooltip="{{'Task.noDescription' | translate}}"
+                    [matTooltipPosition]="'below'" matTooltipHideDelay="100" *ngIf="item.description == null"
+                    class="icon seventask-icon-task-card-disable-description icon-opacity-40"></span>
+              <span style="font-size: 17px" [appTooltip]="(item.description | textAnalysis : 'description')"
+                    placement="bottom" delay="100" *ngIf="item.description != null"
+                    class="icon seventask-icon-task-card-enable-description"></span>
+              <span style="font-size: 17px" #tooltip="matTooltip" matTooltip="{{'Task.estimatedTime' | translate}}"
+                    [matTooltipPosition]="'below'" matTooltipHideDelay="100"
+                    class="icon seventask-icon-task-card-disable-progressbar icon-opacity-40"></span>
+              <span style="font-size: 17px" #tooltip="matTooltip" matTooltip="{{'Task.checklist' | translate}}"
+                    [matTooltipPosition]="'below'" matTooltipHideDelay="100" *ngIf="item.checkListItems.length <= 0"
+                    class="icon seventask-icon-task-card-disable-checkList icon-opacity-40"></span>
+              <span style="font-size: 17px" [appTooltip]="item.checkListItems | textAnalysis : 'checklist'"
+                    placement="top" delay="500" *ngIf="item.checkListItems.length> 0"
+                    class="icon seventask-icon-task-card-enable-checkList"></span>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div [class.activated]="selectedTask != null && selectedTask.guid === item.guid" style="margin: 0;"
+             class="selected-task">
+
+          <div style="width: 100%" class="d-flex align-items-center flex-row"
+               *ngIf="selectedTask != null && item.guid === selectedTask.guid">
+
+            <div class="selected-task-time-track">
+
+              <div *ngIf="isRunning(item.id)" class="selected-task-time-track">
+                <button (click)="stopTimeTracker(item)" class="selected-task-time-track-button">
+                  <span
+                    class="seventask-icon-time-tracker-stop selected-task-time-track-icon"></span>
+                  <span
+                    class="selected-task-time-track-button-text">{{
+                    'Task.stopTimeTracker' |
+                      translate}}</span>
+                </button>
+              </div>
+
+              <div *ngIf="!isRunning(item.id) ||
+                isPaused(item.id)" class="selected-task-time-track">
+                <button (click)="startTimeTracker(item)" class="selected-task-time-track-button">
+                  <span
+                    class="seventask-icon-time-tracker-start selected-task-time-track-icon"></span>
+                  <span
+                    class="selected-task-time-track-button-text">{{
+                    'Task.startTimeTracker' |
+                      translate}}</span>
+                </button>
+              </div>
+
+              <div *ngIf="isRunning(item.id) &&
+                !isPaused(item.id)" class="selected-task-time-track">
+                <button (click)="pauseTimeTracker(item)" class="selected-task-time-track-button">
+                  <span
+                    class="seventask-icon-time-tracker-pause selected-task-time-track-icon"></span>
+                  <span
+                    class="selected-task-time-track-button-text">{{'Task.pause'
+                    | translate}}</span>
+                </button>
+              </div>
+
+            </div>
+
+            <!--            <div style="cursor: pointer">-->
+            <!--              <img src="../../../assets/icons/markAsDone.svg"-->
+            <!--                   class="selected-task-control">-->
+            <!--              <span class="selected-task-control-text">{{'Task.markAsDone' | translate}}</span>-->
+            <!--            </div>-->
+
+            <div #tooltip="matTooltip" matTooltip="{{'Tooltip.following'| translate}}" [matTooltipPosition]="'below'"
+                 matTooltipHideDelay="100" *ngIf="isFollowed(item.id)" style="margin-inline-start: 22px">
+              <img style="margin-inline-start: 0;cursor: auto" src="assets/icons/following.svg"
+                   class="selected-task-control">
+              <span class="selected-task-control-text">{{'Task.following' | translate}}</span>
+            </div>
+
+            <!--            <div #tooltip="matTooltip"-->
+            <!--                 matTooltip="{{'Tooltip.followTask'| translate}}"-->
+            <!--                 [matTooltipPosition]="'below'"-->
+            <!--                 matTooltipHideDelay="100"-->
+            <!--                 (click)="followTask(this.selectedTask)"-->
+            <!--                 *ngIf="!isFollowed(item.id)" style="cursor: pointer;margin-inline-start: 22px">-->
+            <!--              <img style="margin-inline-start: 0" src="assets/icons/following.svg"-->
+            <!--                   class="selected-task-control">-->
+            <!--              <span class="selected-task-control-text">{{'Task.follow' | translate}}</span>-->
+            <!--            </div>-->
+
+            <div class="delete-and-more">
+              <div class="delete-container" style="cursor: pointer" (click)="openDeleteDialog(item)">
+                <img src="../../../assets/icons/Task/deleteTask.svg" class="selected-task-control">
+                <span class="selected-task-control-text">{{'Task.deleteTask'
+                  |
+                  translate}}</span>
+              </div>
+
+              <img style="margin-inline-end: 22px" [matMenuTriggerFor]="selectedTaskMenu"
+                   src="../../../assets/icons/Task/selectedTaskMore.svg" class="selected-task-control">
+            </div>
+
+            <mat-menu class="more-menu" #selectedTaskMenu="matMenu" yPosition="below">
+
+              <div (click)="activateInspector()" mat-menu-item>
+                <img class="more-menu-icon-img" src="../../../assets/icons/edit.svg">
+                <span class="font-color">{{ 'Settings.edit' | translate}}</span>
+              </div>
+
+              <div class="d-flex align-items-center" *ngIf="!item.isUrgent"
+                   (click)="updateUrgent(item , true)" mat-menu-item>
+                <img class="more-menu-icon-img" src="../../../assets/icons/alarm-light-outline.svg">
+                <span class="font-color">{{ 'Task.makeUrgent' | translate}}</span>
+              </div>
+
+              <div class="d-flex align-items-center" *ngIf="item.isUrgent"
+                   (click)="updateUrgent(item , false)" mat-menu-item>
+                <img class="more-menu-icon-img" src="../../../assets/icons/alarm-light-off-outline.svg">
+                <span class="font-color">{{ 'Task.removeUrgent' | translate}}</span>
+              </div>
+
+              <div class="d-flex align-items-center" (click)="archiveTask(item)" mat-menu-item>
+                <img src="assets/icons/archive.svg" class="more-menu-icon-img">
+                <span class="font-color">{{ 'Task.archive' | translate}}</span>
+              </div>
+
+              <div class="d-flex align-items-center" (click)="duplicateTask(item)" mat-menu-item>
+                <img src="assets/icons/duplicate.svg" class="more-menu-icon-img">
+                <span class="font-color">{{ 'Task.duplicate' | translate}}</span>
+              </div>
+
+              <div #tooltip="matTooltip" matTooltip="{{'Tooltip.followTask'| translate}}" [matTooltipPosition]="'below'"
+                   matTooltipHideDelay="100" class="d-flex align-items-center" *ngIf="!isFollowed(this.item.id)"
+                   (click)="followTask(item)" mat-menu-item>
+                <img class="more-menu-icon-img" src="assets/icons/follow.svg">
+                <span class="font-color">{{ 'Task.follow' | translate}}</span>
+              </div>
+
+              <div #tooltip="matTooltip" matTooltip="{{'Tooltip.unfollowTask'| translate}}"
+                   [matTooltipPosition]="'below'" matTooltipHideDelay="100" class="d-flex align-items-center"
+                   *ngIf="isFollowed(item.id)" (click)="unfollowTask(item)" mat-menu-item>
+                <img class="more-menu-icon-img" src="assets/icons/unfollow.svg">
+                <span class="font-color">{{ 'Task.unfollow' | translate}}</span>
+              </div>
+
+            </mat-menu>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div *ngIf="toDoView === 'Gantt' && !showGetTasksLoading" class="main-container-gantt">
+    <div class="month-days-header">
+      <div class="month-navigator">
+        <span class="seventask-icon-calendar-back month-navigator-icon" (click)="addToCurrentDate(-1, 'months')"
+              [style]="'transform: rotate(' + iconRotationDegree + 'deg)'"></span>
+      </div>
+      <div class="month-days" *ngFor="let day of visibleDates; let dayIndex = index" [style.width.px]="dayWidth"
+           [class.today]="todayDate.diff(day.momentDate, 'days') == 0 && day.momentDate.day() == todayDate.day()">
+        <div class="today-bar" [style.height.px]="ganttChartHeight - 170"
+             *ngIf="todayDate.diff(day.momentDate, 'days') == 0 && day.momentDate.day() == todayDate.day()"></div>
+        <div [ngSwitch]="calendarData.firstCalendar" style="text-align: center;">
+          <span *ngSwitchCase="calendarType.GEORGIAN">{{day.momentDate.toDate()| date:'d'}}</span>
+          <span *ngSwitchCase="calendarType.JALALI">
+            {{day.momentDate.toDate()
+            |getJalaliDate:'D'}}
+          </span>
+        </div>
+        <div style="text-align: center;">
+          {{ dayAbbrs[dayIndex] }}
+        </div>
+      </div>
+      <div class="month-navigator">
+        <span class="seventask-icon-calendar-back month-navigator-icon" (click)="addToCurrentDate(1, 'months')"
+              [style]="'transform: rotate(' + (180-iconRotationDegree) + 'deg);'"></span>
+      </div>
+    </div>
+
+    <div class="current-month">{{ currentMonthName }}</div>
+
+    <div class="gantt-tasks-container" [style.height.px]="ganttChartHeight - 210"
+         (mousemove)="checkMouseMoveOnGantt($event)"
+         (mouseleave)="hoveredOnBarOffset=null;
+                       taskToAddtime = null;
+                       hoveredProjectToAddTimeline = -1;
+                       onMouseUpHandler($event)">
+      <div class="range-tasks-container" [@listAnimation]="rangeTasks" [@.disabled]="disableGanttAnimation">
+        <div class="range-task" *ngFor="let rangeTask of rangeTasks; index as i"
+             (mousemove)="addOrRemoveResizeCursor($event, rangeTask)" (mousedown)="taskMouseDown($event, rangeTask)"
+             (mouseleave)="taskIsDraggable[rangeTask.task.id]=false" (blur)="unselectSelectedTask()"
+             (click)="showInspector(rangeTask.task.guid)"
+             [style.left.px]="iconRotationDegree === 180 ? 0 : rangeTask.offsetX"
+             [style.right.px]="iconRotationDegree === 180 ? rangeTask.offsetX : 0"
+             [style.height.px]="rangeTaskHeight-8"
+             [style.top.px]="rangeTask.offsetY"
+             [style.width.px]="rangeTask.width"
+             [style.background-color]="rangeTask.color">
+          <span class="range-task-title" dir="auto">{{ rangeTask.task.title }}</span>
+        </div>
+      </div>
+
+      <div class="range-tasks-container">
+        <div class="range-task" *ngFor="let rangeTask of onAddingRangeTasks; index as i"
+             style="opacity: 0.3;"
+             [style.left.px]="iconRotationDegree === 180 ? 0 : rangeTask.offsetX"
+             [style.right.px]="iconRotationDegree === 180 ? rangeTask.offsetX : 0"
+             [style.height.px]="rangeTaskHeight-8"
+             [style.top.px]="rangeTask.offsetY"
+             [style.width.px]="rangeTask.width"
+             [style.background-color]="rangeTask.color">
+          <span class="range-task-title" dir="auto">{{ rangeTask.task.title }}</span>
+        </div>
+      </div>
+
+      <div class="hovered-on-bar" *ngIf="hoveredOnBarOffset !== null"
+           [style.top.px]="hoveredOnBarOffset"
+           [style.height.px]="rangeTaskHeight"></div>
+
+      <div class="day" *ngFor="let day of visibleDates; index as i" [style.width.px]="dayWidth"
+           (mouseenter)="enteredDate=day"
+           [style.background-color]="i%2!== 0 ? '#FBFCFE' : 'white'">
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="toDoView === 'Table'" class="main-container-list">
+
+    <div class="no-task" style="opacity: 1;" *ngIf="((showingTasks |search:searchValue).length <= 0 ||
+      (showingTasks|filter: enabledFilters: andOr).length <=0) && !showGetTasksLoading">
+      <img style="width: 15%;height: 15%" src="../../../assets/noDataImages/task.svg">
+      <div style="margin-top: 20px;opacity: 0.3">{{ 'Task.noTaskFound' | translate}}</div>
+    </div>
+
+    <div *ngIf="((showingTasks |search:searchValue).length > 0 &&
+      (showingTasks|filter: enabledFilters: andOr).length > 0)" class="table-header">
+      <div style="width: 9.6%;font-size: 75%;cursor: auto;border: none"
+           class="table-status-container">{{'Task.status'| translate}}</div>
+      <div style="justify-content: center; opacity: 0.7;font-size: 75%;border: none"
+           class="table-title-container"> {{'Task.title'| translate}}</div>
+      <div style="opacity: 0.7;font-size: 75%;border: none"
+           class="table-property-container"> {{'Task.property'| translate}}</div>
+      <div style="opacity: 0.7;font-size: 75%;cursor: auto;border: none"
+           class="justify-content-center table-member-container">
+        {{'Task.members'| translate}}</div>
+      <div style="opacity: 0.7;font-size: 75%;border: none"
+           class="table-time-container"> {{'Task.timeAndRepeat'| translate}}</div>
+      <div style="opacity: 0.7;font-size: 75%;cursor: auto;border: none"
+           class="table-priority-container">{{'Task.priority'| translate}}</div>
+      <div style="opacity: 0.7;font-size: 75%;border: none"
+           class="table-time-track-container">{{'Task.timeTracking'| translate}}</div>
+      <div style="opacity: 0.7;font-size: 75%;border: none" class="table-control-button-container"></div>
+    </div>
+
+    <div *ngIf="((showingTasks |search:searchValue).length > 0 &&
+      (showingTasks|filter: enabledFilters: andOr).length > 0)" [style.height.px]="columnHeight - 180" class="x"
+         [@listAnimation]="showingTasks.length">
+
+      <div class="table-container" *ngFor="let item of showingTasks
+        |sortTask:sortName:isAscending
+        |search:searchValue
+        |filter:enabledFilters:andOr;let j=index;let last = last; let first = first">
+
+        <div class="table-task-row"
+             [style.border-bottom]="last ? '0.5px solid rgba(43, 69, 110, 0.15)' : 'none'"
+             [style.border-bottom-left-radius]="last ? '5px' : 'none'"
+             [style.border-bottom-right-radius]="last ? '5px' : 'none'"
+             [style.border-top-right-radius]="first ? '5px' : 'none'"
+             [style.border-top-left-radius]="first ? '5px' : 'none'"
+             (click)="showInspector(item.guid)"
+             [class.table-selected-task]=" selectedTask != null && item.id === selectedTask.id">
+
+          <div style="padding: 5px;width: 9.6%" class="d-flex align-items-center justify-content-center">
+            <div class="smooth-rectangle table-status-container" [matMenuTriggerFor]="editStatusMenu"
+                 #editStatusTrigger="matMenuTrigger"
+                 [style.background-color]="setColorForStatus(item.statusTitle)[1]">
+              <div class="table-status-title">
+                {{item.statusTitle}}
+              </div>
+
+              <mat-menu xPosition="before" yPosition="above" style="min-height: 233px;"
+                        class="table-edit-status-container" #editStatusMenu>
+                <div class="table-status-row" *ngFor="let status of statuses"
+                     style="padding-bottom: 10px;padding-top: 10px" (click)="$event.stopPropagation();">
+                  <img class="dot" style="margin-inline-start: 15px;margin-inline-end: 15px" src="assets/icons/dot.svg">
+                  <span (click)="$event.stopPropagation();changeStatus(item, status);"
+                        [style.color]="status.id === item.statusId ? '#2f4a77' : 'rgba(47,74,119,0.5)'"
+                        style="width: 80%;margin-inline-start: auto;cursor: pointer">{{status.title}}</span>
+                  <img class="status-tick" [style.visibility]="status.id === item.statusId ? 'visible' : 'hidden'"
+                       src="assets/icons/tick.svg">
+                </div>
+              </mat-menu>
+
+            </div>
+          </div>
+
+          <div class="table-title-container"
+               (mouseenter)="this.onTableTitle[j] = true;controlOpenDescriptionMenu(descriptionTrigger , j)"
+               (mouseleave)="controlCloseDescriptionMenu(descriptionTrigger , j);this.onTableTitle[j] = false;"
+               #descriptionTrigger="matMenuTrigger" [matMenuTriggerFor]="descriptionMenu">
+            <!--            [matMenuTriggerFor]="descriptionMenu" #descriptionTrigger="matMenuTrigger"-->
+            <!--            (mouseenter)="descriptionTrigger.openMenu() "-->
+            <div class="table-title">
+              {{item.title}}
+            </div>
+
+
+            <mat-menu yPosition="above" [hasBackdrop]="false" class="table-description-container" #descriptionMenu>
+
+              <div
+                (mouseleave)="onTableDescription[j] = false; isEditingTaskDescription[j] = false;
+                 isEditingTaskTitle[j] = false;newChecklistItem.value='';descriptionTrigger.closeMenu()"
+                (mouseenter)="onTableDescription[j] = true" (click)="$event.stopPropagation()">
+
+                <div class="d-flex align-items-center">
+                  <img style="margin-inline-end: 10px;"
+                       src="assets/icons/Task/task-title.svg"> {{'Task.title' | translate}}
+                </div>
+
+                <div dir="auto" class="table-description-row">
+                  <!--                  {{item.title}}-->
+                  <textarea dir="auto" autofocus #newTaskTitle
+                            (keydown.enter)="isEditingTaskTitle[j]=false;editTaskTitle(item, newTaskTitle.value.trim())"
+                            (blur)="isEditingTaskTitle[j]= false;editTaskTitle(item, newTaskTitle.value.trim())"
+                            class="table-task-title-input"
+                            *ngIf="isEditingTaskTitle[j]" value="{{item.title}}"></textarea>
+                  <div (click)="isEditingTaskTitle[j]= true"
+                       *ngIf="!isEditingTaskTitle[j]">
+                    {{item.title}}
+                  </div>
+                </div>
+
+                <div class="d-flex align-items-center" style="margin-top: 10px">
+                  <img style="margin-inline-end: 10px;"
+                       src="assets/icons/Task/Inspector/description.svg"> {{'Task.description' | translate}}
+                </div>
+
+                <div *ngIf="item.description != null && item.description !== ''" dir="auto"
+                     class="table-description-row">
+                  <!--                  {{item.description}}-->
+                  <textarea dir="auto" autofocus #newTaskDescription
+                            (keydown.enter)="isEditingTaskDescription[j]=false;editTaskDescription(item, newTaskDescription.value.trim())"
+                            (blur)="isEditingTaskDescription[j]= false;editTaskDescription(item, newTaskDescription.value.trim())"
+                            class="table-task-title-input"
+                            *ngIf="isEditingTaskDescription[j]" value="{{item.description}}"></textarea>
+                  <div (click)="isEditingTaskDescription[j]= true"
+                       *ngIf="!isEditingTaskDescription[j]">
+                    <div dir="auto" *ngFor="let line of item.description.split('\n')">
+                    <span [innerHTML]="(line | linkFinder:'#2e4a77')"
+                          style="line-height: 25px;"></span>
+                      <div *ngIf="line == ''">
+                        <br>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div *ngIf="item.description == null || item.description === ''" dir="auto"
+                     class="table-description-row">
+                  <!--                  {{item.description}}-->
+                  <textarea placeholder="{{'Placeholders.addDescription' | translate}}" dir="auto" autofocus
+                            #newTaskDescription
+                            (keydown.enter)="isEditingTaskDescription[j]=false;editTaskDescription(item, newTaskDescription.value.trim())"
+                            (blur)="isEditingTaskDescription[j]= false;editTaskDescription(item, newTaskDescription.value.trim())"
+                            class="table-task-title-input"
+                            value="{{item.description}}"></textarea>
+                </div>
+
+                <div style="margin-top: 10px" class="d-flex align-items-center">
+                  <img style="margin-inline-end: 10px;"
+                       src="assets/icons/Task/Inspector/checkList.svg"> {{'Task.checklist' | translate}}
+                </div>
+
+                <div *ngIf="item.checkListItems.length > 0" style="max-height: 120px;" class="table-description-row">
+
+                  <div class="checklist-item" (mouseleave)="isRemovingChecklistItem[k]= false"
+                       (mouseenter)="isRemovingChecklistItem[k]= true"
+                       *ngFor="let checklistItem of item.checkListItems; let k= index">
+
+                    <mat-checkbox class="mr-2 mt-2 checkbox-items"
+                                  (change)="modifyChecklistItem(item, $event , checklistItem)"
+                                  [checked]="checklistItem.isChecked"></mat-checkbox>
+                    {{checklistItem.title}}
+                  </div>
+
+                </div>
+
+                <div style="flex-direction: row" class="table-description-row">
+                  <span style="margin-inline-end: 7px" class="seventask-icon-add-add-circle"></span>
+                  <input [class.placeholder-rtl]="iconRotationDegree == 180"
+                         dir="auto" placeholder="{{'Placeholders.addCheckListItem' | translate}}" #newChecklistItem
+                         (keydown.enter)="addChecklistItem(item, newChecklistItem.value.trim());newChecklistItem.value=''"
+                         (blur)="addChecklistItem(item, newChecklistItem.value.trim());newChecklistItem.value=''"
+                         class="table-task-checklist-input">
+                </div>
+
+              </div>
+
+            </mat-menu>
+          </div>
+
+          <div class="table-property-container" #propertyTrigger="matMenuTrigger"
+               [matMenuTriggerFor]="tableEditTeamMenu"
+               (mouseenter)="this.onTableProperty[j] = true;controlOpenPropertyMenu(propertyTrigger , j)"
+               (mouseleave)="controlClosePropertyMenu(propertyTrigger , j);this.onTableProperty[j] = false;">
+
+            <img [style.opacity]="item.teamId != null ? 1 : 0.5" style="margin-inline-end: 12px; cursor: pointer;"
+                 src="assets/icons/Task-Table/Team.svg">
+            <img [style.opacity]="item.projectId != null ? 1 : 0.5" style="cursor: pointer;"
+                 src="assets/icons/Task-Table/Project.svg">
+            <!--            <img style="margin-inline-end: 12px;cursor: pointer;" src="assets/icons/Task-Table/Reminder.svg">-->
+
+            <mat-menu class="table-edit-team-container" yPosition="above" [hasBackdrop]="false" #tableEditTeamMenu>
+              <div (mouseleave)="onTablePropertyMenu[j] = false;propertyTrigger.closeMenu()"
+                   (mouseenter)="onTablePropertyMenu[j] = true">
+                <div class="table-member-row" style="padding-bottom: 10px;padding-top: 10px"
+                     (click)="$event.stopPropagation();">
+                  <img style="margin-inline-start: 15px;margin-inline-end: 15px" src="assets/icons/Task-Table/Team.svg">
+                  <span>{{'Team.team' | translate}}</span>
+
+                  <span (click)="openEditTeamDialog(item)" *ngIf="item.teamName != null"
+                        class="table-team-name"> {{item.teamName}}</span>
+                  <span (click)="openEditTeamDialog(item)" style="font-weight: 900" *ngIf="item.teamName == null"
+                        class="table-team-name"> + </span>
+
+                </div>
+
+                <div class="table-member-row" style="padding-bottom: 10px;padding-top: 10px"
+                     (click)="$event.stopPropagation();">
+                  <img style="margin-inline-start: 15px;margin-inline-end: 15px"
+                       src="assets/icons/Task-Table/Project.svg">
+                  <span>{{'Task.project' | translate}}</span>
+
+                  <span (click)="openEditTeamDialog(item)" *ngIf="item.projectName != null"
+                        class="table-team-name"> {{item.projectName}}</span>
+                  <span (click)="openEditTeamDialog(item)" style="font-weight: 900" *ngIf="item.projectName == null"
+                        class="table-team-name"> + </span>
+
+                </div>
+              </div>
+            </mat-menu>
+
+          </div>
+
+          <div class="table-member-container"
+               [class.justify-content-center]="item.usersAssignedTo.length == 0"
+               #memberTrigger="matMenuTrigger" [matMenuTriggerFor]="tableEditMembersMenu"
+               (mouseenter)="this.onTableMember[j] = true;controlOpenMemberMenu(memberTrigger , j)"
+               (mouseleave)="controlCloseMemberMenu(memberTrigger , j);this.onTableMember[j] = false;">
+
+            <div style="width: 100%;" [matMenuTriggerFor]="tableEditMembersMenu"
+                 class="d-flex flex-row justify-content-start align-items-center"
+                 *ngIf="item.usersAssignedTo != null && item.usersAssignedTo.length > 0 && item.usersAssignedTo.length <= 3">
+              <div *ngFor="let user of item.usersAssignedTo" style="text-align:center;padding-inline-start: 5px">
+                <span #tooltip="matTooltip" [matTooltip]="user.nickName" [matTooltipPosition]="'below'"
+                      matTooltipHideDelay="100" *ngIf="user.profileImageGuid == null"
+                      style="background-color:#86A8E7" class="table-member-without-image">
+                                  {{user.nickName.charAt(0)}}
+                                </span>
+                <img #tooltip="matTooltip" [matTooltip]="user.nickName" [matTooltipPosition]="'below'"
+                     matTooltipHideDelay="100" *ngIf="user.profileImageGuid != null"
+                     [src]="domainName + '/en-US/file/get?id=' + user.profileImageGuid + '&quality=100'"
+                     style="background-color: #86A8E7"
+                     class="table-member">
+              </div>
+            </div>
+
+            <div style="width: 100%;" [matMenuTriggerFor]="tableEditMembersMenu"
+                 class="d-flex flex-row justify-content-start align-items-center"
+                 *ngIf="item.usersAssignedTo != null && item.usersAssignedTo.length > 0 && item.usersAssignedTo.length > 3">
+
+              <div style="text-align:center;padding-inline-start: 5px">
+                                <span #tooltip="matTooltip" [matTooltip]="item.usersAssignedTo[0].nickName"
+                                      [matTooltipPosition]="'below'" matTooltipHideDelay="100"
+                                      *ngIf="item.usersAssignedTo[0].profileImageGuid == null"
+                                      style="background-color:#86A8E7" class="table-member-without-image">
+                                  {{item.usersAssignedTo[0].nickName.charAt(0)}}
+                                </span>
+                <img #tooltip="matTooltip" [matTooltip]="item.usersAssignedTo[0].nickName"
+                     [matTooltipPosition]="'below'" matTooltipHideDelay="100"
+                     *ngIf="item.usersAssignedTo[0].profileImageGuid != null"
+                     [src]="domainName + '/en-US/file/get?id=' + item.usersAssignedTo[0].profileImageGuid + '&quality=100'"
+                     style="background-color: #86A8E7" class="table-member">
+              </div>
+
+              <div style="text-align:center;padding-inline-start: 5px">
+                                <span #tooltip="matTooltip" [matTooltip]="item.usersAssignedTo[1].nickName"
+                                      [matTooltipPosition]="'below'" matTooltipHideDelay="100"
+                                      *ngIf="item.usersAssignedTo[1].profileImageGuid == null"
+                                      style="background-color:#86A8E7" class="table-member-without-image">
+                                   {{item.usersAssignedTo[1].nickName.charAt(0)}}
+                                </span>
+                <img #tooltip="matTooltip" [matTooltip]="item.usersAssignedTo[1].nickName"
+                     [matTooltipPosition]="'below'" matTooltipHideDelay="100"
+                     *ngIf="item.usersAssignedTo[1].profileImageGuid != null"
+                     [src]="domainName + '/en-US/file/get?id=' + item.usersAssignedTo[1].profileImageGuid + '&quality=100'"
+                     style="background-color: #86A8E7" class="table-member">
+              </div>
+
+              <div style="text-align:center;padding-inline-start: 5px">
+                                <span style="background-color:#86A8E7" class="table-member-without-image">
+                          +{{item.usersAssignedTo.length - 2}}
+                                </span>
+              </div>
+
+            </div>
+
+            <div style="width:100%" class="d-flex justify-content-center">
+
+              <div [matMenuTriggerFor]="tableEditMembersMenu" style="width: 50%;margin-inline-start: 5px"
+                   class="table-tag-container" *ngIf="item.usersAssignedTo.length == 0">{{'Task.add' | translate}}</div>
+              <div (click)="joinTask(item)" style="width: 50%;" class="table-tag-container"
+                   *ngIf="item.usersAssignedTo.length == 0">{{'Task.join' | translate}}</div>
+            </div>
+
+            <mat-menu yPosition="above" [hasBackdrop]="false" class="table-edit-team-container" #tableEditMembersMenu>
+              <div (mouseleave)="onTableMemberMenu[j] = false;memberTrigger.closeMenu()"
+                   (mouseenter)="onTableMemberMenu[j] = true">
+                <div style="margin-top: 10px;margin-bottom: 10px;opacity: 0.7"
+                     class="d-flex align-items-center justify-content-center">
+                  <span>{{'Task.createdBy' | translate}}</span>
+                  <span style="margin-inline-start: 5px">{{item.createdBy.nickName}}</span>
+                </div>
+
+                <div style="max-height: 200px ;overflow-y:auto;" class="d-flex flex-column">
+                  <div *ngFor="let member of item.usersAssignedTo" class="table-status-row"
+                       style="padding-bottom: 10px;padding-top: 10px" (click)="$event.stopPropagation();">
+                                    <span #tooltip="matTooltip" [matTooltip]="member.nickName"
+                                          [matTooltipPosition]="'below'" matTooltipHideDelay="100"
+                                          *ngIf="member.profileImageGuid == null"
+                                          style="background-color:#86A8E7;margin-inline-start: 15px;margin-inline-end: 15px"
+                                          class="table-member-without-image">
+                          {{member.nickName.charAt(0)}}
+                </span>
+
+                    <img #tooltip="matTooltip" [matTooltip]="member.nickName" [matTooltipPosition]="'below'"
+                         matTooltipHideDelay="100" *ngIf="member.profileImageGuid != null"
+                         [src]="domainName + '/en-US/file/get?id=' + member.profileImageGuid + '&quality=100'"
+                         style="background-color: #86A8E7;margin-inline-start: 15px;margin-inline-end: 15px"
+                         class="table-member">
+
+                    <span>{{member.nickName}}</span>
+
+                    <div (click)="removeAssignee(item, member.userId)" class="table-member-remove-container">
+                      <span style="font-size: 10px" class="seventask-icon-edit-cancel-medium"></span>
+                    </div>
+
+
+                  </div>
+                </div>
+
+                <div class="d-flex justify-content-center align-items-center">
+                  <div (click)="openAddMemberDialog(item)" class="table-add-member">
+                    {{'Task.addMember' | translate}}
+                  </div>
+                </div>
+
+              </div>
+            </mat-menu>
+
+          </div>
+
+          <div class="table-time-container">
+
+            <div *ngIf="item.startDate != null" class="date-container"
+                 (mouseenter)="isHoveringStartDateForTask=item.id"
+                 (mouseleave)="isHoveringStartDateForTask=null"
+                 (click)="openEditDateDialog(item, 'start')">
+              <div class="delete-datetime-button" *ngIf="isHoveringStartDateForTask === item.id"
+                   (click)="deleteTaskDate($event, item, 'start')">
+                <span class="seventask-icon-edit-cancel-medium" style="font-size: 7px"></span>
+              </div>
+              <img style="margin-inline-end: 7px"
+                   src="assets/icons/Task-Table/Date.svg"> <span
+              class="date-text">{{item.startDate | seventaskDatePipe: 'YYYY/M/D' | async}}</span>
+            </div>
+
+            <div *ngIf="item.startDate == null" class="date-container"
+                 (click)="openEditDateDialog(item, 'start')">
+              <img style="margin-inline-end: 7px" src="assets/icons/Task-Table/Date.svg"> <span
+              class="date-text">{{'Task.setStartTime' | translate}}</span>
+            </div>
+
+            <div *ngIf="item.endDate != null" class="date-container"
+                 (mouseenter)="isHoveringEndDateForTask=item.id"
+                 (mouseleave)="isHoveringEndDateForTask=null"
+                 (click)="openEditDateDialog(item, 'end')">
+              <div class="delete-datetime-button" *ngIf="isHoveringEndDateForTask === item.id"
+                   (click)="deleteTaskDate($event, item, 'end')">
+                <span class="seventask-icon-edit-cancel-medium" style="font-size: 7px"></span>
+              </div>
+              <img style="margin-inline-end: 7px"
+                   src="assets/icons/Task-Table/Date.svg">
+              <span class="date-text">{{item.endDate | seventaskDatePipe: 'YYYY/M/D' | async}}</span>
+            </div>
+
+            <div *ngIf="item.endDate == null" class="date-container"
+                 (click)="openEditDateDialog(item, 'end')">
+              <img style="margin-inline-end: 7px" src="assets/icons/Task-Table/Date.svg"> <span
+              class="date-text">{{'Task.setEndTime' | translate}}</span>
+            </div>
+
+            <!--            <mat-menu style="min-height: 433px;" class="table-edit-status-container" #tableEditTimeMenu>-->
+            <!--              <app-date-time-picker [datePicker]="true"-->
+            <!--                                    [timePicker]="true"-->
+            <!--                                    [havePresets]="true"-->
+            <!--                                    [defaultStartDate]="null"-->
+            <!--                                    [defaultEndDate]="null"-->
+            <!--                                    (selectDates)="item.startD = $event[0];newTaskDateRange.controls.end.value = $event[1];">-->
+            <!--              </app-date-time-picker>-->
+            <!--            </mat-menu>-->
+
+          </div>
+
+          <div class="table-priority-container"
+               (mouseenter)="this.onTablePriority[j] = true;controlOpenPriorityMenu(priorityTrigger , j)"
+               (mouseleave)="controlClosePriorityMenu(priorityTrigger , j);this.onTablePriority[j] = false;"
+               #priorityTrigger="matMenuTrigger"
+               [matMenuTriggerFor]="tableEditPriorityMenu">
+
+
+            <div style="width: 100%;background: none;font-size: 75%;font-weight: normal" *ngIf="item.priorityId == 5"
+                 class="d-flex justify-content-center align-items-center label-high">
+              <img style="margin-inline-end: 5px"
+                   src="../../../assets/icons/Task/label-high.svg"> {{item.priorityTitle}}
+            </div>
+
+            <div style="width: 100%;background: none;font-size: 75%;font-weight: normal" *ngIf="item.priorityId == 3"
+                 class="d-flex justify-content-center align-items-center label-medium">
+              <img style="margin-inline-end: 5px"
+                   src="../../../assets/icons/Task/label-medium.svg"> {{item.priorityTitle}}
+            </div>
+
+            <div style="width: 100%;background: none;font-size: 75%;font-weight: normal" *ngIf="item.priorityId == 1"
+                 class="d-flex justify-content-center align-items-center label-low">
+              <img style="margin-inline-end: 5px" src="../../../assets/icons/Task/label-low.svg"> {{item.priorityTitle}}
+            </div>
+
+            <mat-menu yPosition="above" [hasBackdrop]="false" class="table-edit-priority-container"
+                      #tableEditPriorityMenu>
+              <div (mouseleave)="onTablePriorityMenu[j] = false;priorityTrigger.closeMenu()"
+                   (mouseenter)="onTablePriorityMenu[j] = true">
+
+                <div class="d-flex justify-content-start align-items-center table-status-row table-priority-row"
+                     (click)="updatePriority(item, 1);$event.stopPropagation()">
+                  <img style="margin-inline-end: 15px;margin-inline-start: 15px"
+                       src="../../../assets/icons/Task/label-low.svg"> {{'Task.low' | translate}}
+                  <img class="priority-tick" [style.visibility]="1 === item.priorityId ? 'visible' : 'hidden'"
+                       src="assets/icons/tick.svg">
+                </div>
+
+                <div class="d-flex justify-content-start align-items-center table-status-row table-priority-row"
+                     (click)="updatePriority(item, 3);$event.stopPropagation()">
+                  <img style="margin-inline-end: 15px;margin-inline-start: 15px"
+                       src="../../../assets/icons/Task/label-medium.svg"> {{'Task.medium' | translate}}
+                  <img class="priority-tick" [style.visibility]="3 === item.priorityId ? 'visible' : 'hidden'"
+                       src="assets/icons/tick.svg">
+                </div>
+
+                <div class="d-flex justify-content-start align-items-center table-status-row table-priority-row"
+                     (click)="updatePriority(item, 5);$event.stopPropagation()">
+                  <img style="margin-inline-end: 15px;margin-inline-start: 15px"
+                       src="../../../assets/icons/Task/label-high.svg"> {{'Task.high' | translate}}
+                  <img class="priority-tick" [style.visibility]="5 === item.priorityId ? 'visible' : 'hidden'"
+                       src="assets/icons/tick.svg">
+                </div>
+
+              </div>
+            </mat-menu>
+
+          </div>
+
+          <div class="table-time-track-container">
+
+            <div style="cursor: pointer" *ngIf="isRunning(item.id)" (click)="stopTimeTracker(item)"
+                 class="selected-task-time-track">
+              <span style="font-size: 24px"
+                    class="seventask-icon-time-tracker-stop selected-task-time-track-icon"></span>
+            </div>
+
+            <div style="cursor: pointer" *ngIf="!isRunning(item.id) || isPaused(item.id)"
+                 (click)="startTimeTracker(item)" class="selected-task-time-track">
+              <span style="font-size: 24px"
+                    class="seventask-icon-time-tracker-start selected-task-time-track-icon"></span>
+            </div>
+
+            <!--            <div style="cursor: pointer" *ngIf="isRunning(item.id) && !isPaused(item.id)"-->
+            <!--                 (click)="pauseTimeTracker(item)" class="selected-task-time-track">-->
+            <!--              <span style="font-size: 24px"-->
+            <!--                    class="seventask-icon-time-tracker-pause selected-task-time-track-icon"></span>-->
+            <!--            </div>-->
+
+          </div>
+
+          <div class="table-control-button-container" [matMenuTriggerFor]="tableMoreMenu">
+            <img style="margin-inline-end: 12px" src="assets/icons/Task-Table/More.svg">
+
+            <mat-menu class="table-edit-status-container" #tableMoreMenu>
+
+              <div class="d-flex align-items-center" *ngIf="!item.isUrgent" (click)="updateUrgent(item , true)"
+                   mat-menu-item>
+                <img class="more-menu-icon-img" src="../../../assets/icons/alarm-light-outline.svg">
+                <span class="font-color">{{ 'Task.makeUrgent' | translate}}</span>
+              </div>
+
+              <div class="d-flex align-items-center" *ngIf="item.isUrgent" (click)="updateUrgent(item , false)"
+                   mat-menu-item>
+                <img class="more-menu-icon-img" src="../../../assets/icons/alarm-light-off-outline.svg">
+                <span class="font-color">{{ 'Task.removeUrgent' | translate}}</span>
+              </div>
+
+              <div class="d-flex align-items-center" (click)="archiveTask(item)" mat-menu-item>
+                <img src="assets/icons/archive.svg" class="more-menu-icon-img">
+                <span class="font-color">{{ 'Task.archive' | translate}}</span>
+              </div>
+
+              <div class="d-flex align-items-center" (click)="duplicateTask(item)" mat-menu-item>
+                <img src="assets/icons/duplicate.svg" class="more-menu-icon-img">
+                <span class="font-color">{{ 'Task.duplicate' | translate}}</span>
+              </div>
+
+              <div #tooltip="matTooltip" matTooltip="{{'Tooltip.followTask'| translate}}" [matTooltipPosition]="'below'"
+                   matTooltipHideDelay="100" class="d-flex align-items-center" *ngIf="!isFollowed(this.item.id)"
+                   (click)="followTask(item)" mat-menu-item>
+                <img class="more-menu-icon-img" src="assets/icons/follow.svg">
+                <span class="font-color">{{ 'Task.follow' | translate}}</span>
+              </div>
+
+              <div #tooltip="matTooltip" matTooltip="{{'Tooltip.unfollowTask'| translate}}"
+                   [matTooltipPosition]="'below'" matTooltipHideDelay="100" class="d-flex align-items-center"
+                   *ngIf="isFollowed(this.item.id)" (click)="unfollowTask(item)" mat-menu-item>
+                <img class="more-menu-icon-img" src="assets/icons/unfollow.svg">
+                <span class="font-color">{{ 'Task.unfollow' | translate}}</span>
+              </div>
+
+              <div class="d-flex align-items-center" (click)="openDeleteDialog(item)" mat-menu-item>
+                <span style="font-size: 20px;margin-inline-end: 5px" class="seventask-icon-task-header-trash"></span>
+                <span style="color: red">{{ 'Task.deleteTask' | translate}}</span>
+              </div>
+
+            </mat-menu>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div *ngIf="(isAllTasksSelected && toDoView === 'Board')" class="main-container-list">
+  <div class="no-task" style="opacity: 1;">
+    <img style="width: 15%;height: 15%" src="../../../assets/noDataImages/task.svg">
+    <div style="margin-top: 20px;opacity: 0.3">{{ 'Task.selectTeamOrProject' | translate}}</div>
+  </div>
+</div>
+
+
+<!--<div class="no-task" style="opacity: 0.3;"-->
+<!--     *ngIf="toDoView === 'List' && this.showingTasks.length <= 0 && !showGetTasksLoading">-->
+<!--  <img style="width: 15%;height: 15%" src="../../../assets/noDataImages/task.svg">-->
+<!--  <div style="margin-top: 20px">{{ 'Task.noTaskMessage' | translate}}</div>-->
+<!--</div>-->
+
+<div *ngIf="showGetTasksLoading || (toDoView === 'Board' && ((selectedProject == null &&selectedTeam == null && isPersonalSelected === false) ||
+  isPersonalProjectSelected))" class="loading-container">
+  <seventask-spinner [loadingType]="3" *ngIf="showGetTasksLoading"></seventask-spinner>
+  <!--  <div style="margin-top: 10px;color: #2E4A77;">{{'Task.loadingTasks' |translate}}</div>-->
+</div>
+
+<!--<app-task-card [mode]="'list'" [item]="selectedTask" [backgroundColor]="'red'"></app-task-card>-->

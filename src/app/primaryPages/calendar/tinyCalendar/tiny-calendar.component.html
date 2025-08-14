@@ -1,0 +1,114 @@
+<div class="main-container">
+  <div *ngIf="navigatorOn || headerOn" class="header d-flex flex-row">
+    <div *ngIf="navigatorOn" [id]="selectorMode ? 'left-nav' : ''"  class="navigator" (click)="addMonth(-1)">
+      <span class="seventask-icon-calendar-back navigator-icon"
+            [style]="'transform: rotate(' + navIconRotateDegree + 'deg)'"></span>
+    </div>
+    <div *ngIf="headerOn" class="header-text d-flex flex-column">
+      <div class="main-calendar-header">{{ mainCalendarHeader }}</div>
+      <div class="second-calendar-header" *ngIf="showSecondCalendarData">{{ secondCalendarHeader }}</div>
+    </div>
+    <div *ngIf="navigatorOn" [id]="selectorMode ? 'right-nav' : ''" class="navigator" (click)="addMonth(1)">
+      <span class="seventask-icon-calendar-back navigator-icon"
+            [style]="'transform: rotate(' + (180-navIconRotateDegree) + 'deg);'"></span>
+    </div>
+  </div>
+
+  <div class="week-day-nav-item-container">
+    <div class="week-day-nav-item" *ngFor="let weekday of weekdays">
+      {{weekday.abbr}}
+    </div>
+  </div>
+  <div [@fadeInOut]="gotDates ? 'show' : 'hide'">
+    <div [id]="selectorMode ? 'calendar-container' : ''" class="calendar-main-container"
+        (mouseleave)="changeCurrentDays($event)">
+      <div class="calendar-month-day"
+          [class.starting-selected-date-ltr]="selectorMode && isSame(day.momentDate, selectedStartDate) && navIconRotateDegree === 0"
+          [class.ending-selected-date-ltr]="selectorMode && isSame(day.momentDate, selectedEndDate) && navIconRotateDegree === 0"
+          [class.starting-selected-date-rtl]="selectorMode && isSame(day.momentDate, selectedStartDate) && navIconRotateDegree === 180"
+          [class.ending-selected-date-rtl]="selectorMode && isSame(day.momentDate, selectedEndDate) && navIconRotateDegree === 180"
+          [class.selected-date]="selectorMode && inRange(day.momentDate)"
+          *ngFor="let day of visibleDates; let i = index">
+        <div class="day d-flex flex-row"
+            (mousedown)="mouseDown($event, day.momentDate)"
+            (mouseover)="mouseOver($event, day.momentDate)"
+            (mouseenter)="onHover($event, day.momentDate.toDate().toDateString())"
+            (mouseleave)="onLeave($event)"
+            (click)="onClick($event, day.momentDate)">
+          <div *ngIf="!calendarData.isSecondCalendarEnabled || !showSecondCalendarData" style="width: 100%"
+              [class.calendar-day-num-main]="day.hasMainStyle"
+              [class.calendar-day-num]="!day.hasMainStyle"
+              [class.calendar-weekend]="calendarData.weekends.includes(day.momentDate.day()) && day.hasMainStyle"
+              [class.calendar-today]="day.momentDate.diff(todayDate, 'day') == 0 &&
+            day.momentDate.day() == todayDate.day() && day.hasMainStyle"
+              [class.calendar-selected-date]="(selectorMode && day.momentDate.diff(selectedStartDate, 'day') == 0 &&
+              day.momentDate.day() == selectedStartDate.day()) || (showEvents && dayHasEvent[i])"
+              [class.calendar-hovered-date]="selectorMode && toSelectDate == day.momentDate.toDate().toDateString()">
+                <span [ngSwitch]="calendarData.firstCalendar">
+                  <span *ngSwitchCase="calendarType.GEORGIAN">{{day.momentDate.toDate()|date:'d'}}</span>
+                  <span
+                    *ngSwitchCase="calendarType.JALALI">
+                    {{day.momentDate.toDate()
+                    |getJalaliDate:'D'
+                    |getArabicNum}}
+                  </span>
+                </span>
+          </div>
+
+          <div *ngIf="calendarData.isSecondCalendarEnabled && showSecondCalendarData" style="width: 100%"
+              [class.calendar-day-num-main]="day.hasMainStyle"
+              [class.calendar-day-num]="!day.hasMainStyle"
+              [class.calendar-weekend]="calendarData.weekends.includes(day.momentDate.day()) && day.hasMainStyle"
+              [class.calendar-today]="day.momentDate.diff(todayDate, 'day') == 0 &&
+            day.momentDate.day() == todayDate.day() && day.hasMainStyle"
+              [class.calendar-selected-date]="(selectorMode && day.momentDate.diff(selectedStartDate, 'day') == 0 &&
+              day.momentDate.day() == selectedStartDate.day()) || (showEvents && dayHasEvent[i])"
+              [class.calendar-hovered-date]="selectorMode && toSelectDate == day.momentDate.toDate().toDateString()">
+          <span [ngSwitch]="calendarData.firstCalendar">
+                  <span *ngSwitchCase="calendarType.GEORGIAN">
+                    <span [ngSwitch]="calendarData.secondCalendar">
+                      <span *ngSwitchCase="calendarType.GEORGIAN">{{day.momentDate.toDate()|date:'d'}}</span>
+                      <span *ngSwitchCase="calendarType.JALALI">{{day.momentDate.toDate()|date:'d'}}
+                        <sup>{{day.momentDate.toDate()
+                          |getJalaliDate:'D'
+                          |getArabicNum}}</sup></span>
+                    </span>
+                  </span>
+                  <span *ngSwitchCase="calendarType.JALALI">
+                    <span [ngSwitch]="calendarData.secondCalendar">
+                      <span
+                        *ngSwitchCase="calendarType.GEORGIAN">{{day.momentDate.toDate()
+                        |getJalaliDate:'D'
+                        |getArabicNum}}
+                        <sup>{{day.momentDate.toDate()|date:'d'}}</sup></span>
+                      <span
+                        *ngSwitchCase="calendarType.JALALI">{{day.momentDate.toDate()
+                        | getJalaliDate:'D'
+                        |getArabicNum}}</span>
+                    </span>
+                  </span>
+          </span>
+          </div>
+
+          <div class="events-container"
+              [style.visibility]="showEvents && showDayEvents !== null && showDayEvents.id === id &&
+              showDayEvents.selectedDate.diff(day.momentDate, 'day') === 0 ? 'visible' : 'hidden'">
+            <div class="events" *ngIf="dayHasEvent[i]">
+              <div class="event" 
+                   (contextmenu)="handleSelectedEvent($event, event)"
+                   (click)="sendSelectedEvent(event)"
+                   *ngFor="let event of eventsList[i]">
+                <div class="event-header" dir="auto">
+                  <span class="event-type-icon seventask-icon-pages-my-calender"></span>
+                  <div class="event-title">{{ event.title }}</div>
+                </div>
+                <div class="event-time">{{ (event.startTime | date: 'shortTime') }}</div>
+              </div>
+            </div>
+            <div *ngIf="!dayHasEvent[i]" class="no-events-msg">{{ 'Calendar.noEvents' | translate }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

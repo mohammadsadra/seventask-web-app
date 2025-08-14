@@ -1,0 +1,466 @@
+<div *ngIf="mode == 'card'">
+
+  <div *ngIf="item.isUrgent"
+       class="task-badge-container">
+    <div *ngIf="item.isUrgent"
+         class="task-badge">
+      {{ 'Task.urgent' | translate}}
+    </div>
+  </div>
+
+  <div [style.cursor]="cursor" [style.background-color]="backgroundColor" [style.width]="width"
+       [class.selected]="selectedTask != null && item.guid === selectedTask.guid" class="task-box"
+       (mousedown)="showInspector(item.guid)">
+
+    <div>
+      <div class="task-title" dir="auto">
+        {{item.title}}
+      </div>
+      <div class="task-deadline-label-color">
+        <div class="task-deadline">
+          {{item.endDate |
+          date:'yyyy/MM/dd'}}
+        </div>
+        <!--                <div class="task-label-color">-->
+        <!--                  lables-->
+        <!--                </div>-->
+      </div>
+      <div class="task-label-user">
+        <div class="labels">
+          <div *ngIf="item.priorityId == 5"
+               [class]="item.priorityId === 5 ?'label-high':(item.priorityId === 3 ? 'label-medium' :'label-low')">
+            <img
+              style="margin-inline-end:
+                                                            5px"
+              src="../../../assets/icons/Task/label-high.svg">
+            {{item.priorityTitle}}
+          </div>
+          <div *ngIf="item.priorityId ==3"
+               [class]="item.priorityId
+                                                       === 5 ?
+                                                       'label-high':(item.priorityId
+                                                       === 3 ? 'label-medium' :
+                                                       'label-low')">
+            <img
+              style="margin-inline-end:
+                                                            5px"
+              src="../../../assets/icons/Task/label-medium.svg">
+            {{item.priorityTitle}}
+          </div>
+          <div *ngIf="item.priorityId ==
+                                                       1"
+               [class]="item.priorityId
+                                                       === 5 ?
+                                                       'label-high':(item.priorityId
+                                                       === 3 ? 'label-medium' :
+                                                       'label-low')">
+            <img
+              style="margin-inline-end:
+                                                            5px"
+              src="../../../assets/icons/Task/label-low.svg">
+            {{item.priorityTitle}}
+          </div>
+        </div>
+        <div>
+          <!--                  <div *ngIf="item.usersAssignedTo.length > 3 " class="task-row-users">-->
+          <!--                    <div *ngFor="let user of item.usersAssignedTo.splice(1,item.usersAssignedTo.length - 2)"-->
+          <!--                         style="text-align: center; padding-left: 10px">-->
+          <!--                      <span *ngIf="user.profileImageGuid == null" class="member-without-image"-->
+          <!--                            style="background-color: #1EC1C3">{{user.nickName.charAt(0)}}</span>-->
+          <!--                      <img #tooltip="matTooltip"-->
+          <!--                           [matTooltip]="user.nickName"-->
+          <!--                           [matTooltipPosition]="'below'"-->
+          <!--                           matTooltipHideDelay="100" *ngIf="user.profileImageGuid != null"-->
+          <!--                           [src]="domainName + '/en-US/file/get?id=' + user.profileImageGuid"-->
+          <!--                           style="background-color: #86A8E7" class="member">-->
+          <!--                    </div>-->
+          <!--                  </div>-->
+          <!--                  *ngIf="item.usersAssignedTo.length <= 3 "-->
+          <div class="task-row-users">
+            <div *ngFor="let user of
+                                                            item.usersAssignedTo"
+                 style="text-align:
+                                                            center;
+                                                            padding-inline-start:
+                                                            20px">
+                                                            <span
+                                                              #tooltip="matTooltip"
+                                                              [matTooltip]="user.nickName"
+                                                              [matTooltipPosition]="'below'"
+                                                              matTooltipHideDelay="100"
+                                                              *ngIf="user.profileImageGuid
+                                                                 == null"
+                                                              style="background-color:
+                                                                 #86A8E7"
+                                                              class="member-without-image">{{user.nickName.charAt(0)}}</span>
+              <img
+                #tooltip="matTooltip"
+                [matTooltip]="user.nickName"
+                [matTooltipPosition]="'below'"
+                matTooltipHideDelay="100"
+                *ngIf="user.profileImageGuid
+                                                                 != null"
+                [src]="domainName
+                                                                 +
+                                                                 '/en-US/file/get?id='
+                                                                 +
+                                                                 user.profileImageGuid
+                                                                 +
+                                                                 '&quality=100'"
+                style="background-color:
+                                                                 #86A8E7"
+                class="member">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="task-icon-list">
+      <span style="font-size: 17px" #tooltip="matTooltip"
+            matTooltip="{{'Task.noTeam' |translate}}"
+            [matTooltipPosition]="'below'"
+            matTooltipHideDelay="100"
+            *ngIf="item.teamId == null"
+            class="seventask-icon-task-card-disable-team icon-opacity-40"></span>
+      <span style="font-size: 19px" #tooltip="matTooltip"
+            [matTooltip]="item.teamName"
+            [matTooltipPosition]="'below'"
+            matTooltipHideDelay="100"
+            *ngIf="item.teamId != null"
+            class="seventask-icon-task-card-enable-team"></span>
+      <span style="font-size: 17px" #tooltip="matTooltip"
+            matTooltip="{{'Task.noProject' |translate}}"
+            [matTooltipPosition]="'below'"
+            matTooltipHideDelay="100"
+            *ngIf="item.projectId == null"
+            class="seventask-icon-task-card-disable-project icon-opacity-40"></span>
+      <span style="font-size: 19px" #tooltip="matTooltip"
+            [matTooltip]="item.projectName"
+            [matTooltipPosition]="'below'"
+            matTooltipHideDelay="100"
+            *ngIf="item.projectId != null"
+            class="seventask-icon-task-card-enable-project"></span>
+      <!--                <span style="font-size: 17px" #tooltip="matTooltip"-->
+      <!--                      matTooltip="{{'Task.list' | translate}}"-->
+      <!--                      [matTooltipPosition]="'below'"-->
+      <!--                      matTooltipHideDelay="100"-->
+      <!--                      class="seventask-icon-task-card-disable-list"></span>-->
+      <!--                <span style="font-size: 17px" #tooltip="matTooltip"-->
+      <!--                      matTooltip="{{'Task.calendar' | translate}}"-->
+      <!--                      [matTooltipPosition]="'below'"-->
+      <!--                      matTooltipHideDelay="100"-->
+      <!--                      class="seventask-icon-task-card-disable-calender"></span>-->
+      <span style="font-size: 17px" #tooltip="matTooltip"
+            matTooltip="{{'Task.timeTrackNotStarted'| translate}}"
+            [matTooltipPosition]="'below'"
+            matTooltipHideDelay="100"
+            class="seventask-icon-task-card-disable-timeTrack icon-opacity-40"></span>
+      <span style="font-size: 17px" #tooltip="matTooltip"
+            matTooltip="{{'Task.reminder' | translate}}"
+            [matTooltipPosition]="'below'"
+            matTooltipHideDelay="100"
+            class="seventask-icon-task-card-disable-reminder icon-opacity-40"></span>
+      <span style="font-size: 17px" #tooltip="matTooltip"
+            matTooltip="{{'Task.noDescription'| translate}}"
+            [matTooltipPosition]="'below'"
+            matTooltipHideDelay="100"
+            *ngIf="item.description == null"
+            class="seventask-icon-task-card-disable-description icon-opacity-40"></span>
+      <span style="font-size: 17px" #tooltip="matTooltip"
+            [matTooltip]="item.description"
+            [matTooltipPosition]="'below'"
+            matTooltipHideDelay="100"
+            *ngIf="item.description != null"
+            class="seventask-icon-task-card-enable-description"></span>
+      <span style="font-size: 17px" #tooltip="matTooltip"
+            matTooltip="{{'Task.estimatedTime'| translate}}"
+            [matTooltipPosition]="'below'"
+            matTooltipHideDelay="100"
+            class="seventask-icon-task-card-disable-progressbar icon-opacity-40"></span>
+      <span style="font-size: 17px" #tooltip="matTooltip"
+            matTooltip="{{'Task.checklist' |
+                                             translate}}"
+            [matTooltipPosition]="'below'"
+            matTooltipHideDelay="100"
+            *ngIf="item.checkListItems.length <= 0"
+            class="seventask-icon-task-card-disable-checkList icon-opacity-40"></span>
+      <span style="font-size: 17px" #tooltip="matTooltip"
+            matTooltip="{{'Task.checklist' |
+                                             translate}}"
+            [matTooltipPosition]="'below'"
+            matTooltipHideDelay="100"
+            *ngIf="item.checkListItems.length> 0"
+            class="seven seventask-icon-task-card-enable-checkList"></span>
+    </div>
+
+    <div class="selected-task"
+         *ngIf="selectedTask != null &&item.guid === selectedTask.guid">
+
+      <img style="visibility: hidden"
+           src="../../../assets/icons/markAsDone.svg"
+           class="selected-task-control">
+      <img style="margin-inline-start: auto"
+           (click)="openDeleteDialog(selectedTask)"
+           src="../../../assets/icons/Task/deleteTask.svg"
+           class="selected-task-control">
+      <img
+        [matMenuTriggerFor]="selectedTaskMenu"
+        src="../../../assets/icons/Task/selectedTaskMore.svg"
+        class="selected-task-control">
+      <mat-menu #selectedTaskMenu="matMenu"
+                yPosition="below">
+        <div
+          (click)="archiveTask(selectedTask)"
+          mat-menu-item>
+          <img style="margin-inline-end:
+                                                       10px"
+               src="../../../assets/icons/archive.svg">
+          <span>{{ 'Task.archive' |
+            translate}}</span>
+        </div>
+        <div *ngIf="!selectedTask.isUrgent"
+             (click)="updateUrgent(selectedTask
+                                                  , true)" mat-menu-item>
+          <img style="margin-inline-end:
+                                                       10px"
+               src="../../../assets/icons/alarm-light-outline.svg">
+          <span>{{ 'Task.makeUrgent' |
+            translate}}</span>
+        </div>
+        <div *ngIf="selectedTask.isUrgent"
+             (click)="updateUrgent(selectedTask
+                                                  , false)" mat-menu-item>
+          <img style="margin-inline-end:
+                                                       10px"
+               src="../../../assets/icons/alarm-light-off-outline.svg">
+          <span>{{ 'Task.removeUrgent' |
+            translate}}</span>
+        </div>
+      </mat-menu>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div *ngIf="mode == 'list'">
+
+  <div class="task-badge-container">
+    <div *ngIf="item.isUrgent" class="task-badge">
+      {{ 'Task.urgent' | translate}}
+    </div>
+  </div>
+
+  <div [style.cursor]="cursor" [style.background-color]="backgroundColor" [style.width]="width"
+       [class.selected]="selectedTask != null && item.guid === selectedTask.guid"
+       class="task-row">
+    <div class="task-row-details">
+      <div class="task-row-title" dir="auto">
+        {{item.title}}
+      </div>
+      <div class="task-row-right">
+        <div
+          [style.color]="setColorForStatus(item.statusTitle)[1]"
+          [style.background-color]="setColorForStatus(item.statusTitle)[0]"
+          class="task-row-status">
+          <!--              <img style="margin-inline-end: 5px" src="assets/icons/Task/status-list.svg">-->
+          {{item.statusTitle}}
+        </div>
+        <div class="task-row-priority">
+          <div *ngIf="item.priorityId == 5"
+               class="label-high">
+            <img style="margin-inline-end: 5px"
+                 src="../../../assets/icons/Task/label-high.svg">
+            {{item.priorityTitle}}
+          </div>
+          <div *ngIf="item.priorityId == 3"
+               class="label-medium">
+            <img style="margin-inline-end: 5px"
+                 src="../../../assets/icons/Task/label-medium.svg">
+            {{item.priorityTitle}}
+          </div>
+          <div *ngIf="item.priorityId == 1"
+               class="label-low">
+            <img style="margin-inline-end: 5px"
+                 src="../../../assets/icons/Task/label-low.svg">
+            {{item.priorityTitle}}
+          </div>
+        </div>
+        <!--            <div *ngIf="item.usersAssignedTo.length > 3 " class="task-row-users">-->
+        <!--              <div *ngFor="let user of item.usersAssignedTo.splice(2,item.usersAssignedTo.length - 2)"-->
+        <!--                   style="text-align: center; padding-left: 30px">-->
+        <!--                <span *ngIf="user.profileImageGuid == null" class="member-without-image"-->
+        <!--                      style="background-color: #1EC1C3">{{user.nickName.charAt(0)}}</span>-->
+        <!--                <img #tooltip="matTooltip"-->
+        <!--                     [matTooltip]="user.nickName"-->
+        <!--                     [matTooltipPosition]="'below'"-->
+        <!--                     matTooltipHideDelay="100" *ngIf="user.profileImageGuid != null"-->
+        <!--                     [src]="domainName + '/en-US/file/get?id=' + user.profileImageGuid"-->
+        <!--                     style="background-color: #86A8E7" class="member">-->
+        <!--              </div>-->
+        <!--            </div>-->
+
+        <!--            *ngIf="item.usersAssignedTo.length <= 3 "-->
+        <div class="task-row-users">
+          <div *ngFor="let user of
+                                        item.usersAssignedTo" style="text-align:
+                                        center; padding-inline-start: 20px">
+                                        <span #tooltip="matTooltip"
+                                              [matTooltip]="user.nickName"
+                                              [matTooltipPosition]="'below'"
+                                              matTooltipHideDelay="100"
+                                              *ngIf="user.profileImageGuid ==
+                                             null" style="background-color:
+                                             #86A8E7"
+                                              class="member-without-image">{{user.nickName.charAt(0)}}</span>
+            <img #tooltip="matTooltip"
+                 [matTooltip]="user.nickName"
+                 [matTooltipPosition]="'below'"
+                 matTooltipHideDelay="100"
+                 *ngIf="user.profileImageGuid !=
+                                             null"
+                 [src]="domainName +
+                                             '/en-US/file/get?id=' +
+                                             user.profileImageGuid +
+                                             '&quality=100'"
+                 style="background-color: #86A8E7"
+                 class="member">
+          </div>
+        </div>
+        <div class="task-row-date">
+          {{item.endDate | seventaskDatePipe: 'YYYY/M/D' | async}}
+        </div>
+      </div>
+    </div>
+
+    <div class="task-row-icon-list">
+      <span style="font-size: 17px" #tooltip="matTooltip"
+                matTooltip="{{'Task.noTeam' | translate}}"
+                [matTooltipPosition]="'below'"
+                matTooltipHideDelay="100"
+                *ngIf="item.teamId == null"
+                class="icon seventask-icon-task-card-disable-team icon-opacity-40"></span>
+      <div class="d-flex align-items-center" *ngIf="item.teamId != null">
+            <span style="font-size: 15px" #tooltip="matTooltip"
+                  [matTooltip]="item.teamName"
+                  [matTooltipPosition]="'below'"
+                  matTooltipHideDelay="100"
+                  class="icon seventask-icon-task-card-disable-team"></span>
+        <span class="disable-icon-text">{{item.teamName}}</span>
+      </div>
+      <span style="font-size: 17px" #tooltip="matTooltip"
+            matTooltip="{{'Task.noProject' | translate}}"
+            [matTooltipPosition]="'below'"
+            matTooltipHideDelay="100" class="icon"
+            *ngIf="item.projectId == null"
+            class="icon seventask-icon-task-card-disable-project icon-opacity-40"></span>
+      <div *ngIf="item.projectId != null" class="d-flex align-items-center">
+            <span style="font-size: 15px" #tooltip="matTooltip"
+                  [matTooltip]="item.projectName"
+                  [matTooltipPosition]="'below'"
+                  matTooltipHideDelay="100"
+                  class="icon seventask-icon-task-card-disable-project"></span>
+        <span class="disable-icon-text">{{item.projectName}}</span>
+      </div>
+      <!--          <span style="font-size: 17px" #tooltip="matTooltip"-->
+      <!--                matTooltip="{{'Task.list' | translate}}"-->
+      <!--                [matTooltipPosition]="'below'"-->
+      <!--                matTooltipHideDelay="100"-->
+      <!--                class="icon seventask-icon-task-card-disable-list"></span>-->
+      <!--          <span style="font-size: 17px" #tooltip="matTooltip"-->
+      <!--                matTooltip="{{'Task.calendar' | translate}}"-->
+      <!--                [matTooltipPosition]="'below'"-->
+      <!--                matTooltipHideDelay="100"-->
+      <!--                class="icon seventask-icon-task-card-disable-calender"></span>-->
+      <span style="font-size: 17px" #tooltip="matTooltip"
+            matTooltip="{{'Task.timeTrackNotStarted' |translate}}"
+            [matTooltipPosition]="'below'"
+            matTooltipHideDelay="100"
+            class="icon seventask-icon-task-card-disable-timeTrack icon-opacity-40"></span>
+      <span style="font-size: 17px" #tooltip="matTooltip"
+            matTooltip="{{'Task.reminder' | translate}}"
+            [matTooltipPosition]="'below'"
+            matTooltipHideDelay="100"
+            class="icon seventask-icon-task-card-disable-reminder icon-opacity-40"></span>
+      <span style="font-size: 17px" #tooltip="matTooltip"
+            matTooltip="{{'Task.noDescription' | translate}}"
+            [matTooltipPosition]="'below'"
+            matTooltipHideDelay="100" *ngIf="item.description == null"
+            class="icon seventask-icon-task-card-disable-description icon-opacity-40"></span>
+      <span style="font-size: 17px" #tooltip="matTooltip"
+            [matTooltip]="item.description"
+            [matTooltipPosition]="'below'"
+            matTooltipHideDelay="100" *ngIf="item.description != null"
+            class="icon seventask-icon-task-card-enable-description"></span>
+      <span style="font-size: 17px" #tooltip="matTooltip"
+            matTooltip="{{'Task.estimatedTime' | translate}}"
+            [matTooltipPosition]="'below'"
+            matTooltipHideDelay="100"
+            class="icon seventask-icon-task-card-disable-progressbar icon-opacity-40"></span>
+      <span style="font-size: 17px" #tooltip="matTooltip"
+            matTooltip="{{'Task.checklist' | translate}}"
+            [matTooltipPosition]="'below'"
+            matTooltipHideDelay="100"
+            *ngIf="item.checkListItems.length <= 0"
+            class="icon seventask-icon-task-card-disable-checkList icon-opacity-40"></span>
+      <span style="font-size: 17px" #tooltip="matTooltip"
+            matTooltip="{{'Task.checklist' | translate}}"
+            [matTooltipPosition]="'below'"
+            matTooltipHideDelay="100"
+            *ngIf="item.checkListItems.length > 0"
+            class="icon seventask-icon-task-card-enable-checkList"></span>
+    </div>
+    <div style="margin: 0" class="selected-task"
+         *ngIf="selectedTask != null && item.guid === selectedTask.guid">
+
+
+      <!--          <div style="cursor: pointer;visibility: hidden">-->
+      <!--            <img src="../../../assets/icons/markAsDone.svg"-->
+      <!--                 class="selected-task-control">-->
+      <!--            <span class="selected-task-control-text">{{'Task.markAsDone' | translate}}</span>-->
+      <!--          </div>-->
+      <div class="delete-and-more">
+        <div class="delete-container" style="cursor: pointer"
+             (click)="openDeleteDialog(selectedTask)">
+          <img src="../../../assets/icons/Task/deleteTask.svg"
+               class="selected-task-control">
+          <span class="selected-task-control-text">{{'Task.deleteTask'
+            |
+            translate}}</span>
+        </div>
+
+        <img [matMenuTriggerFor]="selectedTaskMenu"
+             src="../../../assets/icons/Task/selectedTaskMore.svg"
+             class="selected-task-control">
+      </div>
+
+      <mat-menu #selectedTaskMenu="matMenu"
+                yPosition="below">
+        <div (click)="archiveTask(selectedTask)"
+             mat-menu-item>
+              <span style="margin-inline-end: 10px;font-size: 20px"
+                    class="seventask-icon-archive-archive"></span>
+          <span>{{ 'Task.archive' | translate}}</span>
+        </div>
+        <div *ngIf="!selectedTask.isUrgent"
+             (click)="updateUrgent(selectedTask , true)"
+             mat-menu-item>
+          <img style="margin-inline-end: 10px"
+               src="../../../assets/icons/alarm-light-outline.svg">
+          <span>{{ 'Task.makeUrgent' | translate}}</span>
+        </div>
+        <div *ngIf="selectedTask.isUrgent"
+             (click)="updateUrgent(selectedTask , false)"
+             mat-menu-item>
+          <img style="margin-inline-end: 10px"
+               src="../../../assets/icons/alarm-light-off-outline.svg">
+          <span>{{ 'Task.removeUrgent' | translate}}</span>
+        </div>
+      </mat-menu>
+
+    </div>
+  </div>
+
+</div>

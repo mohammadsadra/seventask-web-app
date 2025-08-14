@@ -1,0 +1,59 @@
+@import "src/variables";
+@font-face {
+  font-family: 'seventask-header-icon';
+  src:  url('../assets/fonts/seventask-header-icons/seventask-header-icon.eot?5d5uy0');
+  src:  url('../assets/fonts/seventask-header-icons/seventask-header-icon.eot?5d5uy0#iefix') format('embedded-opentype'),
+  url('../assets/fonts/seventask-header-icons/seventask-header-icon.ttf?5d5uy0') format('truetype'),
+  url('../assets/fonts/seventask-header-icons/seventask-header-icon.woff?5d5uy0') format('woff'),
+  url('../assets/fonts/seventask-header-icons/seventask-header-icon.svg?5d5uy0#seventask-header-icon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="seventask-icon-task-header-"], [class*=" seventask-icon-task-header-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'seventask-header-icon' !important;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.seventask-icon-task-header-board:before {
+  content: "\e900";
+  color: $theme-color;
+}
+.seventask-icon-task-header-trash:before {
+  content: "\e901";
+  color: #fc6056;
+}
+.seventask-icon-task-header-list-view:before {
+  content: "\e905";
+  color: $theme-color;
+}
+.seventask-icon-task-header-add:before {
+  content: "\e906";
+  color: inherit;
+}
+.seventask-icon-task-header-assignee:before {
+  content: "\e907";
+  color: $theme-color;
+}
+.seventask-icon-task-header-hasFilter:before {
+  content: "\e902";
+  color: $theme-color;
+}
+.seventask-icon-task-header-priority:before {
+  content: "\e903";
+  color: $theme-color;
+}
+.seventask-icon-task-header-urgent:before {
+  content: "\e904";
+  color: $theme-color;
+}

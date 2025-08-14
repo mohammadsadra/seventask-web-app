@@ -1,0 +1,44 @@
+<div *ngIf="isLoading" class="loading-container main-container">
+  <seventask-spinner [loadingType]="1"></seventask-spinner>
+  <!--  <div style="margin-top: 10px;color: #2E4A77;">{{'Project.loadingProject' |translate}}</div>-->
+</div>
+
+
+<div class="main-container" *ngIf="!isLoading">
+  <div class="d-flex justify-content-center">
+    <div class="p-2 justify-content-center align-items-center search">
+      <form [formGroup]="search">
+        <input [class.placeholder-rtl]="textDirection === 'rtl'"
+               class="search-input" placeholder="{{ 'Placeholders.searchForMember' | translate}}"
+               formControlName="searchField"
+               [dir]="search.controls.searchField.valid ? 'auto': ''">
+      </form>
+    </div>
+  </div>
+  <div class="d-flex flex-column channel-list">
+    <div class="channel-item" *ngFor="let channel of channelList | channelSearch: search.controls.searchField.value"
+         [mat-dialog-close]="channel">
+      <div class="d-flex flex-row align-items-center justify-content-between">
+        <!--      //Image-->
+        <div class="img_cont_msg p-2 d-flex align-items-center justify-content-center rounded-circle"
+             [matBadge]="channel.numberOfUnreadMessages" [matBadgeHidden]="!channel.numberOfUnreadMessages> 0"
+             matBadgePosition="below after" matBadgeSize="small"
+             style="background: rgba(66,120,223,0.05)">
+          <img *ngIf="channel.profileImageGuid != null"
+               [src]="domainName + '/en-US/File/get?id=' + channel.profileImageGuid + '&quality=100'"
+               class="rounded-circle user_img_msg">
+          <div class="seventask-theme-color d-flex flex-row align-items-center justify-content-center"
+               style="height: 40px; width: 40px"
+               *ngIf="channel.profileImageGuid == null">
+            {{channel.title[0].toUpperCase()}}
+          </div>
+        </div>
+        <!--      //Username-->
+        <div class="username">
+          {{channel.title}}
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

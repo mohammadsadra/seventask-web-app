@@ -1,0 +1,40 @@
+@import 'variables';
+.list-container {
+  //width: 12.5rem;
+  //max-width: 267px;
+  padding-top: 13.75px;
+}
+.page-info {
+  border-bottom: 1px solid #f3f6fa;
+}
+.settings-info-title {
+  height: 25px;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 18px;
+  line-height: 25px;
+  color: $theme-color;
+  margin-top: 10px;
+}
+.option {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 20px;
+  color: $theme-color;
+  margin-top: 20px;
+  padding-inline-start: 30px;
+  text-align: start;
+  cursor: pointer;
+}
+.selected-pointer {
+  width: 3px;
+  height: 20px;
+  background: $theme-color;
+}
+.active-tab {
+  color: $theme-color;
+}
+.tab {
+  color: #2e4a77;
+}

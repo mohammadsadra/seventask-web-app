@@ -1,0 +1,181 @@
+<div class="main-container" [style.height.px]="columnHeight">
+
+  <div class="payment"
+       [style]="textDirection === 'ltr' ? {'right': '28px'} : {'left': '28px'}">
+    <div class="button-container smooth-rectangle"
+       (click)="buyPackage()"
+       [disabled]="total === 0"
+       [ngStyle]="{'cursor': total === 0  ? 'not-allowed' : 'pointer', 'opacity': total === 0  ? 0.5 : 1 }">
+    <span *ngIf="!showLoading">{{'Payment.pay' | translate}}</span>
+    <seventask-spinner [loadingType]="1" class="loading" [color]="'white'"
+                                 *ngIf="showLoading"></seventask-spinner>
+    </div>
+    <div class="total-container">
+      <span>{{'Payment.total' | translate}}</span>&nbsp;
+    {{totalString}} {{'Payment.' + currency | translate}}
+    </div>
+  </div>
+
+  <div class="select-team-container">
+    <div class="choose-plan-text">
+      {{'Payment.choosePlan' | translate}}
+    </div>
+    <!--    <mat-select [(ngModel)]="selectedTeamId" name="teams" id="selected-team">-->
+    <!--      <mat-option class="edit-status-option" style="color:#2E4A77;"-->
+    <!--                  *ngFor="let team of teams" [value]="team.id">{{team.name}}</mat-option>-->
+    <!--    </mat-select>-->
+    <div class="upgrade-team-text">
+      <span *ngIf="selectedTeam != null">{{'Payment.upgradingTeam' | translate: {teamName: selectedTeam?.name} }}</span>
+<!--      <seventask-spinner *ngIf="selectedTeam == null" [loadingType]="1"></seventask-spinner>-->
+      <span *ngIf="selectedTeam == null" class="fa fa-spinner fa-spin"></span>
+    </div>
+  </div>
+
+  <div class="payment-options-row">
+    <span style="color: rgba(31, 69, 83, 1)">{{'Payment.billPeriod' | translate}}</span>
+    <span (click)="selectPeriod('monthly')" class="bill-period"
+          [class.active-period]="billPeriod === 'monthly'">{{'Payment.monthly' | translate}}</span>
+    <!-- <span>{{'Payment.or' | translate}}</span>
+    <span (click)="selectPeriod('yearly')" class="bill-period"
+          [class.active-period]="billPeriod === 'yearly'">{{'Payment.yearly' | translate}}</span> -->
+    <div style="margin-inline-start: auto" class="d-flex align-items-center justify-content-center">
+      <span style="color: rgba(31, 69, 83, 1); white-space: nowrap">{{'Payment.seatCount' | translate}}</span>
+      <input required autoSelect [(ngModel)]="seatCount"
+             (input)="updateTotalPrice()"
+             placeholder="0"
+             [min]="0"
+             [max]="100"
+             oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
+             javascript:
+              if(Number(this.value) > this.max) this.value= this.max;"
+             type="number" #title class="field-input seat-count-input">
+    </div>
+  </div>
+
+  <div class="plans">
+
+    <div (click)="selectPlan('free', 1)" style="border-color: #4278DF" class="plan-container">
+      <div [class.active-plan]="selectedPlan === 'free'" id="free" style="color: #4278DF" class="plan-title">
+        <div class="plan-text">{{'Payment.free' | translate}}</div>
+        <div class="plan-price">
+          <div class="price">{{stringPrices['free'] + ' ' + ('Payment.' + currency | translate)}}</div>
+          <div class="user-per-month">{{'Payment.userPerMonth' | translate}}</div>
+        </div>
+      </div>
+      <div class="plan-description" style="color: #4278DF">
+        <div class="description-row">
+          <span class="description">{{'Payment.usersFree' | translate}}</span>
+        </div>
+        <div class="description-row">
+          <span class="description">{{'Payment.sizeFree' | translate}}</span>
+        </div>
+        <div class="description-row">
+          <span class="description">{{'Payment.projectsFree' | translate}}</span>
+        </div>
+        <div class="description-row">
+          <span class="description">{{'Payment.unlimited' | translate: {item: 'Payment.tasks' | translate} }}</span>
+        </div>
+        <div class="description-row">
+          <span class="description">{{'Payment.unlimited' | translate: {item: 'Payment.events' | translate} }}</span>
+        </div>
+        <div class="description-row">
+          <span class="description">{{'Payment.unlimited' | translate: {item: 'Payment.chats' | translate} }}</span>
+        </div>
+      </div>
+      <!--      <button (click)="buyPackage(2)" [disabled]="selectedTeamId == null || showLoading" class="button-container">-->
+      <!--        <div class="button-text">-->
+      <!--          {{'Payment.getStarted' | translate}}-->
+      <!--        </div>-->
+      <!--      </button>-->
+    </div>
+
+    <div (click)="selectPlan('basic', 2)" style="border-color: #E69619" class="plan-container">
+      <div [class.active-plan]="selectedPlan === 'basic'" id="basic" style="color: #E69619"
+           class="plan-title">
+           <div class="plan-text">{{'Payment.basic' | translate}}</div>
+           <div class="plan-price">
+             <div class="price">{{stringPrices['basic'] + ' ' + ('Payment.' + currency | translate)}}</div>
+             <div class="user-per-month">{{'Payment.userPerMonth' | translate}}</div>
+           </div>
+      </div>
+      <div class="plan-description" style="color: #E69619">
+        <div class="description-row plan-header">
+          <span class="description">{{'Payment.basicHeader' | translate}}</span>
+        </div>
+        <div class="description-row">
+          <span class="description">{{'Payment.usersBasic' | translate}}</span>
+        </div>
+        <div class="description-row">
+          <span class="description">{{'Payment.sizeBasic' | translate}}</span>
+        </div>
+        <div class="description-row">
+          <span class="description">{{'Payment.projectsBasic' | translate}}</span>
+        </div>
+      </div>
+      <!--      <button (click)="buyPackage(3)" [disabled]="selectedTeamId == null || showLoading" class="button-container">-->
+      <!--        <div class="button-text">-->
+      <!--          {{'Payment.getStarted' | translate}}-->
+      <!--        </div>-->
+      <!--      </button>-->
+    </div>
+
+    <div (click)="selectPlan('pro', 3)" style="border-color: #1EC1C3" class="plan-container">
+      <div [class.active-plan]="selectedPlan === 'pro'" id="pro" style="color: #1EC1C3;border-color: #1EC1C3" class="plan-title">
+        <div class="plan-text">{{'Payment.pro' | translate}}</div>
+        <div class="plan-price">
+          <div class="price">{{stringPrices['pro'] + ' ' + ('Payment.' + currency | translate)}}</div>
+          <div class="user-per-month">{{'Payment.userPerMonth' | translate}}</div>
+        </div>
+      </div>
+      <div class="plan-description" style="color: #1EC1C3">
+        <div class="description-row plan-header">
+          <span class="description">{{'Payment.proHeader' | translate}}</span>
+        </div>
+        <div class="description-row">
+          <span class="description">{{'Payment.usersPro' | translate}}</span>
+        </div>
+        <div class="description-row">
+          <span class="description">{{'Payment.sizePro' | translate}}</span>
+        </div>
+        <div class="description-row">
+          <span class="description">{{'Payment.unlimited' | translate: {item: 'Payment.projects' | translate} }}</span>
+        </div>
+      </div>
+      <!--      <button (click)="buyPackage(3)" [disabled]="selectedTeamId == null || showLoading" class="button-container">-->
+      <!--        <div class="button-text">-->
+      <!--          {{'Payment.getStarted' | translate}}-->
+      <!--        </div>-->
+      <!--      </button>-->
+    </div>
+
+    <div (click)="selectPlan('enterprise', 4)" style="border-color: #F86F8C" class="plan-container">
+      <div [class.active-plan]="selectedPlan === 'enterprise'" id="enterprise"
+           style="color: #F86F8C;border-color: #F86F8C" class="plan-title">
+           <div class="plan-text">{{'Payment.enterprise' | translate}}</div>
+           <div class="plan-price">
+             <div class="user-per-month">{{('Payment.' + stringPrices['enterprise']) | translate }}</div>
+           </div>
+      </div>
+      <div class="plan-description" style="color: #F86F8C">
+        <div class="description-row plan-header">
+          <span class="description">{{'Payment.enterpriseHeader' | translate}}</span>
+        </div>
+        <div class="description-row">
+          <span class="description">{{'Payment.enterpriseSupport' | translate}}</span>
+        </div>
+        <div class="description-row">
+          <span class="description">{{'Payment.enterpriseReports' | translate}}</span>
+        </div>
+        <div class="description-row">
+          <span class="description">{{'Payment.unlimited' | translate: {item: 'Payment.storage' | translate} }}</span>
+        </div>
+      </div>
+      <!--      <button (click)="buyPackage(3)" [disabled]="selectedTeamId == null || showLoading" class="button-container">-->
+      <!--        <div class="button-text">-->
+      <!--          {{'Payment.getStarted' | translate}}-->
+      <!--        </div>-->
+      <!--      </button>-->
+    </div>
+
+  </div>
+</div>

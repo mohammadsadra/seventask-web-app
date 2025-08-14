@@ -1,0 +1,247 @@
+@import 'variables';
+.workLoad-container {
+  min-height: 100vh;
+  width: 100%;
+}
+
+.workLoad-header-tab {
+  height: 60px;
+  width: 100%;
+  background-color: #f8fbfd;
+}
+
+.noDataImage {
+  opacity: 1;
+  width: 85%;
+  height: auto;
+  margin: 35px 25px;
+}
+
+.noData-text {
+  font-style: normal;
+  font-size: 16px;
+  color: #2e4a77;
+}
+
+.workLoad-tasks-container {
+  background-color: #f8fbfd;
+  min-height: 100%;
+}
+
+.workLoad-tasks-content {
+  width: 100%;
+  min-height: 500px;
+  background: #ffffff;
+  border: 1px solid #f3f6fa;
+  border-bottom: #fff;
+  box-sizing: border-box;
+  border-radius: 10px 10px 0px 0px;
+  overflow-x: hidden;
+}
+
+.workLoadnav {
+  list-style: none;
+  padding: 0px;
+  margin: 0px auto;
+  padding-top: 15px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.workLoadnav-item {
+  color: #2e4a77;
+  opacity: 0.3;
+  font-weight: 500;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 0px 3px;
+}
+
+.workLoadnav-item:hover {
+  color: $theme-color !important;
+  opacity: 1 !important;
+}
+
+.activeTab {
+  color: $theme-color !important;
+  opacity: 1 !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.activeTab span {
+  display: inline-block !important;
+  justify-items: end;
+  font-size: 20px;
+  margin-top: -8px;
+}
+
+.byTeam-container {
+  height: 100%;
+  width: 100%;
+}
+
+.select-date-box {
+  height: 90px;
+  width: 100%;
+  border-bottom: 1px solid #f3f6fa;
+  padding: 15px 10px 0px 10px;
+}
+
+.erorr-display {
+  height: 15px;
+  font-size: 10px;
+}
+
+.top-box-header {
+  font-weight: 500;
+  font-size: 13px;
+  color: #a7afbd;
+  opacity: 0.5;
+  margin-inline-start: 16px;
+}
+
+.header-icon-box {
+  width: 28px;
+  height: 28px;
+  background: rgba(66, 120, 223, 0.1);
+  border-radius: 10px;
+}
+
+.seventask-icon-time-track-calendar {
+  color: #4278df;
+}
+
+.text-between {
+  height: 25px;
+  width: 25px;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 13px;
+  color: rgba(167, 175, 189, 0.5);
+}
+
+.date-input-box {
+  width: 85px;
+  height: 25px;
+  border: 1px solid #f0f4f4;
+  border-radius: 5px;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  color: #2e4a77;
+}
+/* WorkLoad */
+.workload-container {
+  width: 100%;
+  min-height: fit-content;
+  margin: 0px auto;
+  padding-top: 1em;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.workload-chart-wraper {
+  width: 200px;
+  height: 200px;
+  margin: 30px auto;
+}
+.first-level-chart {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  position: relative;
+  text-align: center;
+}
+.second-level-chart {
+  width: 60%;
+  height: 60%;
+  border-radius: 50%;
+  z-index: 100;
+  top: 40px;
+  left: 40px;
+  background-color: #fff;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.second-level-chart h6 {
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  text-align: center;
+  color: #2e4a77;
+  opacity: 0.3;
+}
+.second-level-chart span {
+  font-weight: 900;
+  font-size: 18px;
+  line-height: 25px;
+  color: $theme-color;
+}
+.second-level-chart h4 {
+  font-weight: 900;
+  font-size: 18px;
+  line-height: 25px;
+  color: $theme-color;
+}
+.workload-repeat-shape {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+.content-repeat {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  width: 90%;
+  margin: 20px auto;
+}
+.workload-user-image {
+  width: 40px;
+  height: 40px;
+  background-color: #a7afbd;
+  border-radius: 50%;
+  margin-inline-end: 10px;
+  overflow: hidden;
+}
+.showfristChar {
+  color: #fff;
+  text-align: center;
+  margin-top: 8px;
+}
+.workload-user-info {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+.workload-user-info div {
+  text-align: start;
+}
+.workload-time-person {
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  color: #2e4a77;
+  opacity: 0.5;
+}
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  //margin-top: 20px;
+  flex-direction: column;
+  margin-top: 15%;
+  flex-basis: 50%;
+}
+.null-inspector {
+  font-style: normal;
+  font-size: 16px;
+  line-height: 22px;
+  color: #2e4a77;
+  //padding-inline-end: 20px;
+}

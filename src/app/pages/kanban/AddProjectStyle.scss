@@ -1,0 +1,56 @@
+@import "src/variables";
+.add-team-container{
+  width: 339px;
+  height: 398px;
+  background: #F8FBFD;
+  border-radius: 20px;
+}
+.search{
+  outline: none;
+  width: 309px;
+  height: 49px;
+  background: #FFFFFF;
+  border: 1px solid #F0F4F4;
+  box-sizing: border-box;
+  border-radius: 10px;
+  padding: 15px;
+}
+
+.add-team-container .p-2{
+  padding: 0!important;
+}
+.members-container{
+  padding: 15px;
+  max-height: 330px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.member{
+  background: #F8FBFD;
+  border: none;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  cursor: pointer;
+}
+.member:hover{
+  background-color: #E5E5E5;
+}
+.user_img {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-content: center;
+  vertical-align: center;
+  margin: 0 10px 0 19px;
+  background: $theme-color-opacity-10;
+}
+.item-title{
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 19px;
+  color: #A7AFBD;
+  text-align: start;
+}

@@ -1,0 +1,243 @@
+$main-color: #d0e2ee;
+$main-color-darker: #2E4A77;
+$main-color-lighter: #A7AFBD;
+$secondary-color: #BCD6BC;
+$font-color: #2E4A77;
+$theme-color: var(--theme-color);
+$theme-color-opacity-5: #{''}rgba(var(--theme-color-opacity-version), 0.05);
+$theme-color-opacity-10: #{''}rgba(var(--theme-color-opacity-version), 0.1);
+$theme-color-opacity-15: #{''}rgba(var(--theme-color-opacity-version), 0.15);
+$theme-color-opacity-20: #{''}rgba(var(--theme-color-opacity-version), 0.2);
+$theme-color-opacity-30: #{''}rgba(var(--theme-color-opacity-version), 0.3);
+$theme-color-opacity-40: #{''}rgba(var(--theme-color-opacity-version), 0.4);
+$theme-color-opacity-50: rgba(var(--theme-color-opacity-version), 0.5);
+$theme-color-opacity-60: rgba(var(--theme-color-opacity-version), 0.6);
+$theme-color-opacity-70: rgba(var(--theme-color-opacity-version), 0.7);
+$theme-color-opacity-80: rgba(var(--theme-color-opacity-version), 0.8);
+$theme-color-opacity-85: rgba(var(--theme-color-opacity-version), 0.85);
+$project-color:  var(--project-color);
+
+:root {
+  --theme-color-opacity-version: 66, 120, 223;
+  --theme-color: #4278df;
+  --theme-color-opacity-50: rgba(var(--theme-color), 0.5);
+  --theme-color-opacity-10: rgba(var(--theme-color), 0.1);
+  --project-color:  #4278df;
+}
+
+@mixin seventask-button-style-1 {
+  border-radius: 10px;
+  color: white;
+  text-align: center;
+  cursor: pointer;
+  transition: all .3s;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    z-index: -2;
+  }
+  &:before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background-color: $theme-color;
+    filter: brightness(85%);
+    transition: all .3s;
+    border-radius: 10px;
+    z-index: -1;
+  }
+  &:hover {
+    color: #fff;
+    &:before {
+      width: 100%;
+    }
+  }
+}
+
+@mixin seventask-button-style-2 {
+  cursor: pointer;
+  border-radius: 10px;
+  text-align: center;
+  display: inline-block;
+  transition: all .3s;
+  position: relative;
+  z-index: 1;
+  &:hover {
+    color: white !important;
+    background-color: $theme-color;
+  }
+}
+
+@mixin seventask-button-style-3 {
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  &:after {
+    content: '';
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+    width: 0;
+    height: 100%;
+    background-color: $theme-color;
+    filter: brightness(85%);
+    z-index: -1;
+    -webkit-transition: width 150ms ease;
+    transition: width 150ms ease-in-out;
+  }
+  &:hover {
+    color: white;
+    &:after {
+      width: 110%;
+    }
+  }
+}
+
+@mixin seventask-button-style-4 {
+  cursor: pointer;
+  border-radius: 10px;
+  transition: box-shadow 300ms ease-in-out, color 300ms ease-in-out;
+  &:hover, &:focus {
+    color: white !important;
+    box-shadow: 0 0 40px 40px $theme-color-opacity-60 inset;
+  }
+}
+
+@mixin seventask-button-style-5 {
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  transition: 0.2s transform ease-in-out;
+  z-index: 0;
+  &:after {
+    background-color: $theme-color;
+    filter: brightness(85%);
+    border-radius: 10px;
+    content: '';
+    display: block;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform: translate(-100%, 0) rotate(10deg);
+    transform-origin: top left;
+    transition: 0.2s transform ease-out;
+    z-index: -1;
+  }
+  &:hover {
+    color: white !important;
+    border: none;
+    transform: scale(1.05);
+    &:after {
+      transform: translate(0, 0);
+    }
+  }
+}
+
+@mixin seventask-button-style-6 {
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all .35s;
+  z-index: 0;
+  &:not(.activated) {
+    color: #2E4A77;
+    &:after,
+    &:before {
+      position: absolute;
+      content: "";
+      width: 100%;
+      height: 100%;
+      top: -100%;
+      left: 0;
+      background: $theme-color;
+      z-index: -1;
+      transition: all .35s;
+    }
+    &:after {
+      transition-delay: .2s;
+      filter: brightness(85%);
+    }
+    &:before {
+      filter: brightness(55%);
+    }
+    &:hover {
+      color: white;
+      &:before,
+      &:after {
+        top: 0;
+      }
+    }
+  }
+  &.activated {
+    color: white;
+    &:after,
+    &:before {
+      position: absolute;
+      content: "";
+      width: 100%;
+      height: 100%;
+      bottom: -100%;
+      left: 0;
+      z-index: -10;
+      transition: all .45s;
+    }
+    &:after {
+      background: transparent;
+      transition-delay: .3s;
+      // filter: brightness(85%);
+    }
+    &:before {
+      background: $theme-color;
+      filter: brightness(55%);
+    }
+    &:hover {
+      color: #2E4A77 !important;
+      background: rgba(66, 120, 223, 0.05);
+      &:before,
+      &:after {
+        bottom: 100%;
+      }
+    }
+  }
+}
+
+// buttons with only containing text.
+@mixin seventask-button-style-7 {
+  cursor: pointer;
+  transition: color 100ms ease-in-out, opacity 100ms ease-in-out, text-shadow 100ms ease-in-out;
+  &:hover, &:focus {
+    opacity: 1 !important;
+    color: $theme-color-opacity-85 !important;
+    text-shadow: 0 0 1px $theme-color-opacity-50 !important;
+  }
+}
+
+
+//.default-theme {
+//  $theme-color: #4278DF;
+//  $theme-color-opacity-50: rgba(66, 120, 223, 0.5);
+//  $theme-color-opacity-10: rgba(66, 120, 223, 0.1);
+//}
+//
+//.dark-green-theme {
+//  $theme-color: rgb(7, 160, 146);
+//  $theme-color-opacity-50: rgba(7, 160, 146, 0.5);
+//  $theme-color-opacity-10: rgba(7, 160, 146, 0.1);
+//}

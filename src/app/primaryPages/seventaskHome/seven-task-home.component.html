@@ -1,0 +1,441 @@
+<div class="page-container col-12 m-0 p-0 h-100">
+
+  <div class="side-nav">
+    <div class="side-nav-logo">
+      <a href="https://seventask.com" target="_blank">
+        <img
+          style="width: 37px;"
+          src="../../../assets/icons/7Task-New-Logo-White.svg"
+        />
+      </a>
+    </div>
+
+    <div class="side-nav-item-list">
+      <div class="side-nav-item">
+        <div (click)="changeUserClicks('dashboard')"
+             class="side-nav-icon smooth-square d-flex justify-content-center align-items-center"
+             [@FadeInOut]="router.isActive('dashboard',false) ? 'in' : 'out'">
+          <a routerLink="dashboard"
+             aria-label="Button that displays a tooltip that hides when scrolled
+            out of the container">
+            <img
+              #tooltip="matTooltip"
+              matTooltip="{{ 'Home.dashboard' | translate }}"
+              [matTooltipPosition]="'right'"
+              [matTooltipShowDelay]="calculateTooltipShowDelay('dashboard')"
+              matTooltipHideDelay="100"
+              style="padding: 12px"
+              src="../../../assets/icons/dashboard.svg"
+            />
+          </a>
+        </div>
+      </div>
+      <div class="side-nav-item">
+        <div (click)="changeUserClicks('todo')"
+             class="side-nav-icon smooth-square d-flex justify-content-center align-items-center"
+             [@FadeInOut]="router.isActive('todo',false) ? 'in' : 'out'">
+          <a aria-label="Button that displays a tooltip that hides when scrolled
+            out of the container"
+             routerLink="todo">
+            <img
+              #tooltip="matTooltip"
+              matTooltip="{{ 'Home.toDo' | translate }}"
+              [matTooltipPosition]="'right'"
+              [matTooltipShowDelay]="calculateTooltipShowDelay('todo')"
+              matTooltipHideDelay="100"
+              style="padding: 12px"
+              src="../../../assets/icons/kanban.svg"
+            />
+          </a>
+        </div>
+      </div>
+      <div class="side-nav-item">
+        <div (click)="changeUserClicks('project')"
+             class="d-flex align-items-center justify-content-center side-nav-icon smooth-square"
+             [@FadeInOut]="router.isActive('project',false) ? 'in' : 'out'">
+          <a aria-label="Button that displays a tooltip that hides when scrolled
+            out of the container"
+             routerLink="project">
+            <img
+              #tooltip="matTooltip"
+              matTooltip="{{ 'Home.projects' | translate }}"
+              [matTooltipPosition]="'right'"
+              [matTooltipShowDelay]="calculateTooltipShowDelay('project')"
+              matTooltipHideDelay="100"
+              style="padding: 12px"
+              src="../../../assets/icons/folder-open.svg"
+            />
+          </a>
+        </div>
+      </div>
+      <div class="side-nav-item">
+        <div (click)="changeUserClicks('team')"
+             class="side-nav-icon smooth-square d-flex justify-content-center align-items-center"
+             [@FadeInOut]="router.isActive('team',false) ? 'in' : 'out'">
+          <a aria-label="Button that displays a tooltip that hides when scrolled
+            out of the container"
+             routerLink="team">
+            <img
+              #tooltip="matTooltip"
+              matTooltip="{{ 'Home.teams' | translate }}"
+              [matTooltipPosition]="'right'"
+              [matTooltipShowDelay]="calculateTooltipShowDelay('team')"
+              matTooltipHideDelay="100"
+              style="padding: 12px"
+              src="../../../assets/icons/team.svg"
+            />
+          </a>
+        </div>
+      </div>
+      <div class="side-nav-item">
+        <div (click)="changeUserClicks('calendar')"
+             class="side-nav-icon smooth-square d-flex justify-content-center align-items-center"
+             [@FadeInOut]="router.isActive('calendar',false) ? 'in' : 'out'">
+          <a aria-label="Button that displays a tooltip that hides when scrolled
+            out of the container"
+             routerLink="calendar">
+            <img
+              #tooltip="matTooltip"
+              matTooltip="{{ 'Home.calendar' | translate }}"
+              [matTooltipPosition]="'right'"
+              [matTooltipShowDelay]="calculateTooltipShowDelay('calendar')"
+              matTooltipHideDelay="100"
+              style="padding: 12px"
+              src="../../../assets/icons/calender.svg"
+            />
+          </a>
+        </div>
+      </div>
+      <div class="side-nav-item">
+        <div (click)="changeUserClicks('chat')"
+             class="side-nav-icon smooth-square d-flex justify-content-center align-items-center"
+             [@FadeInOut]="router.isActive('chat',false) ? 'in' : 'out'">
+          <a aria-label="Button that displays a tooltip that hides when scrolled
+            out of the container"
+             routerLink="chat">
+            <img
+              #tooltip="matTooltip"
+              matTooltip="{{ 'Home.chat' | translate }}"
+              [matTooltipPosition]="'right'"
+              [matTooltipShowDelay]="calculateTooltipShowDelay('chat')"
+              matTooltipHideDelay="100"
+              style="padding: 12px"
+              src="../../../assets/icons/chat.svg"
+            />
+          </a>
+        </div>
+      </div>
+
+      <!--      <div class="side-nav-item">-->
+      <!--        <img #tooltip="matTooltip"-->
+      <!--             matTooltip="Archive"-->
+      <!--             [matTooltipPosition]="'right'"-->
+      <!--             matTooltipHideDelay="100"-->
+      <!--             aria-label="Button that displays a tooltip that hides when scrolled out of the container"-->
+      <!--             class="side-nav-item-image" src="assets/icons/folder-closed.svg">-->
+      <!--      </div>-->
+      <!--      <div class="side-nav-item">-->
+      <!--        <img #tooltip="matTooltip"-->
+      <!--             matTooltip="Settings"-->
+      <!--             [matTooltipPosition]="'right'"-->
+      <!--             matTooltipHideDelay="100"-->
+      <!--             aria-label="Button that displays a tooltip that hides when scrolled out of the container"-->
+      <!--             class="side-nav-item-image" src="assets/icons/settings.svg">-->
+      <!--      </div>-->
+    </div>
+
+    <!--    <div class="side-nav-item">-->
+    <!--      <img width="50px"-->
+    <!--           height="50px"-->
+    <!--        #tooltip="matTooltip"-->
+    <!--        matTooltip="{{ 'Home.pro' | translate }}"-->
+    <!--        [matTooltipPosition]="'right'"-->
+    <!--        matTooltipHideDelay="100"-->
+    <!--        routerLink="payment"-->
+    <!--        routerLinkActive="selected"-->
+    <!--        class="side-nav-item-image"-->
+    <!--        src="../../../assets/icons/crown-solid.svg"-->
+    <!--      />-->
+    <!--    </div>-->
+
+    <div (click)="changeUserClicks('more')" class="member-profile-image">
+      <div
+        [matMenuTriggerFor]="menu"
+        *ngIf="userProfileImageGuid == null"
+        style="background-color: #86a8e7; line-height: 32px"
+        class="profile-image">
+        {{ userNickName.charAt(0) }}
+      </div>
+
+      <img
+        [matMenuTriggerFor]="menu"
+        *ngIf="userProfileImageGuid != null"
+        [src]="domainName +
+        '/en-US/File/get?id=' +
+        userProfileImageGuid +
+        '&quality=100'" style="background-color: #86a8e7"
+        class="profile-image"
+      />
+
+      <mat-menu class="settings-menu" #menu="matMenu">
+        <a routerLink="settings" class="d-flex align-items-center" mat-menu-item
+           routerLinkActive="selected" style="text-decoration:none">
+          <span style="font-size: 20px;margin-inline-end: 10px"
+                class="seventask-icon-time-track-profile"></span>
+          <span style="color: #2E4A77;">{{ 'Home.profile' | translate }}</span>
+        </a>
+        <div class="d-flex align-items-center" (click)="openSignOutDialog()"
+             mat-menu-item>
+          <span style="font-size: 20px;margin-inline-end: 10px"
+                class="seventask-icon-others-logout"></span>
+          <span style="color: #2E4A77;">{{ 'Home.signOut' | translate }}</span>
+        </div>
+      </mat-menu>
+    </div>
+
+
+  </div>
+
+
+  <div [style.width.px]="leftNavBarWidth" class="left-sidebar"
+       *ngIf="this.router.url.search('dashboard') !== 1 &&
+        this.router.url.search('payment') !== 1 && this.router.url.search('call') !== 1 ">
+    <div style="width: 100%"
+         *ngIf="this.router.url.search('project') == 1 &&
+      this.router.url.search('project/projectOverview') == -1">
+      <app-project-left-nav-bar></app-project-left-nav-bar>
+    </div>
+    <div style="width: 100%" *ngIf="this.router.url.search('todo') == 1">
+      <app-task-left-nav-bar></app-task-left-nav-bar>
+    </div>
+    <div style="width: 100%" *ngIf="this.router.url.search('chat') == 1">
+      <app-chat-left-nav-bar></app-chat-left-nav-bar>
+    </div>
+    <div style="width: 100%"
+         *ngIf="this.router.url.search('team') == 1 &&
+      this.router.url.search('team/teamOverview') == -1">
+      <app-team-left-nav-bar></app-team-left-nav-bar>
+    </div>
+    <div style="width: 100%" *ngIf="this.router.url.search('project/projectOverview') == 1">
+      <app-project-overview-left-nav-bar></app-project-overview-left-nav-bar>
+    </div>
+    <div style="width: 100%" *ngIf="this.router.url.search('team/teamOverview') == 1">
+      <app-team-overview-left-nav-bar></app-team-overview-left-nav-bar>
+    </div>
+    <div style="width: 100%" *ngIf="this.router.url.search('calendar') == 1">
+      <app-calendar-left-nav-bar></app-calendar-left-nav-bar>
+    </div>
+    <div style="width: 100%" *ngIf="this.router.url.search('settings') == 1
+      || this.router.url.search('timetrack') == 1 || this.router.url.search('integrations') == 1">
+      <app-settings-left-nav-bar></app-settings-left-nav-bar>
+    </div>
+  </div>
+
+  <div *ngIf="this.router.url.search('dashboard') !== 1 &&
+    this.router.url.search('settings') !== 1 &&
+    this.router.url.search('payment') !== 1 &&
+    this.router.url.search('call') !== 1" id="leftNavBarGrabber" class="grabber"></div>
+
+  <!-- check here for styles -->
+  <div style="width: 100%;max-width: 100%;overflow-x: auto;overflow-y: hidden" class="d-flex flex-column">
+
+    <div class="d-flex flex-row" id="page-header">
+
+      <div class="page-content-header" id="header-container" [style.width.%]="100-rightNavBarWidthPercantage"
+           *ngIf="this.router.url.search('dashboard') !== 1 &&
+        this.router.url.search('settings') !== 1 &&
+        this.router.url.search('payment') !== 1">
+        <div style="width: 100%" *ngIf="this.router.url.search('todo') == 1">
+          <app-tasks-header></app-tasks-header>
+        </div>
+
+        <div style="width: 100%" *ngIf="this.router.url.search('project') == 1">
+          <app-project-header></app-project-header>
+        </div>
+
+        <div style="width: 100%" *ngIf="this.router.url.search('team') == 1">
+          <app-team-header></app-team-header>
+        </div>
+
+        <div style="width: 100%" *ngIf="this.router.url.search('calendar') == 1">
+          <app-calendar-header></app-calendar-header>
+        </div>
+
+        <div style="width: 100%" *ngIf="this.router.url.search('timetrack') == 1">
+          <app-timetrack-header></app-timetrack-header>
+        </div>
+      </div>
+
+      <div *ngIf="this.router.url.search('dashboard') !== 1 &&
+        this.router.url.search('settings') !== 1 &&
+        this.router.url.search('payment') !== 1" [style.width.px]="rightNavBarWidth" class="notification-menu">
+        <div class="notification-menu-item smooth-square"
+             #tooltip="matTooltip"
+             [matTooltip]="inspector ? ('Tooltip.hideInspector' | translate) : 'Tooltip.showInspector' | translate"
+             [matTooltipPosition]="'below'"
+             [matTooltipShowDelay]="100"
+             matTooltipHideDelay="100"
+             [ngClass]="inspector ? 'rightside-menu-item-selected' : ''"
+             (click)="TabSelect(1)">
+          <!--        <img class="notification-menu-item-image" [src]="inspectImgUrl"/>-->
+          <div style="font-size: 20px" *ngIf="!inspector"
+               class="seventask-icon-right-navbar--inspector-off"></div>
+          <div style="font-size: 20px" *ngIf="inspector"
+               class="seventask-icon-right-navbar--inspector-on"></div>
+        </div>
+
+        <div class="notification-menu-item smooth-square"
+             [matTooltip]="chat ? ('Tooltip.hideChats' | translate) : 'Tooltip.showChats' | translate"
+             [matTooltipPosition]="'below'"
+             [matTooltipShowDelay]="100"
+             matTooltipHideDelay="100"
+             [ngClass]="chat ? 'rightside-menu-item-selected' : ''"
+             (click)="TabSelect(2)">
+          <!--        <img class="notification-menu-item-image" [src]="chatImgUrl"/>-->
+          <div style="font-size: 20px" *ngIf="!chat"
+               class="seventask-icon-right-navbar--chat-off"></div>
+          <div style="font-size: 20px" *ngIf="chat"
+               class="seventask-icon-right-navbar--chat-on"></div>
+          <span
+            *ngIf="numOfUnreadMessage !== 0"
+            [ngClass]="numOfUnreadMessage !== 0 ? 'badge badge-chat' :
+            'badge-chat-notshow'">
+
+            {{ numOfUnreadMessage | numToArabic }}
+          </span>
+        </div>
+
+        <div class="notification-menu-item smooth-square"
+             [matTooltip]="calendar ? ('Tooltip.hideCalendar' | translate) : 'Tooltip.showCalendar' | translate"
+             [matTooltipPosition]="'below'"
+             [matTooltipShowDelay]="100"
+             matTooltipHideDelay="100"
+             [ngClass]="calendar ? 'rightside-menu-item-selected' : ''"
+             (click)="TabSelect(3)">
+          <!--        <img class="notification-menu-item-image" [src]="calendarImgUrl"/>-->
+          <div style="font-size: 20px" *ngIf="!calendar">
+            <span class="calendar-day" style="color: rgba(46, 74, 119, 0.3) !important;">{{ currentDate }}</span>
+            <span class="seventask-icon-right-navbar--calendar-off"></span>
+          </div>
+          <div style="font-size: 20px" *ngIf="calendar">
+            <span class="calendar-day">{{ currentDate }}</span>
+            <span class="seventask-icon-right-navbar--calendar-on"></span>
+          </div>
+        </div>
+
+        <div class="notification-menu-item smooth-square"
+             [matTooltip]="notification ? ('Tooltip.hideNotifications' | translate) : 'Tooltip.showNotifications' | translate"
+             [matTooltipPosition]="'below'"
+             [matTooltipShowDelay]="100"
+             matTooltipHideDelay="100"
+             [ngClass]="notification ? 'rightside-menu-item-selected' : ''"
+             (click)="TabSelect(4)">
+          <!--        <img class="notification-menu-item-image" [src]="notificImgUrl"/>-->
+          <div style="font-size: 20px" *ngIf="!notification"
+               class="seventask-icon-right-navbar--notification-off"
+               [ngClass]="bellEffect ? 'bellmove':''"></div>
+          <div style="font-size: 20px" *ngIf="notification"
+               class="seventask-icon-right-navbar--notification-on"></div>
+          <span
+            *ngIf="badgeIsShow"
+            [ngClass]="badgeIsShow ? 'badge-notif' :
+            'badge-notif-notshow'">
+          </span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="d-flex flex-row" style="height: 100%;overflow-x: auto !important;">
+
+      <div style="height: 100%" class="page-content-container">
+
+        <!--    <div [@routeAnimations]="prepareRoute(o)" class="page-content">-->
+        <!--      <router-outlet #o=outlet></router-outlet>-->
+        <!--    </div>-->
+        <div cdkScrollable class="page-content" id="page-content">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+
+      <div [style.display]="isRightNavBarVisible ? '' : 'none'" class="grabber d-flex" id="rightNavBarGrabber"
+           *ngIf="this.router.url.search('dashboard') !== 1 &&
+        this.router.url.search('settings') !== 1 &&
+        this.router.url.search('payment') !== 1">
+
+      </div>
+
+      <div class="flex-column"
+           [style.width.px]="rightNavBarWidth"
+           [@slideInOut]="{value: '', params: {enterPx: rightNavBarWidth + 'px'}}"
+           [@.disabled]="disableRightNavBarAnimation"
+           [style.display]="isRightNavBarVisible ? '' : 'none'"
+           [ngClass]="inspector ? 'right-sidebar-inspector-on' :'right-sidebar-inspector-off'"
+           *ngIf="isRightNavBarVisible && this.router.url.search('dashboard') !== 1 &&
+        this.router.url.search('settings') !== 1 &&
+        this.router.url.search('payment') !== 1">
+
+
+        <app-task-right-navbar
+          *ngIf="this.router.url.search('todo') == 1 && inspector">
+        </app-task-right-navbar>
+
+
+        <app-project-right-nav-bar
+          *ngIf="(this.router.url.search('project') == 1 ||
+          this.router.url.search('project/projectOverview') == 1) && inspector">
+        </app-project-right-nav-bar>
+
+
+        <app-team-right-nav-bar
+          *ngIf="this.router.url.search('team') == 1 && inspector">
+        </app-team-right-nav-bar>
+
+
+        <app-chat-right-nav-bar
+          *ngIf="this.router.url.search('chat') == 1 && inspector">
+        </app-chat-right-nav-bar>
+
+
+        <app-calendar-right-nav-bar
+          *ngIf="this.router.url.search('calendar') == 1 && inspector">
+        </app-calendar-right-nav-bar>
+
+        <app-work-load-in-period
+          *ngIf="this.router.url.search('timetrack') == 1 && inspector">
+        </app-work-load-in-period>
+
+
+        <div *ngIf="notification">
+          <app-notification-right-nav-bar></app-notification-right-nav-bar>
+        </div>
+        <div *ngIf="chat">
+          <app-sticky-chat-right-nav-bar></app-sticky-chat-right-nav-bar>
+        </div>
+        <div *ngIf="calendar">
+          <app-sticky-calendar-right-nav-bar></app-sticky-calendar-right-nav-bar>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div *ngIf="showTutorial" class="tutorialContainer">
+  <div class="videoContainer">
+    <p class="tutorialTitle">{{ 'Home.howItWorks' | translate }}</p>
+    <video controls class="tutorialVideo centerItem">
+      <source src="../../../assets/videos/Intro_01.mp4" type="video/mp4"/>
+      {{ 'Home.browserNotSupport' | translate }}
+    </video>
+    <div class="skipButton" (click)="skipTutorial()">
+      {{ 'Home.letStart' | translate }}
+    </div>
+  </div>
+</div>
+<!--<button *ngIf="!showTutorial" matTooltip="Report Bug" mat-fab class="report-bug-button" (click)="openReportBug()">-->
+<!--  <img src="assets/icons/bug-outline.svg">-->
+<!--</button>-->

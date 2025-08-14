@@ -1,0 +1,196 @@
+@import 'variables';
+
+.main-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-height: 100%;
+    background-color: #F8FBFD;
+    height: 100%;
+}
+
+.form-container {
+    width: 600px;
+    height: 480px;
+    background-color: white;
+    border-radius: 20px;
+    border: 1px solid #F0F4F4;
+    padding: 5px 10px;
+    max-width: 100%;
+    max-height: 95%;
+}
+
+.form {
+    margin: auto;
+    padding: 30px 50px 15px;
+    overflow-y: auto;
+    height: 100%;
+}
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 20px;
+}
+
+.form-title {
+    cursor: default;
+    margin: -15px -15px 10px -15px;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 36px;
+    line-height: 49px;
+    text-align: center;
+    color: #2E4A77;
+}
+
+.Profile-Image {
+    cursor: pointer;
+    height: 145px;
+    width: 150px;
+    border-radius: 45px;
+    border: 1px solid darkgray;
+}
+
+.Profile-Image:hover {
+    opacity: 0.9;
+}
+
+@media screen and (max-width: 600px) {
+    .form {
+        //padding: 10px;
+        max-width: 95%;
+        max-height: 95%;
+    }
+
+    .user-input {
+        padding: 5px !important;
+    }
+
+    .mobile-view-warn {
+        top: 0;
+        padding: 5px;
+        font-size: 14px;
+        position: absolute;
+        background-color: rgba(241, 219, 80, 0.3);
+        display: block;
+        text-align: center;
+    }
+
+    .logo-container {
+        margin-top: 20px;
+    }
+
+    .login-guide {
+        line-height: 20px !important;
+    }
+}
+
+.login-guide {
+    cursor: default;
+    margin-top: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 30px;
+    text-align: center;
+    color: #4278DF;
+}
+
+.login-form {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.input-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: center;
+    padding: 15px;
+    flex-direction: row;
+    height: 50px;
+    border-radius: 10px;
+    border: 1px solid #F0F4F4;
+    background-color: #F8FBFD;
+    margin-bottom: 20px;
+}
+
+.user-input {
+    background-color: #F8FBFD;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    flex-basis: 90%;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 19px;
+    color: #2E4A77;
+    padding: 10px;
+}
+
+.input-icon {
+    opacity: 0.3;
+    margin-inline-end: 10px;
+    flex-basis: 5%;
+}
+
+.input-description {
+    cursor: default;
+    display: flex;
+    //justify-content: end;
+    font-style: normal;
+    //font-weight: 900;
+    font-size: 14px;
+    line-height: 19px;
+    text-align: center;
+    margin-top: -10px;
+    color: #a7afbd;
+}
+
+.submit-login-form-button-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.submit-login-form-button:not(:disabled) {
+    @include seventask-button-style-5;
+}
+
+.submit-login-form-button {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: #4278DF;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    margin-top: 20px;
+}
+
+.submit-login-form-button:disabled {
+    opacity: 0.5;
+}
+
+.submit-login-form-button-text {
+    text-align: center;
+    font-weight: 600;
+    font-size: 16px;
+    color: #FFFFFF;
+}
+
+.input-error {
+    color: red;
+}

@@ -1,0 +1,44 @@
+<body style="background-color: white ; padding: 30px 30px 30px 30px">
+<h2 mat-dialog-title>{{teamData.name}} Invitation Links</h2>
+<mat-dialog-content class="mat-typography">
+  <div class="container">
+    <div class="row" *ngFor="let link of thisTeamLinks" style="margin-bottom: 5px">
+      <div class="col-9" style="color: #3d67b1">app.seventask.com/inviteTeam?invitationCode={{link.linkGuid}}</div>
+      <div class="col-3">
+        <button mat-raised-button
+                [cdkCopyToClipboard]="'app.seventask.com/inviteTeam?invitationCode=' + link.linkGuid"
+                (click)="openSnackBar('Link Copied to your clipboard', 'Got it')"
+                style="margin-inline-end: 5px">
+          Copy
+        </button>
+        <button mat-raised-button mat-dialog-close color="warn" (click)="revokeTeamInviteLink(link, 0)">Revoke</button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isNewLinkAvailable">
+    <h2 mat-dialog-title>New Links</h2>
+    <div class="container">
+      <div class="row" *ngFor="let link of newLinks" style="margin-bottom: 5px">
+        <div class="col-9" style="color: #3d67b1">app.seventask.com/inviteTeam?invitationCode={{link.linkGuid}}</div>
+        <div class="col-3">
+          <button mat-raised-button
+                  [cdkCopyToClipboard]="'app.seventask.com/inviteTeam?invitationCode=' + link.linkGuid"
+                  (click)="openSnackBar('Link Copied to your clipboard', 'Got it')"
+                  style="margin-inline-end: 5px">
+            Copy
+          </button>
+          <button mat-raised-button mat-dialog-close color="warn" (click)="revokeTeamInviteLink(link, 1)">Revoke
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+
+  <!--  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Install</button>-->
+  <button mat-button cdkFocusInitial (click)="creatNewLink(teamData.id)">Creat New Link</button>
+  <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>
+</body>

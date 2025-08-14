@@ -1,0 +1,592 @@
+<div class="main-container" dir="auto" *ngIf="rangePicker && !usedAsDialog">
+
+  <div class="selected-datetime-info" dir="ltr">
+    <div class="selected-datetime">
+      <div id="start-date-input" class="datetime-input d-flex flex-row">
+        <input dir="ltr" class="input-field" type="text"
+         [value]="submittedStartDateString ? submittedStartDateString : ''"
+         [placeholder]="showingFormat"
+         (input)="onInputChange($event, 'start')">
+      </div>
+      &nbsp;
+      -
+      &nbsp;
+      <div id="end-date-input" class="datetime-input d-flex flex-row">
+        <input dir="ltr" class="input-field" type="text" 
+        [value]="submittedEndDateString ? submittedEndDateString : ''"
+        [placeholder]="showingDatetimeFormat"
+        (input)="onInputChange($event, 'end')">
+      </div>
+    </div>
+    <div class="show-datetime-picker-button" (click)="showPicker = !showPicker">
+      <span class="seventask-icon-pages-my-calender"></span>
+    </div>
+  </div>
+
+  <div [@fadeInOut]="showPicker ? 'show' : 'hide'" style="width: 100%;">
+
+    <div class="picker" *ngIf="showPicker">
+
+      <div class="tabs-title-container">
+        <div class="tab"
+            [class.selected-tab]="activeTab === 'date'"
+            (click)="activeTab='date'">{{'DatetimePicker.date' | translate}}</div>
+        <div class="tab"
+            [class.selected-tab]="activeTab === 'time'"
+            (click)="activeTab='time'">{{'DatetimePicker.time' | translate}}</div>
+        <!-- <div class="tab"
+            [class.selected-tab]="activeTab === 'reminder'"
+            (click)="activeTab='reminder'">{{'DatetimePicker.reminder' | translate}}</div>
+        <div class="tab"
+            [class.selected-tab]="activeTab === 'repeat'"
+            (click)="activeTab='repeat'">{{'DatetimePicker.repeat' | translate}}</div> -->
+      </div>
+
+      <div [@fadeInOut]="activeTab === 'date' ? 'show' : 'hide'">
+        <div class="date-picker-container" *ngIf="datePicker && activeTab === 'date'">
+          <div class="date-presets-container">
+            <div class="date-preset" 
+                 *ngFor="let preset of datePresets" [class.selected]="selectedDatePreset === preset.day"
+                 (click)="handlePreset('date', preset)">
+              {{ 'DatetimePicker.' + preset.day | translate }}
+            </div>
+          </div>
+          <app-tiny-calendar [selectorMode]="true"
+                            [defaultSelectedStartDate]="selectedStartDate.moment"
+                            [defaultSelectedEndDate]="selectedEndDate.moment"
+                            (selectDates)="selectedDatesHandler($event)">
+          </app-tiny-calendar>
+          <div class="range-of-event">
+            {{ selectedEndDate.moment.diff(selectedStartDate.moment, 'day') === 0 ? 
+              (selectedEndDate.moment.diff(currentDateTime, 'day') > 0 ? 
+              'In ' + selectedEndDate.moment.diff(currentDateTime, 'day') + ' Days' : '') :
+              ((selectedEndDate.moment.diff(selectedStartDate.moment, 'day') + 1) + ' Days Long')
+            }}
+          </div>
+        </div>
+      </div>
+
+      <div [@fadeInOut]="activeTab === 'time' ? 'show' : 'hide'">
+        <div class="time-picker-container" *ngIf="timePicker && activeTab === 'time'">
+          <div class="time-picker">
+            <!-- <div class="selected-datetime">
+              {{ (selectedEndDate.moment.diff(selectedStartDate.moment, 'days') === 0 ? (('DatetimePicker.start' | translate) + ': ') : '') + 
+              (selectedStartDate.momentString) }}
+            </div> -->
+            <div class="selected-datetime">
+              {{ (('DatetimePicker.start' | translate) + ': ') + (selectedStartDate.momentString)}}
+            </div>
+            <div class="single-time-picker">
+              <div class="meridian-container">
+                <div class="time-picker-title">
+                  {{ 'AM/PM' }}
+                </div>
+                <div class="meridian-picker">
+                  <div class="meridian" 
+                      [class.selected]="selectedStartDate.meridian === 'AM'"
+                      (click)="changeDateTime('start', 'AM', 'meridian')">
+                    {{ 'DatetimePicker.AM' | translate }}
+                  </div>
+                  <div class="meridian" 
+                      [class.selected]="selectedStartDate.meridian === 'PM'"
+                      (click)="changeDateTime('start', 'PM', 'meridian')">
+                    {{ 'DatetimePicker.PM' | translate }}
+                  </div>
+                </div>
+              </div>
+              <div class="hours-container">
+                <div class="time-picker-title">
+                  {{ 'Hours' }}
+                </div>
+                <div class="hour-picker">
+                  <div class="hour" *ngFor="let hour of hours"
+                      [class.selected]="selectedStartDate.hour == hour"
+                      (click)="changeDateTime('start', hour, 'hour')">
+                    {{ hour }}
+                  </div>
+                </div>
+              </div>
+              <div class="minutes-container">
+                <div class="time-picker-title">
+                  {{ 'Minutes' }}
+                </div>
+                <div class="minute-picker">
+                  <div class="minute" *ngFor="let minute of minutes"
+                      [class.selected]="selectedStartDate.minute == minute"
+                      (click)="changeDateTime('start', minute, 'minute')">
+                    {{ minute }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- <div class="time-picker" *ngIf="selectedEndDate.moment.diff(selectedStartDate.moment, 'days') === 0"> -->
+          <div class="time-picker">
+            <div class="selected-datetime">
+              {{ (('DatetimePicker.end' | translate) + ': ') + (selectedEndDate.momentString)}}
+            </div>
+            <div class="single-time-picker">
+              <div class="meridian-container">
+                <div class="time-picker-title">
+                  {{ 'AM/PM' }}
+                </div>
+                <div class="meridian-picker">
+                  <div class="meridian" 
+                      [class.selected]="selectedEndDate.meridian === 'AM'"
+                      (click)="changeDateTime('end', 'AM', 'meridian')">
+                    {{ 'DatetimePicker.AM' | translate }}
+                  </div>
+                  <div class="meridian" 
+                      [class.selected]="selectedEndDate.meridian === 'PM'"
+                      (click)="changeDateTime('end', 'PM', 'meridian')">
+                    {{ 'DatetimePicker.PM' | translate }}
+                  </div>
+                </div>
+              </div>
+              <div class="hours-container">
+                <div class="time-picker-title">
+                  {{ 'Hours' }}
+                </div>
+                <div class="hour-picker">
+                  <div class="hour" *ngFor="let hour of hours"
+                      [class.selected]="selectedEndDate.hour == hour"
+                      (click)="changeDateTime('end', hour, 'hour')">
+                    {{ hour }}
+                  </div>
+                </div>
+              </div>
+              <div class="minutes-container">
+                <div class="time-picker-title">
+                  {{ 'Minutes' }}
+                </div>
+                <div class="minute-picker">
+                  <div class="minute" *ngFor="let minute of minutes"
+                      [class.selected]="selectedEndDate.minute == minute"
+                      (click)="changeDateTime('end', minute, 'minute')">
+                    {{ minute }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div [@fadeInOut]="activeTab === 'reminder' ? 'show' : 'hide'">
+        <div *ngIf="activeTab === 'reminder'" class="tab-container">
+          <img src="../../../../../assets/images/under-construction.png" style="margin: 20px auto 0; opacity: 0.5;">
+        </div>
+      </div>
+
+      <div [@fadeInOut]="activeTab === 'repeat' ? 'show' : 'hide'">
+        <div *ngIf="activeTab === 'repeat'" class="tab-container">
+          <img src="../../../../../assets/images/under-construction.png" style="margin: 20px auto 0; opacity: 0.5;">
+        </div>
+      </div> -->
+
+      <div class="submit-button" (click)="submit()">
+        {{ 'DatetimePicker.submit' | translate }}
+      </div>
+
+    </div>
+
+  </div>
+</div>
+<div class="main-container" dir="auto" *ngIf="rangePicker && usedAsDialog" style="width: 600px; margin: 0; padding: 15px 0;">
+
+  <div style="width: 100%;">
+
+    <div class="picker">
+
+      <div class="tabs-title-container">
+        <div class="tab"
+            [class.selected-tab]="activeTab === 'date'"
+            (click)="activeTab='date'">{{'DatetimePicker.date' | translate}}</div>
+        <div class="tab"
+            [class.selected-tab]="activeTab === 'time'"
+            (click)="activeTab='time'">{{'DatetimePicker.time' | translate}}</div>
+        <!-- <div class="tab"
+            [class.selected-tab]="activeTab === 'reminder'"
+            (click)="activeTab='reminder'">{{'DatetimePicker.reminder' | translate}}</div>
+        <div class="tab"
+            [class.selected-tab]="activeTab === 'repeat'"
+            (click)="activeTab='repeat'">{{'DatetimePicker.repeat' | translate}}</div> -->
+      </div>
+
+      <div [@fadeInOut]="activeTab === 'date' ? 'show' : 'hide'">
+        <div class="date-picker-container" *ngIf="datePicker && activeTab === 'date'">
+          <div class="date-presets-container">
+            <div class="date-preset" 
+                 *ngFor="let preset of datePresets" [class.selected]="selectedDatePreset === preset.day"
+                 (click)="handlePreset('date', preset)">
+              {{ 'DatetimePicker.' + preset.day | translate }}
+            </div>
+          </div>
+          <app-tiny-calendar [selectorMode]="true"
+                            [defaultSelectedStartDate]="selectedStartDate.moment"
+                            [defaultSelectedEndDate]="selectedEndDate.moment"
+                            (selectDates)="selectedDatesHandler($event)">
+          </app-tiny-calendar>
+          <div class="range-of-event">
+            {{ selectedEndDate.moment.diff(selectedStartDate.moment, 'day') === 0 ? 
+              (selectedEndDate.moment.diff(currentDateTime, 'day') > 0 ? 
+              'In ' + selectedEndDate.moment.diff(currentDateTime, 'day') + ' Days' : '') :
+              ((selectedEndDate.moment.diff(selectedStartDate.moment, 'day') + 1) + ' Days Long')
+            }}
+          </div>
+        </div>
+      </div>
+
+      <div [@fadeInOut]="activeTab === 'time' ? 'show' : 'hide'">
+        <div class="time-picker-container" *ngIf="timePicker && activeTab === 'time'">
+          <div class="time-picker">
+            <!-- <div class="selected-datetime">
+              {{ (selectedEndDate.moment.diff(selectedStartDate.moment, 'days') === 0 ? (('DatetimePicker.start' | translate) + ': ') : '') + 
+              (selectedStartDate.momentString) }}
+            </div> -->
+            <div class="selected-datetime">
+              {{ (('DatetimePicker.start' | translate) + ': ') + (selectedStartDate.momentString)}}
+            </div>
+            <div class="single-time-picker">
+              <div class="meridian-container">
+                <div class="time-picker-title">
+                  {{ 'AM/PM' }}
+                </div>
+                <div class="meridian-picker">
+                  <div class="meridian" 
+                      [class.selected]="selectedStartDate.meridian === 'AM'"
+                      (click)="changeDateTime('start', 'AM', 'meridian')">
+                    {{ 'DatetimePicker.AM' | translate }}
+                  </div>
+                  <div class="meridian" 
+                      [class.selected]="selectedStartDate.meridian === 'PM'"
+                      (click)="changeDateTime('start', 'PM', 'meridian')">
+                    {{ 'DatetimePicker.PM' | translate }}
+                  </div>
+                </div>
+              </div>
+              <div class="hours-container">
+                <div class="time-picker-title">
+                  {{ 'Hours' }}
+                </div>
+                <div class="hour-picker">
+                  <div class="hour" *ngFor="let hour of hours"
+                      [class.selected]="selectedStartDate.hour == hour"
+                      (click)="changeDateTime('start', hour, 'hour')">
+                    {{ hour }}
+                  </div>
+                </div>
+              </div>
+              <div class="minutes-container">
+                <div class="time-picker-title">
+                  {{ 'Minutes' }}
+                </div>
+                <div class="minute-picker">
+                  <div class="minute" *ngFor="let minute of minutes"
+                      [class.selected]="selectedStartDate.minute == minute"
+                      (click)="changeDateTime('start', minute, 'minute')">
+                    {{ minute }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- <div class="time-picker" *ngIf="selectedEndDate.moment.diff(selectedStartDate.moment, 'days') === 0"> -->
+          <div class="time-picker">
+            <div class="selected-datetime">
+              {{ (('DatetimePicker.end' | translate) + ': ') + (selectedEndDate.momentString)}}
+            </div>
+            <div class="single-time-picker">
+              <div class="meridian-container">
+                <div class="time-picker-title">
+                  {{ 'AM/PM' }}
+                </div>
+                <div class="meridian-picker">
+                  <div class="meridian" 
+                      [class.selected]="selectedEndDate.meridian === 'AM'"
+                      (click)="changeDateTime('end', 'AM', 'meridian')">
+                    {{ 'DatetimePicker.AM' | translate }}
+                  </div>
+                  <div class="meridian" 
+                      [class.selected]="selectedEndDate.meridian === 'PM'"
+                      (click)="changeDateTime('end', 'PM', 'meridian')">
+                    {{ 'DatetimePicker.PM' | translate }}
+                  </div>
+                </div>
+              </div>
+              <div class="hours-container">
+                <div class="time-picker-title">
+                  {{ 'Hours' }}
+                </div>
+                <div class="hour-picker">
+                  <div class="hour" *ngFor="let hour of hours"
+                      [class.selected]="selectedEndDate.hour == hour"
+                      (click)="changeDateTime('end', hour, 'hour')">
+                    {{ hour }}
+                  </div>
+                </div>
+              </div>
+              <div class="minutes-container">
+                <div class="time-picker-title">
+                  {{ 'Minutes' }}
+                </div>
+                <div class="minute-picker">
+                  <div class="minute" *ngFor="let minute of minutes"
+                      [class.selected]="selectedEndDate.minute == minute"
+                      (click)="changeDateTime('end', minute, 'minute')">
+                    {{ minute }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div [@fadeInOut]="activeTab === 'reminder' ? 'show' : 'hide'">
+        <div *ngIf="activeTab === 'reminder'" class="tab-container">
+          <img src="../../../../../assets/images/under-construction.png" style="margin: 20px auto 0; opacity: 0.5;">
+        </div>
+      </div>
+
+      <div [@fadeInOut]="activeTab === 'repeat' ? 'show' : 'hide'">
+        <div *ngIf="activeTab === 'repeat'" class="tab-container">
+          <img src="../../../../../assets/images/under-construction.png" style="margin: 20px auto 0; opacity: 0.5;">
+        </div>
+      </div> -->
+
+      <div class="submit-button" (click)="submit()">
+        {{ 'DatetimePicker.submit' | translate }}
+      </div>
+
+    </div>
+
+  </div>
+</div>
+<div class="main-container" dir="auto" *ngIf="dateOnly && usedAsDialog" style="width: 600px; margin: 0; padding: 15px 0;">
+
+  <div class="selected-datetime-info">
+    <div class="selected-datetime" style="width: 50%;">
+      <div id="datetime-input" class="datetime-input d-flex flex-row">
+        <input dir="ltr" class="input-field" type="text"
+         [value]="submittedStartDateString ? submittedStartDateString : ''"
+         [placeholder]="showingFormat"
+         (input)="onInputChange($event, 'start')">
+      </div>
+    </div>
+  </div>
+
+  <div style="width: 100%;">
+
+    <div class="picker">
+
+      <div [@fadeInOut]="activeTab === 'date' ? 'show' : 'hide'">
+        <div class="date-picker-container" *ngIf="datePicker && activeTab === 'date'">
+          <div class="date-presets-container">
+            <div class="date-preset" 
+                 *ngFor="let preset of datePresets" [class.selected]="selectedDatePreset === preset.day"
+                 (click)="handlePreset('date', preset)">
+              {{ 'DatetimePicker.' + preset.day | translate }}
+            </div>
+          </div>
+          <app-tiny-calendar [selectorMode]="true"
+                            [defaultSelectedStartDate]="selectedStartDate.moment"
+                            [defaultSelectedEndDate]="selectedEndDate.moment"
+                            [enableRangeSelection]="false"
+                            (selectDates)="selectedDatesHandler($event)">
+          </app-tiny-calendar>
+          <div class="range-of-event">
+            {{ selectedEndDate.moment.diff(selectedStartDate.moment, 'day') === 0 ? 
+              (selectedEndDate.moment.diff(currentDateTime, 'day') > 0 ? 
+              'In ' + selectedEndDate.moment.diff(currentDateTime, 'day') + ' Days' : '') :
+              ((selectedEndDate.moment.diff(selectedStartDate.moment, 'day') + 1) + ' Days Long')
+            }}
+          </div>
+        </div>
+      </div>
+
+      <div [@fadeInOut]="activeTab === 'time' ? 'show' : 'hide'">
+        <div class="time-picker-container" *ngIf="timePicker && activeTab === 'time'">
+          <div class="time-picker">
+            <!-- <div class="selected-datetime">
+              {{ (selectedEndDate.moment.diff(selectedStartDate.moment, 'days') === 0 ? (('DatetimePicker.start' | translate) + ': ') : '') + 
+              (selectedStartDate.momentString) }}
+            </div> -->
+            <div class="selected-datetime">
+              {{ (('DatetimePicker.start' | translate) + ': ') + (selectedStartDate.momentString)}}
+            </div>
+            <div class="single-time-picker">
+              <div class="meridian-container">
+                <div class="time-picker-title">
+                  {{ 'AM/PM' }}
+                </div>
+                <div class="meridian-picker">
+                  <div class="meridian" 
+                      [class.selected]="selectedStartDate.meridian === 'AM'"
+                      (click)="changeDateTime('start', 'AM', 'meridian')">
+                    {{ 'DatetimePicker.AM' | translate }}
+                  </div>
+                  <div class="meridian" 
+                      [class.selected]="selectedStartDate.meridian === 'PM'"
+                      (click)="changeDateTime('start', 'PM', 'meridian')">
+                    {{ 'DatetimePicker.PM' | translate }}
+                  </div>
+                </div>
+              </div>
+              <div class="hours-container">
+                <div class="time-picker-title">
+                  {{ 'Hours' }}
+                </div>
+                <div class="hour-picker">
+                  <div class="hour" *ngFor="let hour of hours"
+                      [class.selected]="selectedStartDate.hour == hour"
+                      (click)="changeDateTime('start', hour, 'hour')">
+                    {{ hour }}
+                  </div>
+                </div>
+              </div>
+              <div class="minutes-container">
+                <div class="time-picker-title">
+                  {{ 'Minutes' }}
+                </div>
+                <div class="minute-picker">
+                  <div class="minute" *ngFor="let minute of minutes"
+                      [class.selected]="selectedStartDate.minute == minute"
+                      (click)="changeDateTime('start', minute, 'minute')">
+                    {{ minute }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div [@fadeInOut]="activeTab === 'reminder' ? 'show' : 'hide'">
+        <div *ngIf="activeTab === 'reminder'" class="tab-container">
+          <img src="../../../../../assets/images/under-construction.png" style="margin: 20px auto 0; opacity: 0.5;">
+        </div>
+      </div>
+
+      <div [@fadeInOut]="activeTab === 'repeat' ? 'show' : 'hide'">
+        <div *ngIf="activeTab === 'repeat'" class="tab-container">
+          <img src="../../../../../assets/images/under-construction.png" style="margin: 20px auto 0; opacity: 0.5;">
+        </div>
+      </div> -->
+
+      <div class="submit-button" (click)="submit()">
+        {{ 'DatetimePicker.submit' | translate }}
+      </div>
+
+    </div>
+
+  </div>
+</div>
+<div class="main-container" dir="auto" *ngIf="!rangePicker && !dateOnly" style="width: 600px; margin: 0;">
+
+  <div class="selected-datetime-info">
+    <div class="selected-datetime" style="width: 50%;">
+      <div id="datetime-input" class="datetime-input d-flex flex-row">
+        <input dir="ltr" class="input-field" type="text"
+         [value]="submittedStartDateString ? submittedStartDateString : ''"
+         [placeholder]="showingFormat"
+         (input)="onInputChange($event, 'start')">
+      </div>
+    </div>
+  </div>
+
+  <div style="width: 100%;">
+
+    <div class="picker">
+
+      <div class="tabs-title-container">
+        <div class="tab" style="width: 50%;"
+            [class.selected-tab]="activeTab === 'date'"
+            (click)="activeTab='date'">{{'DatetimePicker.date' | translate}}</div>
+        <div class="tab" style="width: 50%;"
+            [class.selected-tab]="activeTab === 'time'"
+            (click)="activeTab='time'">{{'DatetimePicker.time' | translate}}</div>
+      </div>
+
+      <div [@fadeInOut]="activeTab === 'date' ? 'show' : 'hide'">
+        <div class="date-picker-container" *ngIf="datePicker && activeTab === 'date'">
+          <div class="date-presets-container">
+            <div class="date-preset" 
+                 *ngFor="let preset of datePresets" [class.selected]="selectedDatePreset === preset.day"
+                 (click)="handlePreset('date', preset)">
+              {{ 'DatetimePicker.' + preset.day | translate }}
+            </div>
+          </div>
+          <app-tiny-calendar [selectorMode]="true"
+                            [defaultSelectedStartDate]="selectedStartDate.moment"
+                            [defaultSelectedEndDate]="selectedEndDate.moment"
+                            [enableRangeSelection]="false"
+                            (selectDates)="selectedDatesHandler($event)">
+          </app-tiny-calendar>
+        </div>
+      </div>
+
+      <div [@fadeInOut]="activeTab === 'time' ? 'show' : 'hide'">
+        <div class="time-picker-container" *ngIf="timePicker && activeTab === 'time'">
+          <div class="time-picker">
+            <div class="selected-datetime">
+              {{ (selectedStartDate.momentString)}}
+            </div>
+            <div class="single-time-picker">
+              <div class="meridian-container">
+                <div class="time-picker-title">
+                  {{ 'AM/PM' }}
+                </div>
+                <div class="meridian-picker">
+                  <div class="meridian" 
+                      [class.selected]="selectedStartDate.meridian === 'AM'"
+                      (click)="changeDateTime('start', 'AM', 'meridian')">
+                    {{ 'DatetimePicker.AM' | translate }}
+                  </div>
+                  <div class="meridian" 
+                      [class.selected]="selectedStartDate.meridian === 'PM'"
+                      (click)="changeDateTime('start', 'PM', 'meridian')">
+                    {{ 'DatetimePicker.PM' | translate }}
+                  </div>
+                </div>
+              </div>
+              <div class="hours-container">
+                <div class="time-picker-title">
+                  {{ 'Hours' }}
+                </div>
+                <div class="hour-picker">
+                  <div class="hour" *ngFor="let hour of hours"
+                      [class.selected]="selectedStartDate.hour == hour"
+                      (click)="changeDateTime('start', hour, 'hour')">
+                    {{ hour }}
+                  </div>
+                </div>
+              </div>
+              <div class="minutes-container">
+                <div class="time-picker-title">
+                  {{ 'Minutes' }}
+                </div>
+                <div class="minute-picker">
+                  <div class="minute" *ngFor="let minute of minutes"
+                      [class.selected]="selectedStartDate.minute == minute"
+                      (click)="changeDateTime('start', minute, 'minute')">
+                    {{ minute }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="submit-button" style="border: none;" (click)="submit()" [disabled]="!enteredValidDatetime"
+      [style]="!enteredValidDatetime ? 'pointer-events: none' : ''">
+        {{ 'DatetimePicker.submit' | translate }}
+      </button>
+
+    </div>
+
+  </div>
+</div>

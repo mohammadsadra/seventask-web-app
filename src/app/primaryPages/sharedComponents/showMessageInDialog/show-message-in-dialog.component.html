@@ -1,0 +1,13 @@
+<body>
+<h5>
+  {{'DialogMessage.'+ messageText | translate}}
+</h5>
+<p *ngIf="itemName">
+  "{{itemName}}"
+</p>
+<div class="button-row d-flex flex-row justify-content-center align-items-center">
+  <div *ngFor="let n of numbers" class="d-flex flex-row justify-content-around align-items-center">
+    <button class="btn" [style.background-color]="chooseColor(buttonText[n])"  [mat-dialog-close]="buttonText[n]">{{'Buttons.' + buttonText[n] | translate}}</button>
+  </div>
+</div>
+</body>

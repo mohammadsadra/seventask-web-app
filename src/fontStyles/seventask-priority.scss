@@ -1,0 +1,39 @@
+@import "src/variables";
+@font-face {
+  font-family: 'seventask-priority-icon';
+  src:  url('~src/assets/fonts/seventask-priority-icons/seventask-priority-icon.eot?uzog66');
+  src:  url('~src/assets/fonts/seventask-priority-icons/seventask-priority-icon.eot?uzog66#iefix') format('embedded-opentype'),
+  url('~src/assets/fonts/seventask-priority-icons/seventask-priority-icon.ttf?uzog66') format('truetype'),
+  url('~src/assets/fonts/seventask-priority-icons/seventask-priority-icon.woff?uzog66') format('woff'),
+  url('~src/assets/fonts/seventask-priority-icons/seventask-priority-icon.svg?uzog66#seventask-priority-icon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="seventask-icon-priority-"], [class*=" seventask-icon-priority-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'seventask-priority-icon' !important;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.seventask-icon-priority-high:before {
+  content: "\e900";
+  color: inherit;
+}
+.seventask-icon-priority-low:before {
+  content: "\e901";
+  color: inherit;
+}
+.seventask-icon-priority-medium:before {
+  content: "\e902";
+  color: inherit;
+}

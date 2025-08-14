@@ -1,0 +1,63 @@
+@import "variables";
+
+.assignments-team {
+  @include seventask-button-style-6;
+  width: 183px;
+  height: 42px;
+  background: rgba(66, 120, 223, 0.05);
+  border-radius: 10px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 15px;
+  color: #2E4A77;
+  text-align: center;
+  cursor: pointer;
+}
+
+.active-assignments-team {
+  width: 183px;
+  height: 42px;
+  background: $theme-color;
+  border-radius: 10px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 15px;
+  color: #FFFFFF;
+  text-align: center;
+  cursor: pointer;
+}
+
+.submit-button {
+  //border: 1px solid $theme-color;
+  border: 1px solid rgba(46, 74, 119, 0.3);
+  box-sizing: border-box;
+  border-radius: 10px;
+  alignment: center;
+  text-align: center;
+  background-color: white;
+  padding: 15px;
+  outline: none;
+  margin-top: 20px;
+}
+
+.submit-button-text {
+  display: flex;
+  align-items: center;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 19px;
+  //letter-spacing: 0.1em;
+  color: $theme-color;
+}
+
+.submit-button-off {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.submit-button:hover {
+  border: 1px solid $theme-color;
+}

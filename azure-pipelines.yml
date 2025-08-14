@@ -1,0 +1,13 @@
+# Starter pipeline
+
+trigger:
+- master
+
+pool:
+  name: MHassans-MacBook-Pro
+steps:
+- script: 'cp -r ./* $(Build.ArtifactStagingDirectory)'
+  displayName: 'Command Line Script'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: drop'

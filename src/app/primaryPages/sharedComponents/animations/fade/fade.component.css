@@ -1,0 +1,21 @@
+/* Fade component styles */
+app-fade {
+    display: block;
+    transition: opacity 0.3s ease-in-out;
+}
+
+app-fade.ng-enter {
+    opacity: 0;
+}
+
+app-fade.ng-enter-active {
+    opacity: 1;
+}
+
+app-fade.ng-leave {
+    opacity: 1;
+}
+
+app-fade.ng-leave-active {
+    opacity: 0;
+}

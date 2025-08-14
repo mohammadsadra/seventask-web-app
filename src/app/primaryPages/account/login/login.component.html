@@ -1,0 +1,145 @@
+<div class="wrapper">
+  <div [@fadeInOut]="!changedLanguage && !needConfirm && !getProfile ? 'show' : 'hide'"
+       [style.height.%]="!needConfirm && !getProfile ? '100' : '0'">
+    <div class="main-container" *ngIf="!needConfirm && !getProfile">
+      <div class="mobile-view-warn">
+        <img src="../../../../assets/icons/warning.png" width="20">
+        {{'Login.mobileMessage' | translate}}
+      </div>
+      <div class="form-container">
+        <div class="form">
+          <div class="logo-container">
+            <img style="width: 105px;" src="../../../../assets/icons/7Task-New-Logo.svg">
+          </div>
+          <div class="form-title">
+            {{ 'Login.title' | translate }}
+          </div>
+          <div class="login-guide">
+            <div class="not-registered">{{ 'Login.notRegisterYet' | translate }}</div>
+            <div>{{ 'Login.newAccount' | translate }}</div>
+          </div>
+          <form [formGroup]="signInForm" (ngSubmit)="submitSignInForm()" class="login-form">
+            <div class="input-row"
+                 [class]="(signInForm.controls.UsernameOrEmail.errors && signInForm.controls.UsernameOrEmail.touched) ? 'input-error' : ''">
+              <div class="input-icon">
+                <img src="../../../../assets/icons/account/mail.svg">
+              </div>
+              <input dir="auto" [class.placeholder-rtl]="textDirection === 'rtl'"
+                inputmode="email" formControlName="UsernameOrEmail" type="text" class="user-input"
+                placeholder="{{ 'Placeholders.email' | translate }}"
+                aria-label="Username">
+            </div>
+            <div class="input-row"
+                 [class]="(signInForm.controls.Password.errors && signInForm.controls.Password.touched) ? 'input-error' : ''">
+              <div class="input-icon">
+                <img src="../../../../assets/icons/account/Password.svg">
+              </div>
+              <input dir="auto" [class.placeholder-rtl]="textDirection === 'rtl'"
+                     [type]="hidePassword ? 'password' : 'text'" formControlName="Password" type="password"
+                     class="user-input"
+                     placeholder="{{ 'Placeholders.password' | translate }}"
+                     aria-label="Password">
+
+              <img src="../../../../assets/icons/visibility.svg"
+                   [src]="hidePassword ? 'assets/icons/visibility_off.svg' : 'assets/icons/visibility.svg'"
+                   (click)="hidePassword = !hidePassword"
+                   style="cursor: pointer; opacity: 0.6">
+
+
+            </div>
+            <div class="d-flex flex-row justify-content-end">
+              <!--        Remember me to be added.-->
+              <div class="forget-password">
+                <span style="cursor: pointer;" routerLink="/forgetPassword" >{{ 'Login.forgetPassword' | translate }}</span>
+              </div>
+            </div>
+            <button
+              [disabled]="signInForm.invalid || ((needConfirm && !emailSent) || (hasRequestedSignIn && !isSignedIn))"
+              (click)="submitSignInForm()" class="submit-login-form-button" type="submit">
+              <!--        <mat-progress-spinner [diameter]="20"-->
+              <!--                              *ngIf="(needConfirm && !emailSent) || (hasRequestedSignIn)"-->
+              <!--                              class="loading"-->
+              <!--                              color="primary"-->
+              <!--                              mode="indeterminate"-->
+              <!--                              value="50">-->
+              <!--        </mat-progress-spinner>-->
+              <seventask-spinner [loadingType]="1" class="loading" [color]="'white'"
+                                 *ngIf="(needConfirm && !emailSent) || hasRequestedSignIn"></seventask-spinner>
+              <div *ngIf="!((needConfirm && !emailSent) || (hasRequestedSignIn))"
+                   class="submit-login-form-button-text">{{'Login.signIn' | translate}}
+              </div>
+            </button>
+            <button class="login-with-google-button" (click)="ssoClick()" type="button">
+              <div>
+                <img src="../../../../assets/icons/account/google.png" width="25">&nbsp;&nbsp;
+                {{'Login.SSO' | translate}}
+              </div>
+            </button>
+          </form>
+          <div class="language d-flex flex-row" style="margin-top: 15px">
+            <img src="../../../../assets/icons/language.svg" style="width:24px; cursor: pointer"
+                 (click)="toggleChangeLanguageState()">
+            <div style="cursor: pointer" (click)="toggleChangeLanguageState()">&nbsp;{{language}}</div>
+            <div [@fadeInOut]="isChangeLanguage ? 'show' : 'hide'">
+              <div *ngIf="language == 'English' && isChangeLanguage" class="new-language"
+                   (click)="changeLanguage('fa-IR');">
+                Persian
+              </div>
+            </div>
+            <div [@fadeInOut]="isChangeLanguage ? 'show' : 'hide'">
+              <div *ngIf="language == 'فارسی' && isChangeLanguage" class="new-language"
+                   (click)="changeLanguage('en-US');">
+                انگلیسی
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div [@fadeInOut]="needConfirm && !emailConfirmed ? 'show' : 'hide'"
+       [style.height.%]="needConfirm && !emailConfirmed ? '100' : '0'">
+    <app-confirm-account
+      *ngIf="needConfirm && !emailConfirmed"
+      (emailConfirmEvent)="onEmailConfirm($event)"
+      [email]="signInForm.controls.UsernameOrEmail.value"
+      [password]="signInForm.controls.Password.value">
+    </app-confirm-account>
+  </div>
+  <div [@fadeInOut]="getProfile ? 'show' : 'hide'"
+       [style.height.%]="getProfile ? '100' : '0'">
+    <app-onboarding *ngIf="getProfile"
+                    [email]="signInForm.controls.UsernameOrEmail.value"
+                    [ssoPhotoUrl]="ssoImageUrl"
+                    [setNickNameSecurityStamp]="setNickNameSecurityStamp"
+                    [setProfileImageSecurityStamp]="setProfileImageSecurityStamp">
+    </app-onboarding>
+  </div>
+</div>
+
+<!--<div class="wrapper" [@fadeInOut]="needConfirm && !emailConfirmed ? 'show' : 'hide'">-->
+<!--  <button (click)="getProfile=true;emailConfirmed=true">Click</button>-->
+<!--  <app-confirm-account-->
+<!--    *ngIf="needConfirm && !emailConfirmed"-->
+<!--    (emailConfirmEvent)="onEmailConfirm($event)"-->
+<!--    [email]="signInForm.controls.UsernameOrEmail.value"-->
+<!--    [password]="signInForm.controls.Password.value">-->
+<!--  </app-confirm-account>-->
+<!--</div>-->
+<!--<div class="wrapper" [@fadeInOut]="getProfile ? 'show' : 'hide'">-->
+<!--  <app-onboarding *ngIf="getProfile"-->
+<!--                  [email]="signInForm.controls.UsernameOrEmail.value"-->
+<!--                  [ssoPhotoUrl]="ssoImageUrl"-->
+<!--                  [setNickNameSecurityStamp]="setNickNameSecurityStamp"-->
+<!--                  [setProfileImageSecurityStamp]="setProfileImageSecurityStamp">-->
+<!--  </app-onboarding>-->
+<!--</div>-->
+<app-sso style="display: none" [eventListener]="ssoEvent" (onSignedIn)="onSsoSignIn($event)"></app-sso>
+<swal
+  #sweetAlert
+  title="Username Or Password Is Incorrect"
+  text="Something went wrong"
+  icon="error"
+  [showCancelButton]="false"
+  [focusCancel]="true">
+</swal>

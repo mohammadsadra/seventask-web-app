@@ -1,0 +1,1166 @@
+@import 'variables';
+.project-container, .table-container {
+  padding: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+}
+
+.section-title {
+  /* Members */
+  height: 25px;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 18px;
+  line-height: 25px;
+  margin-bottom: 12px;
+  color: #a7afbd;
+  opacity: 0.5;
+  margin-top: 40px;
+  text-align: start;
+}
+
+.activity-log {
+  margin-bottom: 40px;
+}
+
+.each-member {
+  margin-inline-end: 10px;
+  //padding: 5px;
+  height: 100px;
+  margin-inline-end: 50px;
+}
+
+.tasks {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 10px 30px 0px 30px;
+}
+.members-list-container {
+  width: 85%;
+}
+.members-container {
+  justify-content: space-between;
+  height: 180px;
+  left: 290px;
+  top: 137px;
+  background: #ffffff;
+  border: 1px solid #f0f4f4;
+  box-sizing: border-box;
+  border-radius: 10px;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+.this-week-container {
+  width: 85%;
+}
+.this-week-calendar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 105px;
+  left: 290px;
+  top: 137px;
+  background: #ffffff;
+  border: 1px solid #f0f4f4;
+  box-sizing: border-box;
+  border-radius: 10px;
+}
+
+.weekday {
+  width: 14.285714285714286%;
+  color: #a7afbd;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.day-border {
+  border-right: 1px solid #f0f4f4;
+}
+
+.calendar-day-events-container {
+  overflow-y: auto;
+  padding-bottom: 10px;
+}
+
+.calendar-day-event {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  font-size: 14px;
+}
+
+.calendar-day-event:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.event-type-icon {
+  width: 12px;
+}
+
+.calendar-day-event-title {
+  width: 150px;
+  padding-inline-start: 5px;
+  text-align: start;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow-x: hidden;
+  max-width: 100%;
+  color: $theme-color;
+}
+
+.calendar-weekday-footer {
+  display: flex;
+  margin-top: auto;
+  width: 100%;
+  padding: 0 3px 3px 5px;
+  height: 27px;
+  box-shadow: -5px -5px 5px white;
+  z-index: 2;
+}
+
+.calendar-footer-day-num-container {
+  display: flex;
+  flex-basis: 85%;
+  justify-content: flex-start;
+}
+
+.calendar-day-num-main {
+  opacity: 0.9;
+  cursor: default;
+}
+
+.calendar-weekend {
+  opacity: 0.5 !important;
+}
+
+.calendar-today {
+  display: inline-block;
+  border: 1px solid $theme-color;
+  border-radius: 20px;
+  background-color: $theme-color;
+  color: white;
+}
+
+.weekday-number {
+  padding: 5px;
+}
+
+.add-member-title {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 15px;
+  text-align: center;
+
+  /* Theme Color */
+  color: rgba(46, 74, 119, 1);
+}
+
+.add-member-circle {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-content: center;
+  vertical-align: center;
+
+  background: $theme-color-opacity-10;
+  /* Theme Color */
+  border: 1px dashed $theme-color;
+  box-sizing: border-box;
+}
+
+.members-list {
+  overflow-x: auto;
+  //margin-left: 15px;
+}
+
+.img_cont {
+  //position: relative;
+}
+
+.user_img {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-content: center;
+  vertical-align: center;
+  color: $theme-color;
+  background: #f8fbfd;
+}
+
+.remove_user {
+  width: 15px;
+  height: 15px;
+  display: flex;
+  //margin-left: 20px;
+  justify-content: center;
+  text-align: center;
+  align-content: center;
+  vertical-align: center;
+  horiz-align: center;
+  cursor: pointer;
+  z-index: 1;
+  background: rgba(66, 120, 223, 0.5);
+}
+
+.file-logo {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-content: center;
+  vertical-align: center;
+  background: white;
+}
+
+//////////////////////////// ACTIVITY LOG
+.activity {
+  border-bottom: 1px solid #f3f6fa;
+  padding: 30px !important;
+}
+
+.activity .p-2 {
+  padding: 0 !important;
+}
+.project-list-container {
+  width: 85%;
+}
+.activity-log {
+  width: 85%;
+}
+.activity-log-body {
+  min-height: 100px;
+  max-height: 663px;
+  overflow-y: auto;
+
+  /* Task Background */
+
+  background: #ffffff;
+  /* Task Stroke */
+
+  border: 1px solid #f0f4f4;
+  box-sizing: border-box;
+  border-radius: 10px;
+}
+
+.activity-user-profile {
+  margin-inline-end: 10px;
+}
+
+.activity-description {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 15px;
+  color: #2e4a77;
+}
+
+.activity-time {
+  font-style: normal;
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 16px;
+  margin-top: 10px;
+  color: #a7afbd;
+  text-align: start;
+}
+
+.activity-username {
+  font-weight: 500;
+}
+
+.activity-task-name {
+  font-weight: 500;
+}
+
+.activity-file {
+  width: 200px;
+  height: 56px;
+  /* Theme Color */
+  background: rgba(66, 120, 223, 0.05);
+  border-radius: 10px;
+  padding: 10px;
+  margin: 0 10px 0 10px;
+}
+
+.file-info .p-2 {
+  padding: 0 !important;
+}
+
+.file-info {
+  margin-inline-start: 10px;
+}
+
+.file-name {
+  /* Final_Researh.pdf */
+  height: 18px;
+
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 15px;
+  color: #2e4a77;
+  opacity: 0.7;
+}
+
+.file-size {
+  height: 16px;
+
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 14px;
+
+  /* Color 3 */
+  color: #a7afbd;
+}
+
+.view-all-task,
+.view-all-activity {
+  /* View All Activities */
+  height: 19px;
+
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+  text-align: center;
+
+  /* Theme Color */
+  color: $theme-color;
+}
+
+.activity-task-comment-body {
+  width: 670px;
+  min-height: 114px;
+
+  /* Theme Color */
+  background-color: rgba(66, 120, 223, 0.05);
+  border-radius: 10px;
+}
+
+.activity-task-comment-text {
+  //min-width: 630px;
+  //height: 40px;
+  padding: 15px 20px 15px 20px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 18px;
+
+  /* Color one */
+  color: #2e4a77;
+  opacity: 0.7;
+}
+
+.activity-add-replay {
+  width: 630px;
+  height: 34px;
+  margin: 0 20px 15px 20px;
+  padding: 1px 5px 1px 5px;
+  /* White */
+
+  background: #ffffff;
+  /* Task Stroke */
+  border: 1px solid #f0f4f4;
+  border-radius: 10px;
+}
+
+//.tasks-body{
+//  width: 820px;
+//  min-height: 484px;
+//
+//  /* Task Background */
+//
+//  background: #FFFFFF;
+//  /* Task Stroke */
+//
+//  border: 1px solid #F0F4F4;
+//  box-sizing: border-box;
+//  border-radius: 10px;
+//}
+//.tasks-body .p-2 {
+//  padding: 0 !important;
+//}
+//.task{
+//  //padding: 20px;
+//  border-bottom: 1px solid #F3F6FA;
+//}
+//.task-title{
+//  height: 22px;
+//
+//  font-style: normal;
+//  font-weight: 500;
+//  font-size: 16px;
+//  line-height: 19px;
+//
+//  /* Color one */
+//
+//  color: #2E4A77;
+//}
+//.in-progress{
+//  padding: 6px!important;
+//  width: 103px;
+//  height: 28px;
+//
+//  font-style: normal;
+//  font-weight: normal;
+//  font-size: 12px;
+//  line-height: 14px;
+//  color: $theme-color;
+//
+//  background-color: rgba(66, 120, 223, 0.1);
+//  border-radius: 5px;
+//}
+//.label-high {
+//  padding: 6px!important;
+//  background-color: rgba(255, 0, 0, 0.1);
+//  color: #F86F8C;
+//  height: 28px;
+//  border-radius: 5px;
+//  font-weight: 900;
+//  font-size: 12px;
+//  line-height: 16px;
+//}
+//
+//.label-medium{
+//  padding: 6px;
+//  background-color: rgba(255, 165, 0, 0.1);
+//  color: orange;
+//  height: 28px;
+//  border-radius: 5px;
+//  font-weight: 900;
+//  font-size: 12px;
+//  line-height: 16px;
+//}
+//
+//.label-low{
+//  padding: 6px;
+//  background-color: rgba(30, 193, 195, 0.1);
+//  color: #1ec1c3;
+//  height: 28px;
+//  border-radius: 5px;
+//  font-weight: 900;
+//  font-size: 12px;
+//  line-height: 16px;
+//}
+//.task-icon-list{
+//  margin-top: 20px;
+//}
+//.task-icon{
+//  margin-right: 18px;
+//}
+//.task-icon-title{
+//  height: 16px;
+//
+//  font-style: normal;
+//  font-weight: normal;
+//  font-size: 12px;
+//  line-height: 14px;
+//  margin-left: 9px;
+//
+//  /* Color 3 */
+//  color: #A7AFBD;
+//
+//}
+//.task-member-logo{
+//
+//  width: 28px;
+//  height: 28px;
+//  display: inline-block;
+//
+//  /* White */
+//  border: 2px solid #FFFFFF;
+//  border-radius: 50%;
+//  box-sizing: border-box;
+//  text-align: center;
+//  justify-content: center;
+//
+//  font-style: normal;
+//  font-weight: normal;
+//  font-size: 14px;
+//  line-height: 17px;
+//  color: #FFFFFF;
+//  margin-left: -10px;
+//  padding-top: 4px;
+//}
+//.task-time{
+//
+//  font-style: normal;
+//  font-weight: normal;
+//  font-size: 12px;
+//  line-height: 16px;
+//
+//  color: #2E4A77;
+//  opacity: 0.3;
+//
+//}
+//.task-status{
+//  margin: 0 10px 0 10px;
+//}
+//.task-mood-circle{
+//  width: 12px;
+//  height: 12px;
+//  border-radius: 50%;
+//  margin: 0 5px 0 5px;
+//}
+//.task-icon .p-2{
+//  padding: 0!important;
+//}
+//.time-tracking-body{
+//  /* Rectangle 22 */
+//
+//  width: 818px;
+//  height: 60px;
+//
+//  /* Theme Color */
+//  background: $theme-color;
+//  /* task shadow */
+//  box-shadow: 0px 30px 15px -18px rgba(66, 120, 223, 0.25);
+//  border-radius: 0px;
+//  margin-bottom: 20px;
+//  padding: 15px 0 15px 0;
+//
+//}
+//.task-time-tracking{
+//  width: 150px;
+//  height: 30px;
+//
+//  background: #FFFFFF;
+//  border: 1.5px solid #FFFFFF;
+//  box-sizing: border-box;
+//  border-radius: 10px;
+//  font-style: normal;
+//  font-weight: normal;
+//  font-size: 12px;
+//  line-height: 14px;
+//  justify-content: center;
+//  margin-left: 20px;
+//  color: $theme-color;
+//}
+//.mark-as-done{
+//  width: 120px;
+//  height: 30px;
+//  margin-left: 20px;
+//
+//  font-style: normal;
+//  font-weight: normal;
+//  font-size: 12px;
+//  line-height: 14px;
+//  color: #FFFFFF;
+//  justify-content: center;
+//}
+//.task-following{
+//  width: 120px;
+//  height: 30px;
+//
+//  font-style: normal;
+//  font-weight: normal;
+//  font-size: 12px;
+//  line-height: 14px;
+//  color: #FFFFFF;
+//  justify-content: center;
+//}
+//.trash{
+//  width: 120px;
+//  height: 30px;
+//
+//  font-style: normal;
+//  font-weight: normal;
+//  font-size: 12px;
+//  line-height: 14px;
+//  color: #FFFFFF;
+//  justify-content: center;
+//}
+//.more{
+//  width: 20px;
+//  height: 30px;
+//
+//  font-style: normal;
+//  font-weight: normal;
+//  font-size: 12px;
+//  line-height: 14px;
+//  color: #FFFFFF;
+//  justify-content: center;
+//  margin-right: 20px;
+//}
+.task-container {
+  width: 820px;
+  //height: 293px;
+  min-height: 250px;
+  background: #ffffff;
+  border: 1px solid #f0f4f4;
+  box-sizing: border-box;
+  border-radius: 20px;
+  padding: 30px;
+}
+
+.department-list {
+  border-bottom: 1px solid #f3f6fa;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 20px 20px 0 20px;
+}
+
+.department-name {
+  font-weight: normal;
+  font-size: 14px;
+  color: #a7afbd;
+  padding: 0px 5px 0px 5px !important;
+  cursor: pointer;
+  margin-inline-end: 60px;
+}
+
+.department-context-menu {
+  position: absolute;
+  border-radius: 10px;
+  z-index: 1000;
+  border-radius: 5px;
+  background: #f8fbfd;
+  width: 120px;
+  border: 0.1px solid #f0f4f4;
+}
+
+.edit-department {
+  cursor: pointer;
+}
+.input-wrapper {
+  border: 1px solid $theme-color;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.input-accept-btn {
+  background-color: $theme-color-opacity-10;
+  padding: 4px;
+  cursor: pointer;
+}
+
+.delete-department {
+  cursor: pointer;
+}
+
+.department-item:hover {
+  background: rgba(46, 74, 119, 0.1);
+  border-radius: 5px;
+}
+
+.active-department {
+  height: 3px;
+  background: $theme-color;
+  border-radius: 10px 10px 0px 0px;
+  margin-top: 10px;
+}
+//////////////////////////////////////////////
+.selected-project {
+  box-shadow: 0 0 5px 1px #306bdd;
+}
+
+.all-team {
+  padding: 30px;
+}
+
+.team {
+  //padding-left: 6%;
+}
+
+.item-title {
+  /* IVS Team */
+
+  //position: absolute;
+
+  height: 25px;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 18px;
+  line-height: 25px;
+  text-align: start;
+  /* identical to box height */
+
+  /* Color 3 */
+  color: #a7afbd;
+  opacity: 0.5;
+}
+
+.team-project-container {
+  padding: 12px;
+}
+
+.project {
+  margin: 10px 10px 10px 10px;
+}
+
+.project-header {
+  /* Rectangle 57 */
+
+  width: 340px;
+  height: 41px;
+
+  /* Green */
+  background-color: rgba(0, 0, 0, 0.1);
+  //background: rgba(30, 193, 195, 0.1);
+  border-radius: 20px 20px 0px 0px;
+
+  text-align: center;
+  justify-content: center;
+  padding: 5px 0 5px 0;
+}
+
+.project-header-title {
+  /* Seven Task Project */
+  height: 22px;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 16px;
+  line-height: 19px;
+
+  background: transparent !important;
+
+  text-align: center;
+
+  /* Green */
+  color: #1ec1c3;
+}
+
+.project-body {
+  /* Rectangle 58 */
+
+  width: 340px;
+  height: 181px;
+
+  /* Task Background */
+  background-color: #ffffff;
+  /* Task Stroke */
+  border: 1px solid #f0f4f4;
+  box-sizing: border-box;
+  border-radius: 0px 0px 20px 20px;
+}
+
+.mood {
+  /* Rectangle 56 */
+  width: 65px !important;
+  height: 28px;
+
+  /* Green */
+  background-color: rgba(30, 193, 195, 0.1);
+  border-radius: 5px;
+}
+
+.chill-logo {
+  padding: 6px;
+}
+
+.chill-title {
+  /* Chill */
+  width: 25px;
+  height: 16px;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 14px;
+  margin-inline-start: 2px;
+
+  /* Green */
+  color: #1ec1c3;
+}
+
+.notification-row-item-title {
+  height: 16px;
+  width: 89px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 14px;
+
+  /* Color 3 */
+
+  color: #a7afbd;
+}
+
+.notification-row-item-number {
+  color: $theme-color;
+}
+
+.notification-row-logo {
+  margin-bottom: 12px;
+}
+
+.deadLine {
+  /* Tomroow */
+  height: 16px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 16px;
+
+  /* Color one */
+  color: #2e4a77;
+  opacity: 0.3;
+  text-align: center;
+}
+
+.watchTimer {
+  margin-inline-end: 8px;
+}
+
+.user_img_msg {
+  height: 28px;
+  width: 28px;
+  display: inline-block;
+  border: none;
+  box-sizing: border-box;
+  text-align: center;
+  justify-content: center;
+  color: #ffffff;
+  margin-inline-start: -10px;
+  //padding-top: 4px;
+}
+
+.border {
+  border: 2px solid #ffffff;
+}
+
+.member {
+  /* Ellipse 1 */
+
+  width: 28px;
+  height: 28px;
+  display: inline-block;
+
+  /* White */
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  box-sizing: border-box;
+  text-align: center;
+  justify-content: center;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 17px;
+  color: #ffffff;
+  margin-inline-start: -10px;
+  padding-top: 4px;
+}
+
+.mood-circle {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin: 0 5px 0 5px;
+}
+
+.all-team .p-2 {
+  padding: 0 !important;
+}
+
+/////////////////////////////////////
+.task-box {
+  min-width: 310px;
+  min-height: 174px;
+  margin-bottom: 30px;
+  padding: 20px;
+  border-bottom: solid 1px #ccc;
+  color: rgba(0, 0, 0, 0.87);
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  background: #f8fbfd;
+  font-size: 14px;
+  //height: 174px;
+  border-radius: 20px;
+  margin-inline-end: 20px;
+  //align-items: center;
+  //justify-content: space-between;
+  //box-sizing: border-box;
+}
+
+.task-deadline-label-color {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.task-deadline {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 16px;
+  color: #2e4a77;
+  opacity: 0.3;
+}
+
+.task-label-color {
+}
+
+.task-label-user {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.labels {
+}
+
+.label-high {
+  padding: 6px;
+  background-color: rgba(255, 0, 0, 0.1);
+  color: red;
+  height: 28px;
+  border-radius: 5px;
+  font-weight: 900;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.label-medium {
+  padding: 6px;
+  background-color: rgba(255, 165, 0, 0.1);
+  color: orange;
+  height: 28px;
+  border-radius: 5px;
+  font-weight: 900;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.label-low {
+  padding: 6px;
+  background-color: rgba(30, 193, 195, 0.1);
+  color: green;
+  height: 28px;
+  border-radius: 5px;
+  font-weight: 900;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.task-icon-list {
+  margin-top: 22px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.task-title {
+  //text-overflow:ellipsis;
+  //white-space: nowrap;
+  overflow: hidden;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 16px;
+  line-height: 22px;
+  color: #2e4a77;
+  text-align: start;
+}
+
+.task-row-users {
+  margin-inline-endright: 30px;
+  display: flex;
+  flex-direction: row;
+}
+
+.selected-task {
+  background-color: $theme-color;
+  margin: 20px -20px 0 -20px;
+  border-radius: 0px 0px 20px 20px;
+  padding: 15px;
+  display: flex;
+  flex-direction: row;
+  outline: none;
+  justify-content: space-between;
+  text-align: center;
+  align-items: center;
+}
+
+.selected-task-time-track-button {
+  background: #ffffff;
+  border: 1.5px solid #ffffff;
+  box-sizing: border-box;
+  border-radius: 10px;
+}
+
+.selected-task-time-track-button-text {
+  font-style: normal;
+  font-weight: 900;
+  font-size: 12px;
+  line-height: 16px;
+  color: $theme-color;
+}
+
+.selected-task-time-track-icon {
+  margin-inline-end: 8px;
+}
+
+.selected-task-control {
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  margin-inline-end: 8px;
+}
+
+.selected-task-control-text {
+  font-style: normal;
+  font-weight: 900;
+  font-size: 12px;
+  line-height: 16px;
+  color: #ffffff;
+}
+
+.payment-table {
+  width: 100%;
+  text-align: center !important;
+  font-family: inherit !important;
+}
+
+th.mat-header-cell {
+  text-align: center !important;
+  font-family: inherit !important;
+}
+
+::ng-deep .mat-sort-header-container {
+  justify-content: center !important;
+}
+
+.loading-spinner {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.payment-button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  color: white;
+  margin: auto;
+}
+
+@mixin payment-button {
+  padding: 5px;
+  width: 100%;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.failed-button {
+  @include payment-button;
+  background-color: rgb(228, 5, 5);
+}
+
+.done-button {
+  @include payment-button;
+  background-color: rgb(23, 142, 23);
+}
+
+.in-progress-button {
+  @include payment-button;
+  background-color: rgba(23, 142, 23, 0.5);
+}
+
+.bill-button {
+  @include payment-button;
+  background-color: rgba(61, 126, 247, 0.8);
+}
+
+.export-button {
+  padding: 5px 15px;
+  border-radius: 5px;
+  width: 100%;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+  background-color: $theme-color;
+  color: white;
+}
+
+.export-button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px auto;
+  min-width: 172px;
+  max-width: 17%;
+}
+
+tr.detail-row {
+  height: 0;
+}
+
+tr.element-row:not(.expanded-row):hover {
+  background: whitesmoke;
+}
+
+tr.element-row:not(.expanded-row):active {
+  background: #efefef;
+}
+
+.element-row td {
+  border-bottom-width: 0;
+}
+
+.element-detail {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.element-detail-box {
+  margin: 5px auto;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  text-align: start;
+  align-items: center;
+  width: 50%;
+  color: $theme-color;
+  background-color: $theme-color-opacity-15;
+}
+
+.element-description-header {
+  width: 100%;
+  background-color: $theme-color;
+  color: white;
+  text-align: center;
+  margin-bottom: 5px;
+  border-radius: 5px 5px 0 0;
+  border: 1px solid $theme-color;
+}
+
+.element-description-row {
+  width: 100%;
+  text-align: start;
+  margin-bottom: 5px;
+  margin-inline-start: 5px;
+}
+
+.element-description {
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.example-element-symbol {
+  font-weight: bold;
+  font-size: 40px;
+  line-height: normal;
+}
+
+.example-element-description {
+  padding: 16px;
+}
+
+.example-element-description-attribution {
+  opacity: 0.5;
+}

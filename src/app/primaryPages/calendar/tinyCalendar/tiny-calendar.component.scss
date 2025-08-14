@@ -1,0 +1,226 @@
+@import "variables";
+
+.main-container {
+    padding: 0 !important;
+    z-index: 0;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin: 5px 0 5px 0;
+}
+
+.header-text {
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+}
+
+.navigator {
+    width: 25px;
+    height: 25px;
+    margin: 10px;
+    cursor: pointer;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+
+    &.blink {
+        animation: blink-animation 0.75s infinite;
+    }
+}
+
+@keyframes blink-animation {
+    to {
+        background-color: $theme-color-opacity-20;
+    }
+}
+
+.navigator:hover {
+    background: $theme-color-opacity-10;
+}
+
+.main-calendar-header {
+    opacity: 0.4;
+}
+
+.second-calendar-header {
+    opacity: 0.2;
+    font-size: 15px;
+}
+
+.week-day-nav-item-container {
+    width: 90%;
+    display: flex;
+    margin: auto;
+}
+
+.week-day-nav-item {
+    opacity: 0.3;
+    color: rgb(46, 74, 119);
+    font-size: 13px;
+    width: 14.2857142857%; //equal to 100/7
+    text-align: center;
+    cursor: default;
+}
+
+.calendar-main-container {
+    position: relative;
+    background-color: white;
+    padding: 0 5px;
+    margin: auto;
+    width: 90%;
+    display: flex;
+    flex-wrap: wrap;
+    border-radius: 10px;
+    font-size: 13px;
+}
+
+.day {
+    text-align: center;
+}
+
+.calendar-month-day {
+    width: 14.2857142857%; //equal to 100/7
+    color: #A7AFBD;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    margin: 0.5px 0 0.5px;
+    border: 1px solid transparent;
+    transition: border 0.3s;
+    -webkit-user-select: none;
+    /* Safari */
+    -moz-user-select: none;
+    /* Firefox */
+    user-select: none;
+    /* Standard */
+}
+
+.calendar-day-num {
+    opacity: 0.2;
+    color: #2E4A77;
+    cursor: default;
+}
+
+.calendar-day-num-main {
+    opacity: 0.8;
+    color: #2E4A77;
+    cursor: default;
+}
+
+.calendar-today {
+    opacity: 1;
+    color: #FFFFFF;
+    border: 1px solid $theme-color;
+    background-color: $theme-color;
+    border-radius: 20px;
+}
+
+.calendar-selected-date {
+    background-color: $theme-color-opacity-50;
+    border-radius: 20px;
+}
+
+.calendar-hovered-date {
+    opacity: 0.6;
+    color: #2E4A77;
+    background-color: $theme-color-opacity-10;
+    border-radius: 20px;
+}
+
+.events-container {
+    visibility: hidden;
+    position: absolute;
+    border-radius: 20px;
+    border: 1px solid #F0F4F4;
+    background-color: #F8FBFD;
+    min-width: 70px;
+    max-width: 120px;
+    z-index: 1;
+}
+
+.events {
+    margin: 10px auto;
+    padding: 0 5px;
+    overflow-y: auto;
+}
+
+.event {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 10px auto;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.event-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.event-title {
+    max-width: 80px;
+    min-width: 60px;
+    padding-inline-start: 5px;
+    text-align: start;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+    white-space: nowrap;
+    color: $theme-color;
+}
+
+.event-time {
+    margin-inline-start: 20px;
+    font-size: 12px;
+}
+
+.no-events-msg {
+    color: $theme-color;
+    margin: 10px auto;
+}
+
+.calendar-weekend {
+    opacity: 0.5 !important;
+}
+
+.selected-date {
+    border-top: 1px dashed;
+    border-bottom: 1px dashed;
+}
+
+.starting-selected-date-ltr {
+    border-radius: 10px 0 0 10px;
+    border-left: 1px dashed;
+}
+
+.ending-selected-date-ltr {
+    border-radius: 0 10px 10px 0;
+    border-right: 1px dashed;
+}
+
+.starting-selected-date-rtl {
+    border-radius: 0 10px 10px 0;
+    border-right: 1px dashed;
+}
+
+.ending-selected-date-rtl {
+    border-radius: 10px 0 0 10px;
+    border-left: 1px dashed;
+}
+
+.starting-selected-date-ltr.ending-selected-date-ltr,
+.starting-selected-date-rtl.ending-selected-date-rtl {
+    border: 1px solid dashed;
+    border-radius: 10px;
+}

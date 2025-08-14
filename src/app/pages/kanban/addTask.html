@@ -1,0 +1,441 @@
+<div [style]="'direction: ' + textDirection" class="main-container">
+
+  <div class="add-task-title">
+    {{'Task.createNewTask' | translate}}
+  </div>
+
+  <form (keyup.enter)="addTask()" class="add-task-form" [formGroup]="addTaskForm">
+
+    <div style="margin-top: 40px">
+      <input #title dir="auto"
+             [class.placeholder-rtl]="iconRotationDegree == 180"
+             [ngClass]="(addTaskForm.controls.Title.errors?.required && addTaskForm.controls.Title.touched )? 'not-valid': ''"
+             formControlName="Title" class="task-title-input"
+             placeholder="{{'Placeholders.enterTaskTitle' | translate}}">
+    </div>
+
+    <div>
+      <div class="p-2 tab-container d-flex flex-row justify-content-between">
+        <div class="p-2 tab" [ngClass]="activeTab == 'Assignments' ? 'active-tab' : 'tab'"
+             (click)="activeTab = 'Assignments'">
+          {{'Task.assignments' | translate}}
+          <br><span *ngIf="activeTab == 'Assignments'">•</span>
+        </div>
+        <div class="p-2 tab" [ngClass]="activeTab == 'Task Details' ? 'active-tab' : 'tab'"
+             (click)="activeTab = 'Task Details'">
+          {{'Task.taskDetails' | translate}}
+          <br><span *ngIf="activeTab == 'Task Details'">•</span>
+        </div>
+        <div class="p-2 tab" [ngClass]="activeTab == 'Time' ? 'active-tab' : 'tab'" (click)="activeTab = 'Time'">
+          {{'Task.time' | translate}}
+          <br><span *ngIf="activeTab == 'Time'">•</span>
+        </div>
+        <div class="p-2 tab" [ngClass]="activeTab == 'Attachments' ? 'active-tab' : 'tab'"
+             (click)="activeTab = 'Attachments'">
+          {{'Task.attachments' | translate}}
+          <br><span *ngIf="activeTab == 'Attachments'">•</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="task-assign">
+
+      <div [@fadeInOut]="activeTab === 'Assignments' ? 'show' : 'hide'">
+
+        <div class="assignments-body" *ngIf="activeTab === 'Assignments'">
+
+          <!--Select Team Section-->
+          <div class="team-selector d-flex flex-column align-items-center">
+
+            <div class="p-2 assignments-title">
+              <div class=" d-flex flex-row align-items-center">
+                <img class="p-2" src="../../../assets/icons/Project/Team.svg">
+                <div class="p-2" style="margin-inline-start: 10px">
+                  {{'Task.team' | translate}}
+                </div>
+              </div>
+            </div>
+
+            <div class="p-2 assignments-team-description">
+              {{'Task.teamMsg' | translate}}
+            </div>
+
+            <div *ngIf="this.inputData.isAddingFromHeader"
+                 class="smooth-rectangle p-2 assignments-teams-list d-flex flex-row align-items-center justify-content-around">
+
+              <button *ngIf="allTeams.length == 0" style="border: none"
+                      (click)="openTeamPage()"
+                      class="assignments-team  d-flex flex-row align-items-center justify-content-center p-2"
+                      mat-dialog-close>
+                {{'Task.createNewTeam' | translate}}
+              </button>
+
+              <!--3rd Section of team select-->
+              <div *ngIf="allTeams.length >= 3" [matMenuTriggerFor]="teamsToSelect" style="margin-inline-end: 20px"
+                   [ngClass]="activeTeam != '' && activeTeam != allTeams[0].id && activeTeam != allTeams[1].id ? 'active-assignments-team' : 'assignments-team'"
+                   class="smooth-rectangle p-2 d-flex flex-row align-items-center justify-content-center"
+                   (click)="activeTeam != '' && activeTeam != allTeams[0].id && activeTeam != allTeams[1].id ? unselectTeam(): ''">
+                <!--                   (click)="activeTeam != '' && activeTeam != allTeams[0].id && activeTeam != allTeams[1].id ? unselectTeam()  : openAddTeam()">-->
+
+                <div *ngIf="activeTeam == '' || activeTeam == allTeams[0].id || activeTeam == allTeams[1].id"
+                     class="p-2">
+                  {{'Task.selectTeam' | translate}}
+                </div>
+
+                <div
+                  *ngIf="selectedTeamFromMenu != null && activeTeam != '' && activeTeam != allTeams[0].id && activeTeam != allTeams[1].id"
+                  class="p-2">
+                  {{selectedTeamFromMenu.name}}
+                </div>
+
+                <div class="p-2" style="margin-inline-start: 5px">
+                  <img src="../../../assets/icons/Project/V.svg">
+                </div>
+
+              </div>
+
+              <mat-menu xPosition="after" class="select-team-container" id="teamsToSelect" #teamsToSelect="matMenu"
+                        (click)="$event.stopPropagation()">
+                <div (click)="$event.stopPropagation()" class="p-2" style="background: #F8FBFD;">
+                  <input [class.placeholder-rtl]="textDirection === 'rtl'"
+                         #searchTeam dir="auto" class="search-team"
+                         placeholder="{{ 'Placeholders.searchForTeam' | translate}}">
+                </div>
+                <div style="max-height: 400px;overflow-y: auto">
+                  <div *ngFor="let team of allTeams |slice:2 |teamSearch: searchTeam.value" class="team-row"
+                       (click)="selectTeamFromMenu(team)">
+                    <div class="d-flex flex-row align-items-center">
+                      <div class="rounded-circle team_img" style="padding: 7px">
+                        <img src="../../../../../assets/icons/Project/Team.svg">
+                      </div>
+                      <div class="team-title">
+                        {{team.name}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </mat-menu>
+
+              <div *ngIf="allTeams.length >= 1" style="margin-inline-end: 20px"
+                   [ngClass]="activeTeam == allTeams[0].id ? 'active-assignments-team' : 'assignments-team'"
+                   [appHoverClass] [active]="activeTeam == allTeams[0].id"
+                   (click)="activeTeam == allTeams[0].id ? unselectTeam() :selectTeam(allTeams[0].id)"
+                   class="smooth-rectangle assignments-team  d-flex flex-row align-items-center justify-content-center p-2">
+                {{allTeams[0].name}}
+              </div>
+
+              <div *ngIf="allTeams.length >= 2"
+                   [ngClass]="activeTeam == allTeams[1].id ? 'active-assignments-team' : 'assignments-team'"
+                   [appHoverClass] [active]="activeTeam == allTeams[1].id"
+                   (click)="activeTeam == allTeams[1].id ? unselectTeam() : selectTeam(allTeams[1].id)"
+                   class="smooth-rectangle assignments-team  d-flex flex-row align-items-center justify-content-center p-2">
+                {{allTeams[1].name}}
+              </div>
+
+            </div>
+
+            <div *ngIf="!this.inputData.isAddingFromHeader && this.inputData.selectedTeam != null"
+                 class="smooth-rectangle active-assignments-team p-2 assignments-teams-list d-flex flex-row align-items-center justify-content-around">
+              {{this.inputData.selectedTeam.name}}
+            </div>
+
+            <div
+              *ngIf="!this.inputData.isAddingFromHeader && this.inputData.selectedProject != null && this.inputData.selectedProject?.teamId != null "
+              class="smooth-rectangle active-assignments-team p-2 assignments-teams-list d-flex flex-row align-items-center justify-content-around">
+              {{this.inputData.selectedProject.teamName}}
+            </div>
+
+          </div>
+
+          <!--Select Project Section-->
+          <div class="team-selector d-flex flex-column align-items-center">
+            <div class="p-2 assignments-title">
+              <div class=" d-flex flex-row align-items-center">
+                <img class="p-2" style="opacity: 0.3" src="../../../assets/icons/Task/add-project.svg">
+                <div class="p-2" style="margin-inline-start: 10px">
+                  {{'Task.project' | translate}}
+                </div>
+              </div>
+            </div>
+            <div class="p-2 assignments-team-description">
+
+            </div>
+            <div *ngIf="this.inputData.isAddingFromHeader"
+                 class="smooth-rectangle p-2 assignments-teams-list d-flex flex-row align-items-center justify-content-around">
+
+              <button style="border: none"
+                      (click)="openProjectPage()"
+                      class="assignments-team  d-flex flex-row align-items-center justify-content-center p-2"
+                      *ngIf="showingProjects.length == 0" mat-dialog-close>
+                {{'Task.createNewProject' | translate}}
+              </button>
+
+              <div *ngIf="showingProjects.length >= 3" style="margin-inline-end: 20px"
+                   [matMenuTriggerFor]="projectsToSelect"
+                   [ngClass]="activeProject != '' && activeProject != showingProjects[0].id && activeProject != showingProjects[1].id ? 'active-assignments-team' : 'assignments-team'"
+                   class="smooth-rectangle p-2 d-flex flex-row align-items-center justify-content-center"
+                   (click)="activeProject != '' && activeProject != showingProjects[0].id && activeProject != showingProjects[1].id ? unselectProject()  : ''">
+                <div
+                  *ngIf="activeProject == '' || activeProject == showingProjects[0].id || activeProject == showingProjects[1].id"
+                  class="p-2">
+                  {{'Task.selectProject' | translate}}
+                </div>
+                <div
+                  *ngIf="selectedProjectFromMenu != null && activeProject != '' && activeProject != showingProjects[0].id && activeProject != showingProjects[1].id"
+                  class="p-2">
+                  {{selectedProjectFromMenu.name}}
+                </div>
+                <div class="p-2" style="margin-inline-start: 5px">
+                  <img src="../../../assets/icons/Project/V.svg">
+                </div>
+              </div>
+
+              <mat-menu xPosition="after" class="select-team-container" id="projectsToSelect"
+                        #projectsToSelect="matMenu"
+                        (click)="$event.stopPropagation()">
+                <div (click)="$event.stopPropagation()" class="p-2" style="background: #F8FBFD;">
+                  <input [class.placeholder-rtl]="textDirection === 'rtl'"
+                         #searchProject dir="auto" class="search-team"
+                         placeholder="{{ 'Placeholders.searchForProject' | translate}}">
+                </div>
+
+                <div style="max-height: 400px;overflow-y: auto">
+                  <div *ngFor="let project of activeProjects |slice:2 |projectSearch: searchProject.value"
+                       class="team-row"
+                       (click)="selectProjectFromMenu(project)">
+                    <div class="d-flex flex-row align-items-center">
+                      <div class="rounded-circle team_img" style="padding: 7px">
+                        <img src="../../../../../assets/icons/Project/Team.svg">
+                      </div>
+                      <div class="team-title">
+                        {{project.name}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </mat-menu>
+
+              <div *ngIf="showingProjects.length >= 1" style="margin-inline-end: 20px"
+                   [ngClass]="activeProject == showingProjects[0].id ? 'active-assignments-team' : 'assignments-team'"
+                   [appHoverClass] [active]="activeProject == showingProjects[0].id"
+                   (click)="activeProject == showingProjects[0].id ? unselectProject() :selectProject(showingProjects[0])"
+                   class="smooth-rectangle assignments-team  d-flex flex-row align-items-center justify-content-center p-2">
+                {{showingProjects[0].name}}
+              </div>
+
+              <div *ngIf="showingProjects.length >= 2"
+                   [ngClass]="activeProject == showingProjects[1].id ? 'active-assignments-team' : 'assignments-team'"
+                   [appHoverClass] [active]="activeProject == showingProjects[1].id"
+                   (click)="activeProject == showingProjects[1].id ? unselectProject() : selectProject(showingProjects[1])"
+                   class="smooth-rectangle assignments-team  d-flex flex-row align-items-center justify-content-center p-2">
+                {{showingProjects[1].name}}
+              </div>
+
+            </div>
+
+            <div *ngIf="!this.inputData.isAddingFromHeader && this.inputData.selectedProject != null"
+                 class="smooth-rectangle active-assignments-team p-2 assignments-teams-list d-flex flex-row align-items-center justify-content-around">
+              {{this.inputData.selectedProject.name}}
+            </div>
+
+          </div>
+
+          <!--AddAssignee Section-->
+          <div class="assign-members-body d-flex flex-column">
+
+            <div class="p-2 assignments-title d-flex flex-column align-items-center">
+              <div class="p-2 d-flex flex-row align-items-center">
+                <img class="p-2" src="../../../assets/icons/Project/Team.svg">
+                <div class="p-2" style="margin-inline-start: 10px">
+                  {{'Task.assignees' | translate}}
+                </div>
+              </div>
+            </div>
+
+            <div class="p-2 add-member-container d-flex flex-column">
+              <div class="p-2 flex-row d-flex align-items-center" style="cursor: pointer; margin-bottom: 30px"
+                   (click)="openAddMember()">
+                <span style="font-size: 18px" class="seventask-icon-add-Add-Member-New p-2"></span>
+                <div class="p-2 add-member-title">
+                  {{'Task.addMember' | translate}}
+                </div>
+              </div>
+              <div class="members-list d-flex flex-column">
+
+                <div style="margin-bottom: 15px" class="p-2  d-flex flex-row align-items-center"
+                     *ngFor="let member of memberList">
+                  <img class="p-2" src="../../../assets/icons/Project/Remove-Member.svg" style="cursor: pointer"
+                       (click)="removeItemFromList(memberList, member)">
+
+                  <div *ngIf="member.profileImageGuid == null" class="member-without-image"
+                       style="background-color: #1EC1C3;margin-bottom: 0">{{member.nickName.charAt(0)}}</div>
+
+                  <img *ngIf="member.profileImageGuid != null"
+                       [src]="domainName + '/en-US/File/get?id=' + member.profileImageGuid + '&quality=100'"
+                       style="background-color: #86A8E7;margin-bottom: 0" class="member">
+
+
+                  <div class="p-2 d-flex flex-row align-items-center">
+                    <div class="member-name p-2">
+                      {{member.nickName}}
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div [@fadeInOut]="activeTab === 'Task Details' ? 'show' : 'hide'">
+        <div *ngIf="activeTab === 'Task Details'">
+          <div class="team-selector d-flex flex-column align-items-center">
+
+            <div style="margin-top: 0" class="p-2 assignments-title">
+              <div class=" d-flex flex-row align-items-center">
+                <img [style]="'transform: rotate(' + iconRotationDegree + 'deg)'" style="opacity: 0.3;" class="p-2"
+                     src="../../../assets/icons/Task/Inspector/description.svg">
+                <div style="margin-inline-start: 3px;padding: 6px 0px 2px 0px !important;">
+                  {{'Task.description' | translate}}
+                </div>
+              </div>
+            </div>
+            <textarea dir="auto"
+                      style="margin-top: 20px;background-color:rgba(66, 120, 223, 0.05);resize: none;outline: none;font-size: 13px "
+                      formControlName="Description" class="task-title-input"
+                      placeholder="{{'Placeholders.writeYourDescription' | translate}}"></textarea>
+
+            <div class="p-2 assignments-title">
+              <div class=" d-flex flex-row align-items-center">
+                <img style="opacity: 0.3;" class="p-2" src="../../../assets/icons/Task/priority.svg">
+                <div style="margin-inline-start: 3px;padding: 6px 0px 2px 0px !important;">
+                  {{'Task.priority' | translate}}
+                </div>
+              </div>
+            </div>
+            <mat-button-toggle-group formControlName="Priority" style="margin-top: 20px"
+                                     #priority="matButtonToggleGroup">
+              <mat-button-toggle checked value="1">
+                <img [style]="iconRotationDegree === 0 ? '' : 'transform: scaleX(-1)'" style="margin-inline-end: 10px"
+                     src="../../../assets/icons/Task/label-low.svg">
+                {{'Task.low' | translate}}
+              </mat-button-toggle>
+              <mat-button-toggle value="3">
+                <img [style]="iconRotationDegree === 0 ? '' : 'transform: scaleX(-1)'" style="margin-inline-end: 10px"
+                     src="../../../assets/icons/Task/label-medium.svg">
+                {{'Task.medium' | translate}}
+              </mat-button-toggle>
+              <mat-button-toggle value="5">
+                <img [style]="iconRotationDegree === 0 ? '' : 'transform: scaleX(-1)'" style="margin-inline-end: 10px"
+                     src="../../../assets/icons/Task/label-high.svg">
+                {{'Task.high' | translate}}
+              </mat-button-toggle>
+            </mat-button-toggle-group>
+
+            <div class="p-2 assignments-title">
+              <div class=" d-flex flex-row align-items-center">
+                <img style="opacity: 0.3;" class="p-2" src="../../../assets/icons/Task/Enable/checkList.svg">
+                <div style="margin-inline-start: 2px;padding: 6px 0px 2px 0px !important;">
+                  {{'Task.checklists' | translate}}
+                </div>
+              </div>
+            </div>
+
+            <div (mouseleave)="editChecklist= false" (mouseenter)="editChecklist=true" class="checklists">
+
+              <div class="checklist-title-container">
+                <div class="checklist-title">
+                  {{'Task.checklists' | translate}}
+                </div>
+                <div [@showHideButton]="editChecklist ? 'show' : 'hide'" class="checklist-icon-container">
+                      <span (click)="openAddItemToChecklistDialog()"
+                            class="seventask-icon-add-add-circle add-checklist-icon"></span>
+                </div>
+              </div>
+
+              <div class="checklist-item-container">
+                <div class="checklist-item" (mouseleave)="isRemovingChecklistItem[j]= false"
+                     (mouseenter)="isRemovingChecklistItem[j]= true"
+                     *ngFor="let item of addingChecklistItems; let j= index">
+                  <div class="d-flex align-items-center">
+                    {{item.title}}
+                  </div>
+                  <div class="item-icon-container">
+                        <span style="margin-inline-end: 10px" (click)="removeChecklistItem(item)"
+                              [@showHideButton]="isRemovingChecklistItem[j] ? 'show' : 'hide'"
+                              class="seventask-icon-edit-cancel-narrow remove-checklist-item"></span>
+                    <mat-checkbox disabled="" style="padding-top: 5px"
+                                  [checked]="item.isChecked"></mat-checkbox>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div [@fadeInOut]="activeTab === 'Time' ? 'show' : 'hide'">
+        <div *ngIf="activeTab === 'Time'">
+          <app-date-time-picker [datePicker]="true"
+                                [timePicker]="true"
+                                [havePresets]="true"
+                                [defaultStartDate]="null"
+                                [defaultEndDate]="null"
+                                (selectDates)="newTaskDateRange.controls.start.value = $event[0];
+                                newTaskDateRange.controls.end.value = $event[1];">
+          </app-date-time-picker>
+        </div>
+      </div>
+
+      <div [@fadeInOut]="activeTab === 'Attachments' ? 'show' : 'hide'">
+        <div [style.display]=" activeTab !== 'Attachments' ? 'none' : ''">
+          <app-upload-file [componentId]="'fileInNewTask'" [multiple]="true" [uploadButtonDisplay]="'none'"
+                           [inputButtonDisplay]="'none'" [auto_upload_File]="true"
+                           (filesInformation)="uploadFile($event)"></app-upload-file>
+          <!--        <div-->
+          <!--          class="upload-file-container" style="margin-inline-end: 25px; margin-inline-start: 5px; cursor: pointer"-->
+          <!--          (click)="clickSelectFile()">-->
+          <!--          <img style="margin-bottom: 10px" src="../../../assets/icons/upload.svg">-->
+          <!--          <div class="upload-file-text">{{'Task.supportedFormats' | translate}}: PNG | SVG | JPG | JPEG | PDF | ZIP-->
+          <!--          </div>-->
+          <!--          <div class="upload-file-text">{{'Task.maxSize' | translate}}: 2GB</div>-->
+
+          <!--        </div>-->
+
+          <div (mouseleave)="isRemovingAttachment= ''"
+               (mouseenter)="isRemovingAttachment= file.fileContainerGuid"
+               *ngFor="let file of addingAttachments" class="uploaded-files">
+            <span style="margin-inline-end: 14px;cursor: pointer;margin-top: 8px"
+                  [style.visibility]="isRemovingAttachment == file.fileContainerGuid ? 'visible' : 'hidden'"
+                  (click)="removeAttachment(file.fileContainerGuid)"
+                  class="seventask-icon-edit-cancel-narrow remove-assignee-icon"></span>
+            <app-show-file type="file" [data]="file"></app-show-file>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <div (click)="addTask()" class="button-container">
+      <button [disabled]="addTaskForm.invalid || this.addTaskForm.controls.Title.value.toString().trim() === ''"
+              [ngClass]="addTaskForm.valid && this.addTaskForm.controls.Title.value.toString().trim() !== '' ? 'creat-button-hover' : 'creat-button-off'"
+              [ngStyle]="{'cursor': addTaskForm.invalid  ? 'not-allowed' : 'pointer' }"
+              class="submit-button" type="submit" mat-dialog-close="">
+        <div class="submit-button-text">
+          <span style="margin-inline-end: 10px" class="seventask-icon-task-header-add"></span>
+          {{'Task.createTask' | translate}}
+        </div>
+      </button>
+    </div>
+
+  </form>
+
+</div>

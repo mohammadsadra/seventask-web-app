@@ -1,0 +1,233 @@
+<form [style]="'direction: ' + textDirection" [formGroup]="creatDepartmentForm" style=" overflow-x: hidden;">
+  <div class="main-container d-flex flex-column align-items-center">
+    <div class="p-2 page-title">
+      {{'Department.createNewDepartment' | translate}}
+    </div>
+    <div class="p-2 team-name-container">
+      <input [class.placeholder-rtl]="textDirection === 'rtl'"
+             dir="auto" formControlName="name" class="team-name-container"
+             placeholder="{{ 'Placeholders.enterYourDepartmentName' | translate}}"
+             [ngClass]="creatDepartmentForm.controls.name.errors?.required && creatDepartmentForm.controls.name.touched ? 'not-valid': ''"
+             style="padding: 15px">
+    </div>
+    <div class="p-2 tab-container d-flex flex-row justify-content-between">
+      <div class="p-2 tab" [ngClass]="activeTab == 'DepartmentDetails' ? 'active-tab' : 'tab'"
+           (click)="activeTab = 'DepartmentDetails'">
+        {{'Department.departmentDetails' | translate}}
+        <br><span *ngIf="activeTab == 'DepartmentDetails'">•</span>
+      </div>
+      <div class="p-2 tab" [ngClass]="activeTab == 'Assignments' ? 'active-tab' : 'tab'"
+           (click)="activeTab = 'Assignments'">
+        {{'Department.assignments' | translate}}
+        <br><span *ngIf="activeTab == 'Assignments'">•</span>
+      </div>
+    </div>
+
+    <div class="tab-body p-2">
+
+      <div class="team-details-body" *ngIf="activeTab == 'DepartmentDetails'">
+        <div class="description-selector d-flex flex-column align-items-center">
+
+          <div class="p-2 assignments-title">
+            <div class=" d-flex flex-row align-items-center">
+              <img class="p-2" src="../../../../../assets/icons/Project/Description.svg">
+              <div class="p-2" style="margin-inline-start: 10px">
+                {{'Department.description' | translate}}
+              </div>
+            </div>
+          </div>
+          <div class="description-container">
+            <textarea class="description-container" formControlName="description" style="padding: 15px;resize: none;"
+                      placeholder="{{ 'Placeholders.writeYourDescription' | translate}}"></textarea>
+          </div>
+
+        </div>
+
+        <div class=" d-flex flex-column align-items-center" style="padding-bottom: 5px">
+          <!--          <div class="color-selector d-flex flex-column align-items-center">-->
+
+          <div class="p-2 assignments-title">
+            <div class=" d-flex flex-row align-items-center">
+              <img class="p-2" src="../../../../../assets/icons/Project/Color.svg">
+              <div class="p-2" style="margin-inline-start: 10px">
+                {{'Department.departmentColor' | translate}}
+              </div>
+            </div>
+          </div>
+
+          <div class="color-container d-flex flex-row justify-content-around">
+            <div class="selected-color d-flex align-items-center justify-content-center p-2 smooth-square"
+                 style="margin-inline-end: 10px"
+                 [ngStyle]="{'background-color': selectedColor ==  '7CAC95' ? 'rgba(124,172,149,0.1)' : 'transparent'}">
+              <div class="p-2 color d-flex align-items-center justify-content-center smooth-square"
+                   style="background:  #7CAC95;"
+                   (click)="selectedColor = '7CAC95'">
+                <img class="p-2" src="../../../../../assets/icons/Project/select-color.svg"
+                     *ngIf="selectedColor == '7CAC95'">
+              </div>
+            </div>
+
+
+            <div class="selected-color d-flex align-items-center justify-content-center p-2 smooth-square"
+                 style="margin-inline-end: 10px"
+                 [ngStyle]="{'background-color': selectedColor ==  '7CA0AC' ? 'rgba(124,160,172,0.1)' : 'transparent'}">
+              <div class="p-2 color d-flex align-items-center justify-content-center smooth-square"
+                   style="background:  #7CA0AC;"
+                   (click)="selectedColor = '7CA0AC'">
+                <img class="p-2" src="../../../../../assets/icons/Project/select-color.svg"
+                     *ngIf="selectedColor == '7CA0AC'">
+              </div>
+            </div>
+
+            <div class="selected-color d-flex align-items-center justify-content-center p-2 smooth-square"
+                 style="margin-inline-end: 10px"
+                 [ngStyle]="{'background-color': selectedColor ==  '977CAC' ? 'rgba(151,124,172,0.1)' : 'transparent'}">
+              <div class="p-2 color d-flex align-items-center justify-content-center smooth-square"
+                   style="background:  #977CAC;"
+                   (click)="selectedColor = '977CAC'">
+                <img class="p-2" src="../../../../../assets/icons/Project/select-color.svg"
+                     *ngIf="selectedColor == '977CAC'">
+              </div>
+            </div>
+
+            <div class="selected-color d-flex align-items-center justify-content-center p-2 smooth-square"
+                 style="margin-inline-end: 10px"
+                 [ngStyle]="{'background-color': selectedColor ==  'AC7C8D' ? 'rgba(172,124,141,0.1)' : 'transparent'}">
+              <div class="p-2 color d-flex align-items-center justify-content-center smooth-square"
+                   style="background:  #AC7C8D;"
+                   (click)="selectedColor = 'AC7C8D'">
+                <img class="p-2" src="../../../../../assets/icons/Project/select-color.svg"
+                     *ngIf="selectedColor == 'AC7C8D'">
+              </div>
+            </div>
+
+            <div class="selected-color d-flex align-items-center justify-content-center p-2 smooth-square"
+                 style="margin-inline-end: 10px"
+                 [ngStyle]="{'background-color': selectedColor ==  '7C87AC' ? 'rgba(124,135,172,0.1)' : 'transparent'}">
+              <div class="p-2 color d-flex align-items-center justify-content-center smooth-square"
+                   style="background:  #7C87AC;"
+                   (click)="selectedColor = '7C87AC'">
+                <img class="p-2" src="../../../../../assets/icons/Project/select-color.svg"
+                     *ngIf="selectedColor == '7C87AC'">
+              </div>
+            </div>
+
+            <div class="selected-color d-flex align-items-center justify-content-center p-2 smooth-square"
+                 style="margin-inline-end: 10px"
+                 [ngStyle]="{'background-color': selectedColor ==  'A8AC7C' ? 'rgba(168,172,124,0.1)' : 'transparent'}">
+              <div class="p-2 color d-flex align-items-center justify-content-center smooth-square"
+                   style="background:  #A8AC7C;"
+                   (click)="selectedColor = 'A8AC7C'">
+                <img class="p-2" src="../../../../../assets/icons/Project/select-color.svg"
+                     *ngIf="selectedColor == 'A8AC7C'">
+              </div>
+            </div>
+
+            <div class="selected-color d-flex align-items-center justify-content-center p-2 smooth-square"
+                 [ngStyle]="{'background-color': selectedColor ==  '74C8BE' ? 'rgba(116,200,190,0.1)' : 'transparent'}">
+              <div class="p-2 color d-flex align-items-center justify-content-center smooth-square"
+                   style="background:  #74C8BE;"
+                   (click)="selectedColor = '74C8BE'">
+                <img class="p-2" src="../../../../../assets/icons/Project/select-color.svg"
+                     *ngIf="selectedColor == '74C8BE'">
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!--        <div class="uploader-container d-flex flex-column align-items-center">-->
+
+        <!--          <div class="p-2 assignments-title">-->
+        <!--            <div class=" d-flex flex-row align-items-center">-->
+        <!--              <img class="p-2" src="assets/icons/Project/Logo.svg">-->
+        <!--              <div class="p-2" style="margin-left: 10px">-->
+        <!--                Department logo-->
+        <!--              </div>-->
+        <!--            </div>-->
+        <!--          </div>-->
+
+        <!--          <div class="p-2 uploader d-flex flex-column">-->
+        <!--            <div class="p-2" style="margin-top: 19px">-->
+        <!--              <img class="p-2" src="assets/icons/Project/upload.svg">-->
+        <!--            </div>-->
+        <!--            <div class="p-2" style="margin-top: 13px">-->
+        <!--              Supported Formats : PNG | SVG-->
+        <!--            </div>-->
+        <!--            <div class="p-2">-->
+        <!--              Max Size : 1 MB-->
+        <!--            </div>-->
+
+        <!--          </div>-->
+
+
+        <!--        </div>-->
+      </div>
+
+      <div class="assignments-body" *ngIf="activeTab == 'Assignments'" style="min-height: 400px">
+        <div class="assign-members-body d-flex flex-column">
+          <div class="p-2 assignments-title d-flex flex-column align-items-center">
+            <div class="p-2 d-flex flex-row align-items-center">
+              <img class="p-2" src="../../../../../assets/icons/Project/Team.svg">
+              <div class="p-2" style="margin-inline-start: 10px">
+                {{'Department.assignees' | translate}}
+              </div>
+            </div>
+          </div>
+
+          <div class="p-2 add-member-container d-flex flex-column">
+            <div class="p-2 flex-row d-flex align-items-center" style="cursor: pointer; margin-bottom: 30px"
+                 (click)="openAddMember()">
+              <span style="font-size: 18px" class="seventask-icon-add-Add-Member-New p-2"></span>
+              <div class="p-2 add-member-title">
+                {{'Department.addMemberToDepartment' | translate}}
+              </div>
+            </div>
+
+            <div class="member-department-container d-flex flex-column ">
+              <div class="members-list d-flex flex-column">
+
+                <div class="p-2 member d-flex flex-row align-items-center" *ngFor="let member of memberList">
+                  <img class="p-2" src="../../../../../assets/icons/Project/Remove-Member.svg" style="cursor: pointer"
+                       (click)="removeItemFromList(memberList, member)">
+                  <div class="p-2 d-flex flex-row align-items-center">
+                    <div class="p-2">
+                      <!--                      <div class="rounded-circle user_img">-->
+                      <!--                        <img src="assets/icons/Project/User.svg">-->
+                      <!--                      </div>-->
+                      <div class="img_cont_msg p-2 d-flex align-items-center justify-content-center rounded-circle"
+                           style="background: rgba(66,120,223,0.05); margin: 0 7px 0 7px;">
+                        <img *ngIf="member.profileImageGuid != null"
+                             [src]="domainName + '/en-US/File/get?id=' + member.profileImageGuid + '&quality=100'"
+                             class="rounded-circle img_cont_msg">
+                        <div style="color: #1c5bff"
+                             *ngIf="member.profileImageGuid == null">{{member.nickName[0].toUpperCase()}}</div>
+                      </div>
+                    </div>
+                    <div class="member-name p-2">
+                      {{member.nickName}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button (click)="creatDepartment()"
+            [ngClass]="creatDepartmentForm.valid ? 'creat-button-hover' : 'creat-button-off'"
+            class="creat-button d-flex flex-row align-items-center justify-content-center"
+            [mat-dialog-close]="!creatDepartmentForm.valid"
+            type="submit" [disabled]="!creatDepartmentForm.valid">
+      <div class="p-2">
+        <span style="margin-inline-end: 5px;margin-inline-start: 15px" class="seventask-icon-add-add"></span>
+      </div>
+      <div style="font-size: 12px">
+        {{'Department.createDepartment' | translate}}
+      </div>
+    </button>
+  </div>
+</form>

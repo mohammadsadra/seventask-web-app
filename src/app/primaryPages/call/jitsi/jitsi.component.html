@@ -1,0 +1,26 @@
+<!--<div id="jitsi-iframe"></div>-->
+
+<!--For Custom Controls-->
+<!--<div class="item-center">-->
+<!--  <span>Custom Controls</span>-->
+<!--</div>-->
+<!--<div class="item-center">-->
+<!--&lt;!&ndash;  <i (click)="executeCommand('toggleAudio')" class="fas fa-2x grey-color" [ngClass]="isAudioMuted ? 'fa-microphone-slash' : 'fa-microphone'" aria-hidden="true" title="Mute / Unmute"></i>&ndash;&gt;-->
+<!--  <span (click)="executeCommand('hangup')" class="seventask-icon-header-tag-labels" aria-hidden="true" title="Leave"></span>-->
+<!--&lt;!&ndash;  <i (click)="executeCommand('toggleVideo')" class="fas fa-2x grey-color" [ngClass]="isVideoMuted ? 'fa-video-slash' : 'fa-video'" aria-hidden="true" title="Start / Stop camera"></i>&ndash;&gt;-->
+<!--&lt;!&ndash;  <i (click)="executeCommand('toggleShareScreen')" class="fas fa-film fa-2x grey-color" aria-hidden="true" title="Share your screen"></i>&ndash;&gt;-->
+<!--</div>-->
+
+<div class="main-container">
+  <div class="control-center">
+    <div class="control-row">
+      <input [disabled]="disabled" [(ngModel)]="meetName" placeholder="Enter room name to create or invite link to join" class="meeting-input">
+      <button [disabled]="disabled" (click)="createMeeting()" class="button smooth-rectangle">Create or join a meeting</button>
+    </div>
+<!--    <div class="control-row">-->
+<!--      <input [(ngModel)]="meetLink" placeholder="Enter the link of the room" class="meeting-input">-->
+<!--      <div (click)="joinExistingMeeting()" class="button smooth-rectangle">Join an existing meeting</div>-->
+<!--    </div>-->
+  </div>
+  <div class="d-flex" style="width: 100%;height: 80%" id="jitsi-iframe"></div>
+</div>

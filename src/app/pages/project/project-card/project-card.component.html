@@ -1,0 +1,93 @@
+<div class="project" (mouseover)="projectOnHover(project)" (mouseleave)="projectHover = ''" [style.margin]="margin">
+
+  <div class="project-header d-flex flex-row align-items-center justify-content-center"
+       [style.background]="hexToRgba('#' + project.color)">
+    <div class="project-header-title" [style.color]="'#' + project.color">
+      {{project.name}}
+    </div>
+  </div>
+
+  <div class="container no-gutters project-body">
+    <div class="row align-items-center justify-content-center" style="height: 65px">
+      <!--              <div class="col-4" style="height: 30px">-->
+      <!--                <div class="mood align-items-center">-->
+      <!--                  <img src="assets/icons/Project/Chill.svg" class="chill-logo">-->
+      <!--                  <span class="chill-title">Chill</span>-->
+      <!--                </div>-->
+      <!--              </div>-->
+      <div class="col-4" style="text-align: center;padding-inline-start: 30px">
+                <span class="member border" style="background-color: #1EC1C3"
+                      *ngIf="project.users.length >= 1 &&project.users[0].profileImageGuid == null">
+                  {{project.users[0].nickName[0]}}
+                </span>
+        <span *ngIf="project.users.length >= 1 && project.users[0].profileImageGuid != null">
+                  <img class="rounded-circle user_img_msg border"
+                       [src]="domainName
+                    + '/en-US/File/get?id=' + project.users[0].profileImageGuid
+                    + '&quality=100'">
+        </span>
+
+        <sapn class="member border" style="background-color: #F86F8C"
+              *ngIf="project.users.length >= 2 &&
+                  project.users[1].profileImageGuid == null">{{project.users[1].nickName[0]}}</sapn>
+        <sapn *ngIf="project.users.length >= 2 &&
+                  project.users[1].profileImageGuid != null">
+          <img class="rounded-circle user_img_msg border"
+               [src]="domainName + '/en-US/File/get?id=' +
+                    project.users[1].profileImageGuid + '&quality=100'">
+        </sapn>
+
+        <span class="seventask-theme-background-color member border"
+              *ngIf="project.users.length == 3 &&
+                  project.users[2].profileImageGuid == null">{{project.users[2].nickName[0]}}</span>
+        <span *ngIf="project.users.length == 3 &&
+                  project.users[2].profileImageGuid != null">
+                  <img class="rounded-circle user_img_msg border"
+                       [src]="domainName + '/en-US/File/get?id=' +
+                    project.users[2].profileImageGuid + '&quality=100'">
+                </span>
+        <span class="seventask-theme-background-color member border"
+              *ngIf="project.users.length> 3">+{{project.users.length - 2 | numToArabic}}</span>
+      </div>
+      <!--              <div class="col-4">-->
+      <!--                <img src="assets/icons/Project/WatchTimer.svg" class="watchTimer">-->
+      <!--                <span class="deadLine">Tomorrow</span>-->
+      <!--              </div>-->
+    </div>
+    <div class="row align-items-center" style="height: 65px">
+      <div class="col-sm-4" style="text-align: center">
+        <img src="../../../assets/icons/Project/TaskToDo.svg"
+             class="notification-row-logo">
+        <div class="notification-row-item-title">
+          <span class="notification-row-item-number">{{project.numberOfTasks | numToArabic}} </span>{{'Project.taskToDo' | translate}}
+        </div>
+      </div>
+      <div class="col-sm-4" style="text-align: center">
+        <img src="../../../assets/icons/Project/Update.svg"
+             class="notification-row-logo">
+        <div class="notification-row-item-title">
+          <span class="notification-row-item-number">{{project.numberOfUpdates| numToArabic}} </span>{{'Project.update' | translate}}
+        </div>
+      </div>
+      <div class="col-sm-4" style="text-align: center">
+        <img src="../../../assets/icons/Project/TimeSpent.svg"
+             class="notification-row-logo">
+        <div class="notification-row-item-title">
+          <span class="notification-row-item-number">{{project.spentTimeInMinutes | minuteToHour}} </span>{{'Project.timeSpent'| translate}}
+        </div>
+      </div>
+    </div>
+    <!--    <div class="row align-items-center" style="height: 30px; text-align:-->
+    <!--              center; justify-content: center">-->
+    <!--              <span class="mood-circle"-->
+    <!--                    style="background-color: #1EC1C3;box-shadow: 0 0 0 3px rgba(30,-->
+    <!--                193, 195, 0.3);"></span>-->
+    <!--      <span class="mood-circle"-->
+    <!--            style="background-color: #F86F8C;box-shadow: 0 0 0 3px rgba(248,-->
+    <!--                111, 140, 0.3);"></span>-->
+    <!--      <span class="mood-circle"-->
+    <!--            style="background-color: #EBAA45;box-shadow: 0 0 0 3px rgba(235,-->
+    <!--                170, 69, 0.3);"></span>-->
+    <!--    </div>-->
+  </div>
+</div>

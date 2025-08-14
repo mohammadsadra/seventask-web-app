@@ -1,0 +1,16 @@
+<div class="d-flex p-2" style="padding-inline-start: 20px">
+  <div class="d-flex p-2 bg-white" style="border: 1px solid #97a5bb; border-radius: 10px;">
+    <div class="m-1">
+      <img src="assets/images/google_calendar.png" height="100">
+    </div>
+    <div class="m-2">
+      <label>{{ 'Settings.googleCalendar' | translate }}</label>
+    </div>
+    <div class="m-1">
+      <button class="btn btn-primary" (click)="getGoogleCode()" [disabled]="connected">
+        <label style="margin-bottom: 0" *ngIf="!connected">{{'Settings.connect' | translate}}</label>
+        <label style="margin-bottom: 0" *ngIf="connected">{{'Settings.connected' | translate}}</label>
+      </button>
+    </div>
+  </div>
+</div>

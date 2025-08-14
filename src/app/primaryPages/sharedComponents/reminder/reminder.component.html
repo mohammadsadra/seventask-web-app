@@ -1,0 +1,110 @@
+<div class="main-container" dir="auto" style="width: 600px; margin: 0;">  
+    <div style="width: 100%;">
+  
+      <div class="picker">
+  
+        <div class="date-picker-container">
+            <div class="date-presets-container">
+              <div class="date-preset" 
+                   *ngFor="let preset of datePresets" [class.selected]="selectedDatePreset === preset.day"
+                   (click)="handlePreset('date', preset)">
+                {{ 'DatetimePicker.' + preset.day | translate }}
+              </div>
+            </div>
+            <app-tiny-calendar [selectorMode]="true"
+                              [defaultSelectedStartDate]="selectedDate.moment"
+                              [defaultSelectedEndDate]="selectedDate.moment"
+                              [enableRangeSelection]="false"
+                              (selectDates)="selectedDateHandler($event)">
+            </app-tiny-calendar>
+        </div>
+
+        <div class="time-picker-container">
+            <div class="time-picker">
+              <div class="single-time-picker">
+                <div class="meridian-container">
+                  <div class="time-picker-title">
+                    {{ 'AM/PM' }}
+                  </div>
+                  <div class="meridian-picker">
+                    <div class="meridian" 
+                        [class.selected]="selectedDate.meridian === 'AM'"
+                        (click)="changeDateTime('AM', 'meridian')">
+                      {{ 'DatetimePicker.AM' | translate }}
+                    </div>
+                    <div class="meridian" 
+                        [class.selected]="selectedDate.meridian === 'PM'"
+                        (click)="changeDateTime('PM', 'meridian')">
+                      {{ 'DatetimePicker.PM' | translate }}
+                    </div>
+                  </div>
+                </div>
+                <div class="hours-container">
+                  <div class="time-picker-title">
+                    {{ 'Hours' }}
+                  </div>
+                  <div class="hour-picker">
+                    <div class="hour" *ngFor="let hour of hours"
+                        [class.selected]="selectedDate.hour == hour"
+                        (click)="changeDateTime(hour, 'hour')">
+                      {{ hour }}
+                    </div>
+                  </div>
+                </div>
+                <div class="minutes-container">
+                  <div class="time-picker-title">
+                    {{ 'Minutes' }}
+                  </div>
+                  <div class="minute-picker">
+                    <div class="minute" *ngFor="let minute of minutes"
+                        [class.selected]="selectedDate.minute == minute"
+                        (click)="changeDateTime(minute, 'minute')">
+                      {{ minute }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <div class="members-section">
+          <div class="d-flex flex-row" style="margin: 15px 18px; cursor: pointer;" (click)="openAddMemberDialog()">
+            <span style="font-size: 18px" class="seventask-icon-add-Add-Member-New"></span>
+            <div class="add-member-title">
+              {{'Reminder.addMember' | translate}}
+            </div>
+          </div>
+  
+          <div class="members-list d-flex flex-column">
+  
+            <div class="d-flex flex-row align-items-center" *ngFor="let user of linkedUsers">
+              <img class="p-2" src="../../../assets/icons/Project/Remove-Member.svg" style="cursor: pointer"
+                   (click)="removeUser(user)">
+  
+              <div *ngIf="user.profileImageGuid == null" class="member-without-image"
+                   style="background-color: #1EC1C3;margin-bottom: 0">{{user.nickName.charAt(0)}}</div>
+  
+              <img *ngIf="user.profileImageGuid != null"
+                   [src]="domainName + '/en-US/File/get?id=' + user.profileImageGuid + '&quality=100'"
+                   style="background-color: #86A8E7;margin-bottom: 0" class="member">
+  
+  
+              <div class="p-2 d-flex flex-row align-items-center">
+                <div class="member-name">
+                  {{user.nickName}}
+                </div>
+              </div>
+            </div>
+  
+          </div>
+        </div>
+  
+  
+        <button class="submit-button" style="border: none;" (click)="addReminder()">
+          {{ 'Reminder.addReminder' | translate }}
+        </button>
+  
+      </div>
+  
+    </div>
+  </div>

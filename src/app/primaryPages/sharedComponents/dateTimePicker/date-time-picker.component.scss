@@ -1,0 +1,262 @@
+@import "variables";
+
+@mixin center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.main-container {
+  @include center;
+  flex-direction: column;
+  border-radius: 10px;
+  border: 1px solid #F0F4F4;
+  background-color: white;
+  margin: 5px auto;
+  padding: 10px 5px;
+}
+.selected-datetime-info {
+  @include center;
+  height: 40px;
+  width: 95%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: row;
+  margin: 5px auto;
+}
+.selected-datetime { 
+  @include center;
+  height: 100%;
+  flex-direction: row;
+  justify-content: space-around;
+  border-radius: 10px;
+}
+.show-datetime-picker-button {
+  padding: 5px;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.6;
+  }
+}
+.tabs-title-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 95%;
+  margin: auto;
+  background-color: $theme-color-opacity-60;
+  border-radius: 10px;
+}
+.tab {
+  width: 50%;
+  color: white;
+  text-align: center;
+  border-radius: 10px;
+  margin: 7px;
+  padding: 5px 0;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.selected-tab {
+  color: $theme-color;
+  background-color: white;
+}
+.picker {
+  @include center;
+}
+.date-picker-container {
+  display: flex;
+  flex-direction: column;
+}
+.range-of-event {
+  font-size: 15px;
+  width: 100%;
+  text-align: center;
+  color: rgba(46, 74, 119, 0.5);
+}
+.datetime {
+  @include center;
+  flex-direction: row;
+  margin-top: 15px;
+}
+.tab-container {
+  width: 95%;
+  margin: auto;
+}
+.date-picker.container {
+  width: 95%;
+}
+.time-picker-container {
+  @include center;
+  width: 95%;
+  margin: 0 auto;
+}
+.time-picker {
+  margin: 15px 0 0;
+}
+.time-picker-title {
+  color: rgba(46, 74, 119, 0.3);
+}
+.single-time-picker {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+.time-picker-title {
+  font-size: 13px;
+}
+.meridian-container {
+  @include center;
+  width: 10%;
+  margin: 5px 0;
+  margin-inline-end: 5px;
+}
+.meridian-picker {
+  color: white;
+  width: 100%;
+  background-color: $theme-color-opacity-60;
+  border-radius: 10px;
+  padding: 10px;
+}
+.meridian {
+  transition: background-color 0.3s;
+  padding: 5px;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 10px;
+}
+.hours-container {
+  @include center;
+  justify-content: space-between;
+  width: 45%;
+  margin: 5px 0;
+  margin-inline-end: 5px;
+}
+.minutes-container {
+  @include center;
+  justify-content: space-between;
+  width: 45%;
+  margin: 5px 0;
+}
+.hour-picker,
+.minute-picker {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  background-color: $theme-color-opacity-60;
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+}
+.hour,
+.minute {
+  transition: background-color 0.3s;
+  cursor: pointer;
+  border-radius: 10px;
+  padding: 5px;
+  text-align: center;
+  width: 16.666666666666667%; // = 100/6
+}
+.hour,
+.minute,
+.meridian {
+  &.selected {
+    background-color: white;
+    color: $theme-color;
+  }
+}
+.selected-datetime {
+  width: 100%;
+  text-align: center;
+  color: rgba(46, 74, 119, 0.5);
+}
+.title {
+  @include center;
+  flex-direction: row;
+  opacity: 0.6;
+  font-size: 15px;
+  padding: 5px;
+}
+.selected-date {
+  opacity: 0.4;
+}
+.time-input-container {
+  @include center;
+}
+.time-input {
+  border: 2px solid $theme-color-opacity-50;
+  max-width: 50px;
+  background: rgba(66, 120, 223, 0.05);
+  border-radius: 10px;
+  font-size: 13px;
+  color: rgba(46, 74, 119, 0.7);
+  padding: 5px;
+}
+.datetime-input {
+  width: 100%;
+  opacity: 0.7;
+  font-size: 14px;
+  margin: auto;
+  padding: 5px;
+  border: 1px solid #F0F4F4;
+  background-color: white;
+  border-radius: 10px;
+}
+.input-field {
+  background-color: white;
+  border: none;
+  width: 100%;
+  text-align: center;
+}
+.selected-input {
+  border-color: blue;
+}
+.submit-button {
+  @include seventask-button-style-6;
+  width: 100px;
+  margin-top: 10px;
+  padding: 5px 15px;
+  border-radius: 10px;
+  text-align: center;
+  color: white !important;
+  background-color: $theme-color-opacity-50;
+  cursor: pointer;
+}
+// .meridian-picker {
+//   flex-direction: column;
+//   color: $theme-color;
+//   border-radius: 10px;
+//   border: 1px solid $theme-color-opacity-50;
+//   margin: 0 5px;
+// }
+.option {
+  width: 100%;
+  height: 100%;
+  font-size: 10px;
+  padding: 3px 10px;
+  cursor: pointer;
+}
+.selected-option {
+  background-color: $theme-color-opacity-50;
+}
+.date-presets-container {
+  padding: 20px 0 15px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: row;
+  width: 100%;
+}
+.date-preset {
+  color: rgba(46, 74, 119, 0.3);
+  cursor: pointer;
+  transition: color .33s;
+  &.selected {
+    color: $theme-color !important;
+  }
+}
+

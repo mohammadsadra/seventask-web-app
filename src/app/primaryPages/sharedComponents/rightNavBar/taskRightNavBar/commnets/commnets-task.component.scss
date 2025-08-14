@@ -1,0 +1,216 @@
+@import 'variables';
+
+.main-container {
+  background-color: #f8fbfd;
+}
+.comment-wrapper {
+  flex-basis: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  padding-top: 20px !important;
+  padding-bottom: 20px !important;
+  -webkit-padding-start: 10px !important;
+  padding-inline-start: 10px !important;
+  padding-inline-end: 10px !important;
+  border-radius: 10px 10px 0 0 !important;
+  background-color: #fff;
+  border-top: 1px solid #f3f6fa;
+  position: relative;
+}
+
+::ng-deep .emoji-menu {
+  //width: 348px !important;
+  max-width: none;
+  max-height: none;
+  padding: 0 0 0 0 !important;
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.25);
+  background: white;
+}
+
+.emoji-button {
+  outline: none;
+  border: none;
+  background-color: #f8fbfd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-inline-end: 3px;
+}
+
+::ng-deep .mat-menu-content {
+  padding: 0 !important;
+}
+
+.comments {
+  overflow-y: auto;
+  display: flex;
+  justify-content: start;
+  flex-direction: column;
+}
+.comments:hover {
+  //overflow-y: auto;
+}
+
+.null-inspector {
+  font-style: normal;
+  font-size: 16px;
+  line-height: 22px;
+  color: #2e4a77;
+  //padding-inline-end: 20px;
+}
+
+.comment-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  margin-bottom: 20px;
+}
+
+.comment-header {
+  color: #2e4a77;
+  font-weight: bold;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.comment-body {
+  color: #2e4a77;
+  line-height: 18px;
+  font-size: 12px;
+  color: #2e4a77;
+  padding-inline-start: 40px;
+  text-align: start;
+  //display: flex;
+  justify-content: start;
+}
+
+.member {
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  box-sizing: border-box;
+  text-align: center;
+  justify-content: center;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 17px;
+  color: #ffffff;
+  margin-inline-end: 10px;
+  //padding-top: 4px;
+}
+
+.member-without-image {
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  box-sizing: border-box;
+  text-align: center;
+  justify-content: center;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 17px;
+  color: #ffffff;
+  margin-inline-end: 10px;
+  padding-top: 4px;
+}
+
+.comment-commented-by {
+  font-size: 13px;
+  text-align: start;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow-x: hidden;
+  max-width: 250px;
+}
+
+.comment-time {
+  margin-inline-start: auto;
+  margin-inline-end: 5px;
+  font-size: 11px;
+  line-height: 15px;
+  text-align: start;
+  color: #2e4a77;
+  opacity: 0.3;
+  width: 60px;
+  //margin: 3px auto 15px auto;
+}
+
+.add-comment-container {
+  background: #f8fbfd;
+  margin-top: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  margin-inline-end: 10px;
+  align-items: center;
+}
+
+.new-comment {
+  width: 85%;
+  text-align: start;
+  height: 40px;
+  padding: 8px;
+  border: none;
+  resize: none;
+  outline: none;
+  border-radius: 15px;
+  color: #2e4a77;
+  //background: rosybrown;
+  background: #f8fbfd;
+}
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  //margin-top: 20px;
+  flex-direction: column;
+  margin-top: 15%;
+  flex-basis: 50%;
+}
+.send-comment {
+  margin-inline-start: auto;
+  margin-inline-end: 10px;
+}
+
+/* preset */
+.preset-message-box {
+  height: 48px;
+  width: 90%;
+  position: absolute;
+  bottom: 60px;
+  overflow: hidden;
+  background-color: #2e4a77;
+  &:hover {
+    overflow-x: auto;
+    scrollbar-color: $theme-color-opacity-10 #fff;
+  }
+}
+.inner-preset-message {
+  height: 40px;
+  border-radius: 18px;
+  white-space: nowrap;
+  padding: 0px 5px;
+  cursor: pointer;
+  background-color: #f6f7fc;
+  color: #6e7b8c;
+  margin: 0px 4px;
+  &:hover {
+    background-color: rgba(66, 120, 223, 0.2);
+    transition-duration: 0.7s;
+  }
+}
+.preset-item {
+  padding: 7px 5px;
+}
+/*  */

@@ -1,0 +1,282 @@
+@import "src/variables";
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.payment {
+  position: absolute;
+  top: 28px;
+}
+
+.button-container {
+  @include seventask-button-style-5;
+  width: 165px;
+  background: $theme-color;
+  color: white;
+  font-size: 20px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  height: 60px;
+  display: flex;
+  outline: none;
+  border: none;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 15px;
+}
+
+.button-container:hover:enabled {
+  background-color: $theme-color-opacity-50;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+.choose-plan-text {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 36px;
+  line-height: 43px;
+  text-align: center;
+  color: #1F4553;
+  margin-bottom: 20px;
+}
+
+.upgrade-team-text {
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 29px;
+  text-align: center;
+  color: rgba(31, 69, 83, 0.8);
+}
+
+.payment-options-row {
+  display: flex;
+  flex-direction: row;
+  width: 75%;
+  justify-content: flex-start;
+  align-items: center;
+  font-weight: 600;
+  font-size: 20px;
+}
+
+.bill-period {
+  margin-inline-start: 5px;
+  margin-inline-end: 5px;
+  cursor: pointer;
+  color: $theme-color-opacity-15;
+}
+
+.active-period {
+  color: $theme-color !important;
+  transition: all 0.33s;
+}
+
+.plans {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 100%;
+  width: 75%;
+  height: 60%;
+  //overflow-y: auto;
+  //margin-top: 60px;
+  margin-top: 60px;
+
+}
+
+.plan-container {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  height: 80%;
+  width: 22%;
+  border: 2px solid #E69619;
+  box-sizing: border-box;
+  border-radius: 50px 50px 10px 10px;
+  cursor: pointer;
+  transition: all 0.5s;
+}
+
+.plan-container:hover {
+  transform: scale(1.08);
+  z-index: 121;
+}
+
+.plan-title {
+  color: inherit;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 29px;
+  border-radius: 48px 48px 0 0;
+  border-bottom: inherit;
+  transition: all 0.33s;
+  height: 90px;
+  min-height: 90px;
+}
+
+.plan-text {
+  color: inherit;
+}
+
+.user-per-month {
+  font-weight: 500;
+  font-size: 16px;
+}
+
+//.plan-title[id='free']:hover{
+//  background-color: #4278DF;
+//  color: white !important;
+//}
+//.plan-title[id='pro']:hover{
+//  background-color: #E69619;
+//  color: white !important;
+//}
+//.plan-title[id='business']:hover{
+//  background-color: #1EC1C3;
+//  color: white !important;
+//}
+//.plan-title[id='enterprise']:hover{
+//  background-color: #F86F8C;
+//  color: white !important;
+//}
+
+.active-plan[id='free'] {
+  background-color: #4278DF;;
+  color: white !important;
+  transition: all 0.33s;
+}
+
+.active-plan[id='basic'] {
+  background-color: #E69619;
+  color: white !important;
+  transition: all 0.33s;
+}
+
+.active-plan[id='pro'] {
+  background-color: #1EC1C3;
+  color: white !important;
+  transition: all 0.33s;
+}
+
+.active-plan[id='enterprise'] {
+  background-color: #F86F8C;
+  color: white !important;
+  transition: all 0.33s;
+}
+
+.seat-count-input {
+  border: 1px solid #F0F4F4;
+  box-sizing: border-box;
+  border-radius: 10px;
+  padding: 5px;
+  margin-inline-start: 7px;
+}
+
+.plan-description {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  text-align: start;
+  margin: 20px 15px;
+  //background-color: $theme-color-opacity-10;
+  border-radius: 15px;
+  max-height: 100%;
+  overflow-y: auto;
+}
+
+.description-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.description {
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 30px;
+  margin-inline-start: 20px;
+}
+
+.select-team-container {
+  display: flex;
+  flex-direction: column;
+  width: 700px;
+  padding: 15px;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  border-radius: 15px;
+}
+
+
+.total-container {
+  width: 165px;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: auto;
+  margin-bottom: 50px;
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 36px;
+  white-space: nowrap;
+  color: $theme-color;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+
+/* Firefox */
+
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+.field-input {
+  text-align: center;
+  color: rgba(46, 74, 119, 0.4);
+}
+
+#selected-team {
+  text-align: center;
+
+}
+
+.edit-status-option {
+  font-weight: 900;
+  font-size: 18px;
+}
+
+.mat-select-value-text {
+  color: $theme-color;
+  font-weight: 900;
+  font-size: 30px;
+}
+
+.plan-header {
+  margin-bottom: 30px;
+}

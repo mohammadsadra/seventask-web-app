@@ -1,0 +1,76 @@
+@import "variables";
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  height: 100%;
+  padding: 0 !important;
+}
+.events-list {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.events-section {
+  padding: 25px 0;
+}
+.events-section-title {
+  opacity: 0.3;
+  text-align: center;
+  color: #2E4A77;
+  font-weight: normal;
+}
+.event {
+  margin: 10px 20px;
+  height: 40px;
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  cursor: pointer;
+}
+.left-part {
+  min-width: 5px;
+  height: 100%;
+  background-color: $theme-color;
+  border-radius: 5px;
+}
+.event-data {
+  width: 100%;
+  margin-inline-start: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+}
+.event-title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: start;
+  font-size: 15px;
+  color: $theme-color;
+}
+.event-title-text {
+  max-width: 100%;
+  white-space: nowrap;
+  padding-inline-start: 5px;
+  padding-inline-end: 5px;
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+}
+.event-time {
+  text-align: start;
+  margin-inline-start: 22px;
+  font-size: 12px;
+  line-height: 14px;
+  color: #2E4A77;
+  opacity: 0.5;
+}
+.passed-events-button {
+  cursor: pointer;
+  color: #2E4A77;
+  opacity: 0.5;
+}
+.passed-events-button {
+  @include seventask-button-style-7;
+}

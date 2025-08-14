@@ -1,0 +1,71 @@
+<div class="workload-tasks-container">
+    <div class="workload-tasks-wraper d-flex flex-column justify-content-between" [style.height.px]="innerHeight-130">
+        <div>
+            <div *ngIf="(workLoads === null || this.notShowChart === 0) &&
+                !showGetWorkloadLoading" style="opacity:1;padding-inline-start:10px;padding-inline-end: 10px;padding-top: 20px">
+                <img src="../../../../../../assets/noDataImages/click.svg" width="85%" style="margin:5px" />
+                <div class="null-inspector">{{ 'Workload.noWorkload' | translate }}</div>
+            </div>
+
+            <div *ngIf="selectedTask == null" style="opacity:1;padding-inline-start:10px;padding-inline-end: 10px;padding-top: 20px">
+                <img src="../../../../../../assets/noDataImages/click.svg" width="85%" style="margin:
+                    5px">
+                <div class="null-inspector">{{ 'Task.clickTaskMsg' | translate}}</div>
+            </div>
+        </div>
+        <div class="workload-container w-100 flex-grow-1" *ngIf="workLoads !== null && totalTime> 0 &&
+            !showGetWorkloadLoading">
+            <h6 class="workLoad-Title">{{messageTitle}}</h6>
+            <div class="workload-chart-wraper">
+                <div class="first-level-chart">
+                    <div *ngFor="let division of workLoads; let num= index">
+                        <div class="workload-repeat-shape" [style.backgroundColor]="dataColor[num]" [style]="clipPath[num][0]" #tooltip="matTooltip" [matTooltip]="clipPath[num][1] + '%'" [matTooltipPosition]="'above'" matTooltipHideDelay="100">
+                        </div>
+                    </div>
+
+                    <div class="second-level-chart">
+                        <h6>{{ 'Workload.totalTime' | translate }}</h6>
+                        <span>{{totalTime | timeInHours : changelocate}}</span>
+                        <h4>{{ 'Workload.hours' | translate }}</h4>
+                    </div>
+
+                </div>
+            </div>
+
+            <div *ngFor="let workLoad of workLoads;let i=index" class="content-repeat">
+                <div *ngIf="workLoad.totalTimeInMinutes> 0" [style.backgroundColor]="dataColor[i]" class="workload-user-image">
+                    <img class="imgShow" [src]="domainName +
+                        '/en-US/File/get?id=' +
+                        workLoad.user.profileImageGuid +
+                        '&quality=100'" *ngIf="workLoad.user.profileImageGuid !== null" />
+                    <div class="showfristChar" *ngIf="workLoad.user.profileImageGuid === null">
+                        <strong>
+                            {{workLoad.user.nickName.charAt(0)}}
+                        </strong>
+                    </div>
+                </div>
+                <div *ngIf="workLoad.totalTimeInMinutes> 0" class="workload-user-info">
+                    <div [style.color]="dataColor[i]">{{workLoad.user.nickName}}</div>
+                    <div class="workload-time-person">
+                        {{ 'Workload.timeSpent' | translate }}: {{ workLoad.totalTimeInMinutes | timeInHours : changelocate }} {{ 'Workload.hours' | translate }}
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div *ngIf="showGetWorkloadLoading && selectedTask != null" class="loading-container">
+            <seventask-spinner [loadingType]="1" *ngIf="showGetWorkloadLoading"></seventask-spinner>
+            <!--  <div style="margin-top: 10px;color: #2E4A77;">{{'Task.loadingTasks' |translate}}</div>-->
+        </div>
+        <div class="justify-content-center d-flex flex-row w-100 mb-4">
+            <a routerLink="/timetrack" class="to-time-track d-flex flex-row align-self-end">
+                <div class="align-self-center">
+                    {{ 'Workload.viewAll' | translate }}
+                </div>
+                <img src="assets/icons/TimeTrack/viewTimeTrack.svg" [style]="'transform: rotate(' + iconRotationDegree + 'deg)'">
+            </a>
+        </div>
+    </div>
+</div>

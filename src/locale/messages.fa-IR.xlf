@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en-US" datatype="plaintext" original="ng2.template" target-language="fa-IR">
+    <body>
+      <trans-unit id="2721da2858a07465adea937f167534b5ac827f21" datatype="html">
+        <source>Welcome Back</source>
+        <target>خوش آمدید!</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/Pages/account/sign-in/sign-in.component.html</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+        <note priority="1" from="description">Welecome</note>
+        <note priority="1" from="meaning">main header</note>
+      </trans-unit>
+      <trans-unit id="UsernameOrEmail" datatype="html">
+        <source>Username or Email</source>
+        <target>نام کاربری یا ایمیل</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/Pages/account/sign-in/sign-in.component.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="UsernameOrEmailError" datatype="html">
+        <source> Please enter your username or Email correctly</source>
+        <target>لطفا نام‌کاربری یا ایمیل خود را بدرستی وارد کنید</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/Pages/account/sign-in/sign-in.component.html</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="Password" datatype="html">
+        <source>Password</source>
+        <target>رمزعبور</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/Pages/account/sign-in/sign-in.component.html</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="PasswordError" datatype="html">
+        <source> Please enter your password</source>
+        <target>لطفا رمزعبور خود را بدرستی وارد کنید</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/Pages/account/sign-in/sign-in.component.html</context>
+          <context context-type="linenumber">49</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="RememberMe" datatype="html">
+        <source>Remember me</source>
+        <target>مرا به خاطر بسپار</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/Pages/account/sign-in/sign-in.component.html</context>
+          <context context-type="linenumber">54</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ForgetPassword" datatype="html">
+        <source>ForgotPassword?</source>
+        <target>فراموشی رمزعبور؟</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/Pages/account/sign-in/sign-in.component.html</context>
+          <context context-type="linenumber">56</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="SSO" datatype="html">
+        <source>or login with SSO </source>
+        <target>با اکانت گوگل خود وارد شوید</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/Pages/account/sign-in/sign-in.component.html</context>
+          <context context-type="linenumber">73,74</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="68060eac342b634bf778fd083fee3cf7866888ee" datatype="html">
+        <source>Let&apos;s make the world more productive with SevenTask.</source>
+        <target>با سون‌تسک دنیا را جای بهتری کنیم:)</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/Pages/account/sign-in/sign-in.component.html</context>
+          <context context-type="linenumber">79</context>
+        </context-group>
+        <note priority="1" from="description">Quotes sentence</note>
+        <note priority="1" from="meaning">Quotes</note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

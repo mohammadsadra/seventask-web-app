@@ -1,0 +1,225 @@
+@import 'src/variables.scss';
+.main-container {
+    padding: 0 30px;
+    width: 100%;
+    overflow-y: auto;
+}
+
+.loading-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    //margin-top: 20px;
+    flex-direction: column;
+    margin-top: 15%;
+    flex-basis: 50%;
+}
+
+.timeTrack-noData {
+    margin-top: 15%;
+    flex-basis: 50%;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    img {
+        width: 29.065%;
+        height: auto;
+    }
+    div {
+        margin-top: 20px;
+        opacity: 0.3;
+    }
+}
+
+.task-badge-container {
+    display: flex;
+    align-content: center;
+    align-items: flex-start;
+}
+
+.task-badge {
+    background-color: #f86f8c;
+    margin-inline-start: 18px;
+    border-radius: 10px 10px 0px 0px;
+    padding: 2px 15px 0px 15px;
+    font-weight: 800;
+    font-size: 12px;
+    line-height: 16px;
+    text-align: center;
+    color: #ffffff;
+}
+
+.display-date-sum-box {
+    width: 100%;
+    margin: 42px 0 18px 0;
+    height: 25px;
+}
+
+.display-date {
+    font-style: normal;
+    font-weight: 300;
+    font-size: 18px;
+    color: #a7afbd;
+    opacity: 0.5;
+}
+
+.sum-times-box {
+    font-style: normal;
+    font-weight: 300;
+    font-size: 18px;
+    color: #a7afbd;
+    line-height: 25px;
+    opacity: 0.5;
+}
+
+.time-track-box {
+    width: 100%;
+    height: 100px;
+    background: #ffffff;
+    border: 1px solid #f0f4f4;
+    border-radius: 10px;
+    margin-bottom: 9px;
+}
+
+.past-time-box {
+    font-weight: 700;
+    font-size: 24px;
+    color: #2e4a77;
+    overflow: hidden;
+}
+
+.title-box {
+    width: 60%;
+}
+
+@media screen and (max-width: 1366px) {
+    .past-time-box {
+        font-size: 1.2rem;
+    }
+}
+
+.space-line {
+    width: 2px;
+    height: 100%;
+    border-right: 2px solid rgba(243, 246, 250, 0.7);
+}
+
+.title-show {
+    font-weight: 700;
+    font-size: 16px;
+    color: #2e4a77;
+    width: 100%;
+    text-align: start;
+}
+
+.title-show span {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 100%;
+}
+
+.delete-icon {
+    cursor: pointer;
+    color: rgba(46, 58, 89, 0.2);
+}
+
+.delete-icon:hover .seventask-icon-time-track-delete {
+    /* color: #ff0000; */
+    color: #f86f8c;
+}
+
+.delete-icon:hover .seventask-icon-time-track-edit {
+    /* color: #ff0000; */
+    color: #f86f8c;
+}
+
+.delete-icon:hover .seventask-icon-time-track-start {
+    /* color: #ff0000; */
+    color: #f86f8c;
+}
+
+.team-project-box {
+    font-weight: 500;
+    font-size: 12px;
+    color: #a7afbd;
+}
+
+.time-active {
+    color: #ebaa45;
+}
+
+.edit-time-track-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #f0f4f4;
+    box-sizing: border-box;
+    border-radius: 10px;
+    padding: 5px;
+    min-width: 70px;
+    margin-bottom: 3px;
+    color: white;
+    cursor: pointer;
+}
+
+.field-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: row;
+    padding: 7px;
+    background: #ffffff;
+    color: rgba(46, 74, 119, 0.4);
+    border: 1px solid #f0f4f4;
+    box-sizing: border-box;
+    border-radius: 10px;
+    cursor: pointer;
+    //margin-inline-start: 16px;
+    text-align: center;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+
+/* Firefox */
+
+input[type='number'] {
+    -moz-appearance: textfield;
+}
+
+.field-input {
+    border: none;
+    width: 30px;
+    text-align: center;
+    color: rgba(46, 74, 119, 0.4);
+}
+
+::ng-deep .select-task {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    //background-color: $theme-color-opacity-10;
+    color: rgba(46, 74, 119, 0.4);
+    text-align: start;
+    //min-width: 400px;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    color: rgba(46, 74, 119, 0.4);
+    padding: 7px;
+    border: 1px solid #f0f4f4;
+    box-sizing: border-box;
+    border-radius: 10px;
+    margin: 10px;
+    text-align: start;
+}

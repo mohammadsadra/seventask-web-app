@@ -1,0 +1,52 @@
+<div class="calendar-header-main-container d-flex align-items-center">
+  <div class="calendar-header-info-section">
+    <div class="header-date-label-container">
+      <label id="date-label">{{dateLabel}}</label>
+      <label *ngIf="alternativeDateLabel!==''" id="alternative-date-label">{{alternativeDateLabel}}</label>
+    </div>
+    <div class="calendar-view-selector d-flex flex-row align-items-center justify-content-center">
+      <mat-button-toggle-group [(ngModel)]="selectedView"
+                               (ngModelChange)="selectView()"
+                               name="calendar-view" value="month-view">
+        <mat-button-toggle value="day">
+          {{!headerIsSmall ? ('Calendar.day' | translate) : ('Calendar.day' | translate)[0]}}
+        </mat-button-toggle>
+        <mat-button-toggle value="week">
+          {{!headerIsSmall ? ('Calendar.week' | translate) : ('Calendar.week' | translate)[0]}}
+        </mat-button-toggle>
+        <mat-button-toggle value="month">
+          {{!headerIsSmall ? ('Calendar.month' | translate) : ('Calendar.month' | translate)[0]}}
+        </mat-button-toggle>
+        <mat-button-toggle value="year">
+          {{!headerIsSmall ? ('Calendar.year' | translate) : ('Calendar.year' | translate)[0]}}
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+    <div class="p-2 new-item hover-style-5 smooth-rectangle" style="width: 140px; min-width: 120px;"
+         (click)="goToday()">
+      <div class="new-item-add-logo">
+        <img src="../../../../../assets/icons/Calendar/calendar-blank.svg">
+      </div>
+      <div class="new-item-button-title">
+        {{'Calendar.today' | translate}}
+      </div>
+    </div>
+  </div>
+  <div class="calendar-header-toolbar-section">
+    <!-- <div class="toolbar-button-icon hover-style-2">
+      <span class="seventask-icon-tools-search"></span>
+    </div>
+    <div class="toolbar-button-icon hover-style-2">
+      <span class="seventask-icon-tools-filter"></span>
+    </div> -->
+    <div class="p-2 new-item hover-style-5 smooth-rectangle"
+    (click)="createEvent()">
+      <div class="new-item-add-logo">
+        <img src="../../../../../assets/icons/Project/Add.svg">
+      </div>
+      <div class="new-item-button-title">
+        {{'Calendar.newEvent' | translate}}
+      </div>
+    </div>
+  </div>
+</div>

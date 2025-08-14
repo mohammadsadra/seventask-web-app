@@ -1,0 +1,139 @@
+<div [style]="'direction: ' + textDirection" class="main-container">
+  <div class="edit-team-and-project-title">
+    {{'Task.editTeamAndProject' | translate}}
+  </div>
+
+  <div class="team-selector d-flex flex-column align-items-center">
+    <div class="p-2 assignments-title">
+      <div class=" d-flex flex-row align-items-center">
+        <img class="p-2" src="../../../../../assets/icons/Project/Team.svg">
+        <div class="p-2" style="margin-inline-start: 10px">
+          {{'Task.team' | translate}}
+        </div>
+      </div>
+    </div>
+<!--    <div class="p-2 assignments-team-description">-->
+<!--      {{'Task.teamMsg' | translate}}-->
+<!--    </div>-->
+
+    <div
+      class="p-2 assignments-teams-list d-flex flex-row align-items-center justify-content-around">
+
+      <button style="border: none"
+              (click)="openTeamPage()"
+              class="assignments-team  d-flex flex-row align-items-center justify-content-center p-2"
+              *ngIf="allTeams.length == 0 " mat-dialog-close>
+        {{'Task.createNewTeam' | translate}}
+      </button>
+
+      <div
+        [ngClass]="activeTeam != '' && activeTeam != allTeams[0].id && activeTeam != allTeams[1].id ? 'active-assignments-team' : 'assignments-team'"
+        class=" p-2 d-flex flex-row align-items-center justify-content-center" style="margin-inline-end: 20px"
+        (click)="activeTeam != '' && activeTeam != allTeams[0].id && activeTeam != allTeams[1].id ? unselectTeam()  : openAddTeam()"
+        *ngIf="allTeams.length >= 3 ">
+        <div *ngIf="activeTeam == '' || activeTeam == allTeams[0].id || activeTeam == allTeams[1].id"
+             class="p-2">
+          {{'Task.selectTeam' | translate}}
+        </div>
+        <div *ngIf="activeTeam != '' && activeTeam != allTeams[0].id && activeTeam != allTeams[1].id"
+             class="p-2">
+          {{selectedTeamFromAddTeamComponent[0].name}}
+        </div>
+        <div class="p-2" style="margin-inline-start: 5px">
+          <img src="../../../../../assets/icons/Project/V.svg">
+        </div>
+      </div>
+
+      <div [ngClass]="activeTeam == allTeams[0].id ? 'active-assignments-team' : 'assignments-team'"
+           (click)="activeTeam == allTeams[0].id ? unselectTeam() :selectTeam(allTeams[0].id)"
+           class="assignments-team  d-flex flex-row align-items-center justify-content-center p-2"
+           style="margin-inline-end: 20px"
+           *ngIf="allTeams.length >= 1 ">
+        {{allTeams[0].name}}
+      </div>
+
+      <div [ngClass]="activeTeam == allTeams[1].id ? 'active-assignments-team' : 'assignments-team'"
+           (click)="activeTeam == allTeams[1].id ? unselectTeam() : selectTeam(allTeams[1].id)"
+           class="assignments-team  d-flex flex-row align-items-center justify-content-center p-2"
+           *ngIf="allTeams.length >= 2 ">
+        {{allTeams[1].name}}
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+  <div class="team-selector d-flex flex-column align-items-center">
+    <div class="p-2 assignments-title">
+      <div class=" d-flex flex-row align-items-center">
+        <img class="p-2" style="opacity: 0.3" src="../../../../../assets/icons/Task/add-project.svg">
+        <div class="p-2" style="margin-inline-start: 10px">
+          {{'Task.project' | translate}}
+        </div>
+      </div>
+    </div>
+
+    <div class="p-2 assignments-team-description">
+
+    </div>
+
+    <div class="p-2 assignments-teams-list d-flex flex-row align-items-center justify-content-around">
+
+      <button style="border: none"
+              (click)="openProjectPage()"
+              class="assignments-team  d-flex flex-row align-items-center justify-content-center p-2"
+              *ngIf="showingProjects.length == 0" mat-dialog-close>
+        {{'Task.createNewProject' | translate}}
+      </button>
+
+      <div
+        [ngClass]="activeProject != '' && activeProject != showingProjects[0].id && activeProject != showingProjects[1].id ? 'active-assignments-team' : 'assignments-team'"
+        class=" p-2 d-flex flex-row align-items-center justify-content-center" style="margin-inline-end: 20px"
+        (click)="activeProject != '' && activeProject != showingProjects[0].id && activeProject != showingProjects[1].id ? unselectProject()  : openAddProject()"
+        *ngIf="showingProjects.length >= 3">
+        <div
+          *ngIf="activeProject == '' || activeProject == showingProjects[0].id || activeProject == showingProjects[1].id"
+          class="p-2">
+          {{'Task.selectProject' | translate}}
+        </div>
+        <div
+          *ngIf="activeProject != '' && activeProject != showingProjects[0].id && activeProject != showingProjects[1].id"
+          class="p-2">
+          {{selectedProjectFromAddProjectComponent[0].name}}
+        </div>
+        <div class="p-2" style="margin-inline-start: 5px">
+          <img src="../../../../../assets/icons/Project/V.svg">
+        </div>
+      </div>
+
+      <div [ngClass]="activeProject == showingProjects[0].id ? 'active-assignments-team' : 'assignments-team'"
+           (click)="activeProject == showingProjects[0].id ? unselectProject() :selectProject(showingProjects[0].id)"
+           class="assignments-team  d-flex flex-row align-items-center justify-content-center p-2"
+           style="margin-inline-end: 20px" *ngIf="showingProjects.length >= 1">
+        {{showingProjects[0].name}}
+      </div>
+
+      <div [ngClass]="activeProject == showingProjects[1].id ? 'active-assignments-team' : 'assignments-team'"
+           (click)="activeProject == showingProjects[1].id ? unselectProject() : selectProject(showingProjects[1].id)"
+           class="assignments-team  d-flex flex-row align-items-center justify-content-center p-2"
+           *ngIf="showingProjects.length >= 2">
+        {{showingProjects[1].name}}
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="button-container">
+    <button (click)="updateTeamAndProject()" class="submit-button" >
+      <div class="submit-button-text">
+         {{'Task.editTeamAndProjectButton' | translate}}
+      </div>
+    </button>
+  </div>
+
+
+</div>
+

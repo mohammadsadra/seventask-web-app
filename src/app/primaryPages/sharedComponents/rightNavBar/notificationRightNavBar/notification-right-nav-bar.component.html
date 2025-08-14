@@ -1,0 +1,132 @@
+<div class="notification-header-tab" style="overflow-x: hidden;">
+  <ul class="notificnav">
+    <li
+      class="notificnav-item"
+      [ngClass]="isSelected === 'activity' ? 'activeTab' : ''"
+      (click)="isSelected = 'activity'">
+      {{'Notification.activity' | translate}}
+      <span style="display: none;">.</span>
+    </li>
+    <li
+      class="notificnav-item"
+      [ngClass]="isSelected === 'runningTask' ? 'activeTab' : ''"
+      (click)="isSelected = 'runningTask'">
+      {{'Notification.runningTask' | translate}}
+      <span style="display: none;">.</span>
+    </li>
+  </ul>
+</div>
+<div *ngIf="isSelected === 'runningTask' && !showGetNotificationsLoading">
+  <app-runnigtask-notification-right-nav-bar></app-runnigtask-notification-right-nav-bar>
+</div>
+
+<div
+  class="notification-tasks-container" (resized)="onResized($event)"
+  [ngClass]="isSelected === 'runningTask' ? 'd-none' : ''">
+  <div class="notification-tasks-content">
+    <div *ngIf="showGetNotificationsLoading && notNotification"
+         class="loading-container">
+      <seventask-spinner [loadingType]="1" *ngIf="showGetNotificationsLoading"></seventask-spinner>
+      <!--  <div style="margin-top: 10px;color: #2E4A77;">{{'Task.loadingTasks' |translate}}</div>-->
+    </div>
+
+    <div *ngIf="notNotification === true">
+      <img class="noDataImage" src="assets/noDataImages/Activity-1.svg">
+      <p class="noData-text">{{'Notification.noNotification' | translate}}</p>
+    </div>
+
+    <div class="olderNotification" (click)="showOlder()"
+         *ngIf="notNotification && !showGetNotificationsLoading">
+      <p>
+        {{'Notification.showOldernotification' |translate}}
+      </p>
+    </div>
+    <div [style.height.px]="innerHeight" style="overflow-y: auto;">
+      <div class="notific-body" [style.width.px]="rightSidebarWidth"
+           *ngIf="!notNotification"
+           (scroll)="onContainerScroll($event)">
+        <div
+          class="notific-wraper"
+          *ngFor="let notific of notification; let index= index">
+          <h6 class="header-notific"
+              *ngIf="(notific.notificationTime | date: 'shortDate' | checkTime : index : 1)">
+            {{
+            notific.notificationTime | date: 'shortDate' | checkTime : index | TimedifferenceCalc
+            }}
+          </h6>
+          <div class="notific-OnName">
+            <div class="notific-OnName-flex"
+
+                 [appTooltip]="checkText(notific.notifiedOnName)"
+                 placement="top" delay="500"
+                 [condition]="checkDisabled(notific.notifiedOnName.length)">
+              <div class="notific-OnName_img">
+                <span class="{{ notific.notificationType | imgNotificOnName }}"></span>
+              </div>
+              <div class="notific-OnName_text" dir="auto"
+                   [style]="checkDisabled(notific.notifiedOnName.length)
+                ? ''
+                :'width :' + notificBodyWidth - 50 +'px'">
+                {{ notific.notifiedOnName}}
+              </div>
+            </div>
+          </div>
+          <div class="notific-container">
+            <div class="img-content">
+              <img
+                class="rounded-circle"
+                src="{{ notific.parameters | sliceImageString }}"
+              />
+
+            </div>
+            <div class="notific-content">
+              <span
+                [innerHTML]="notific.message | ReplaceParam :
+                notific.parameters : notific.parameterTypes">
+              </span>
+              <div class="Date-content">
+                {{ notific.notificationTime | ShowIntimeZone | date :
+                'shortTime'}}
+                <br/>
+              </div>
+
+              <app-show-file *ngIf="notific.parameterTypes.includes(5)" [data]="notific.parameters[1]"></app-show-file>
+
+            </div>
+          </div>
+          <div *ngIf="notific.historyType === 20"
+               class="reply-comment">
+            <input dir="auto" [class.placeholder-rtl]="textDirection === 'rtl'"
+                   type="text"
+                   (keypress)="sendWithEnter($event,replyMessege[index] ,
+              notific.notifiedOnId,index)"
+                   [(ngModel)]="replyMessege[index]"
+                   placeholder="{{'Notification.addReply' | translate}}">
+            <span
+              (click)="addComment(replyMessege[index] , notific.notifiedOnId,
+              index)"
+              [class.rotate-icon]="dirStatus != 'en-US'"
+              class="seventask-icon-chat-send"></span>
+          </div>
+        </div><!-- Ng-For End-->
+
+
+        <div *ngIf="showGetNotificationsLoading && !notNotification"
+             class="loading-container">
+          <seventask-spinner [loadingType]="1"
+                             *ngIf="showGetNotificationsLoading"></seventask-spinner>
+          <!--  <div style="margin-top: 10px;color: #2E4A77;">{{'Task.loadingTasks' |translate}}</div>-->
+        </div>
+
+        <div class="olderNotification" (click)="showOlder()"
+             *ngIf="!notNotification && !showGetNotificationsLoading &&
+          !hideShowOlder">
+          <p>
+            {{'Notification.showOldernotification' |translate}}
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

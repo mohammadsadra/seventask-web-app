@@ -1,0 +1,46 @@
+<div class="list-container d-flex flex-column">
+  <div class="page-info">
+    <div class="settings-info-logo">
+      <span style="font-size: 25px" class="seventask-icon-time-track-profile"></span>
+    </div>
+    <div class="settings-info-title">
+      {{ 'Settings.myProfile' | translate }}
+    </div>
+  </div>
+
+  <div class="list d-flex flex-column">
+    <a routerLink="settings"
+       routerLinkActive="selected" class="text-decoration-none" (click)="changeActiveTab('profile')">
+      <div class="option d-flex flex-row">
+        <div [ngClass]="activeTab === 'profile' ? 'active-tab' : 'tab'">{{ 'Home.settings' | translate }}</div>
+        <div class="selected-pointer" style="margin-inline-start: auto" *ngIf="activeTab === 'profile'"
+             [style.border-radius]="iconRotationDegree == '0' ? '10px 0px 0px 10px' : '0px 10px 10px 0px'"></div>
+      </div>
+    </a>
+
+    <!--    <div class="option d-flex flex-row" (click)="changeActiveTab('calendar')">-->
+    <!--      <div [ngClass]="activeTab === 'calendar' ? 'active-tab' : 'tab'">{{ 'Settings.calendar' | translate }}</div>-->
+    <!--      <div class="selected-pointer" style="margin-inline-start: auto" *ngIf="activeTab === 'calendar'" [style.border-radius]="direction == 'ltr' ? '10px 0px 0px 10px' : '0px 10px 10px 0px'"></div>-->
+    <!--    </div>-->
+    <!--    <div class="option d-flex flex-row" (click)="changeActiveTab('security')">-->
+    <!--      <div [ngClass]="activeTab === 'security' ? 'active-tab' : 'tab'">{{ 'Settings.security' | translate }}</div>-->
+    <!--      <div class="selected-pointer" style="margin-inline-start: auto" *ngIf="activeTab === 'security'" [style.border-radius]="direction == 'ltr' ? '10px 0px 0px 10px' : '0px 10px 10px 0px'"></div>-->
+    <!--    </div>-->
+
+    <a routerLink="timetrack"
+       routerLinkActive="selected" class="text-decoration-none" (click)="changeActiveTab('timeTrack')">
+      <div class="option d-flex flex-row">
+        <div [ngClass]="activeTab == 'timeTrack' ? 'active-tab' : 'tab'">{{ 'Settings.timeTrack' | translate }}</div>
+        <div class="selected-pointer" style="margin-inline-start: auto" *ngIf="activeTab === 'timeTrack'"
+             [style.border-radius]="direction == 'ltr' ? '10px 0px 0px 10px' : '0px 10px 10px 0px'"></div>
+      </div>
+    </a>
+    <a routerLink="integrations"
+       routerLinkActive="selected" class="text-decoration-none" (click)="changeActiveTab('integrations')">
+      <div class="option d-flex flex-row">
+        <div [ngClass]="activeTab == 'integrations' ? 'active-tab' : 'tab'">{{ 'Settings.integrations' | translate }}</div>
+        <div class="selected-pointer" style="margin-inline-start: auto" *ngIf="activeTab === 'integrations'"
+             [style.border-radius]="direction == 'ltr' ? '10px 0px 0px 10px' : '0px 10px 10px 0px'"></div>
+      </div>
+    </a>
+  </div>

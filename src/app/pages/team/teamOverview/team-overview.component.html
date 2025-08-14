@@ -1,0 +1,394 @@
+<div class="department-context-menu d-flex flex-column justify-content-between"
+  [style.top.px]="topValue"
+  [style.left.px]="leftValue"
+  *ngIf="showContext"
+  (mouseleave)="contextLeave($event)">
+  <div class="w-100 p-2 edit-department d-flex flex-row department-item justify-content-between"
+    (click)="departmentEdit()">
+    <div style="font-size: 12px;">{{ 'Chat.edit' | translate }}</div>
+    <span class="seventask-icon-edit-edit align-self-center ml-1 mr-1" style="font-size: 12px"></span>
+  </div>
+  <div class="w-100 p-2 delete-department d-flex flex-row department-item justify-content-between"
+    mat-button
+    (click)="openDepartmentDialog()">
+    <div style="font-size: 12px;">{{ 'Chat.delete' | translate }}</div>
+    <span class="seventask-icon-edit-cancel-medium align-self-center ml-1 mr-1" style="font-size: 12px"></span>
+  </div>
+</div>
+<div *ngIf="selectedTab === 'Overview'">
+  <div class="project-container" style="margin-bottom: 50px;">
+
+    <div class="this-week-container">
+      <div class="section-title mt-0">
+        {{'Team.thisWeek' | translate}}
+      </div>
+  
+      <div class="this-week-calendar">
+        <div class="weekday"
+          [class.day-border]="(textDirection === 'ltr' && dayIndex != 6) || (textDirection === 'rtl' && dayIndex != 0)"
+          *ngFor="let day of visibleDates; let dayIndex= index">
+          <!-- <div class="calendar-day-events-container">
+            <div *ngFor="let event of classifiedEventsList[dayIndex]" dir="auto" class="calendar-day-event">
+              <span class="event-type-icon seventask-icon-pages-my-calender"></span>
+              <span class="calendar-day-event-title">{{event.title}}</span>
+            </div>
+          </div> -->
+  
+          <div class="calendar-weekday-footer">
+            <div class="calendar-footer-day-num-container">
+              <div [class.calendar-day-num-main]="day.hasMainStyle"
+                [class.calendar-weekend]="calendarData.weekends.includes(day.momentDate.day()) && day.hasMainStyle"
+                [class.calendar-today]="day.momentDate.diff(todayDate, 'day') == 0 &&
+                day.momentDate.day() == todayDate.day()">
+                <span class="weekday-number">
+                  <span *ngIf="!calendarData.isSecondCalendarEnabled">
+                    <span [ngSwitch]="calendarData.firstCalendar">
+                      <span *ngSwitchCase="calendarType.GEORGIAN">{{day.momentDate.toDate()|date:'d'}}</span>
+                      <span
+                        *ngSwitchCase="calendarType.JALALI">
+                        {{day.momentDate.toDate()
+                        |getJalaliDate:'D'
+                        |getArabicNum}}
+                      </span>
+                    </span>
+                  </span>
+                  <span *ngIf="calendarData.isSecondCalendarEnabled">
+                    <span [ngSwitch]="calendarData.firstCalendar">
+                      <span *ngSwitchCase="calendarType.GEORGIAN">
+                        <span [ngSwitch]="calendarData.secondCalendar">
+                          <span *ngSwitchCase="calendarType.GEORGIAN">{{day.momentDate.toDate()|date:'d'}}</span>
+                          <span *ngSwitchCase="calendarType.JALALI">{{day.momentDate.toDate()|date:'d'}}
+                            ({{day.momentDate.toDate()
+                            |getJalaliDate:'D'
+                            |getArabicNum}})</span>
+                        </span>
+                      </span>
+                      <span *ngSwitchCase="calendarType.JALALI">
+                        <span [ngSwitch]="calendarData.secondCalendar">
+                          <span
+                            *ngSwitchCase="calendarType.GEORGIAN">{{day.momentDate.toDate()
+                            |getJalaliDate:'D'
+                            |getArabicNum}}
+                            ({{day.momentDate.toDate()|date:'d'}})</span>
+                          <span
+                            *ngSwitchCase="calendarType.JALALI">{{day.momentDate.toDate()
+                            | getJalaliDate:'D'
+                            |getArabicNum}}</span>
+                        </span>
+                      </span>
+                    </span>
+                  </span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="members-list-container">
+  
+      <div class="section-title">
+        {{'Team.departmentsAndMembers' | translate}}
+      </div>
+  
+      <div class="members-container d-flex flex-column">
+        <div class="department-list d-flex flex-row">
+          <div class="department-name flex-column align-items-center mt-auto"
+            (click)="changeActiveDepartmentInMemberSection('AllDepartment');">
+            <div [class.active-test]="activeDepartmentInMemberSection == 'AllDepartment'">{{'Team.allDepartments' | translate}}</div>
+            <div class="active-department" [style.visibility]="activeDepartmentInMemberSection == 'AllDepartment' ? 'visible' :'hidden'"></div>
+          </div>
+          <div *ngFor="let department of teamDepartments; let i= index"
+            class="department-name flex-column align-items-center mt-auto"
+            (click)="changeActiveDepartmentInMemberSection(department.id.toString());"
+            (contextmenu)="onRightClick($event , department, i)">
+            <div *ngIf="editableDepartment[i]" class="d-flex flex-row input-wrapper">
+              <input type="text" [value]="departmentIsSelected.name" class="border-0" dir="auto" #departmentName>
+              <div class="input-accept-btn" (click)="ConfirmDepartmentName(departmentName.value)">
+                <span class="seventask-icon-edit-tick-thick" style="font-size: 12px"></span>
+              </div>
+            </div>
+            <div *ngIf="!editableDepartment[i]"
+              [class.active-test]="activeDepartmentInMemberSection == department.id.toString()">
+              {{department.name}}</div>
+            <div class="active-department"
+              [style.visibility]="activeDepartmentInMemberSection == department.id.toString() ? 'visible' :'hidden'"></div>
+          </div>
+        </div>
+  
+        <div class="d-flex align-items-center justify-content-between">
+          <div class="d-flex flex-row members-list" style="padding-inline-start: 30px">
+            <div class="each-member" *ngFor="let member of members | departmentMember: teamDepartments : activeDepartmentInMemberSection"
+              (mouseleave)="removeUser=
+              'false'" (mouseenter)="removeUser= member.userId">
+              <div class="row justify-content-center" style="position: relative">
+                <div class="col-md-auto" style="position: absolute;" *ngIf="member.userId != null">
+                  <div class="rounded-circle remove_user" style="position: absolute;"
+                    *ngIf="removeUser == member.userId &&
+                    ( ((this.activeDepartmentInMemberSection !== 'AllDepartment' && ((removeUser == myUserGUID && selectedDepartment.createdBy.userId !==
+                    myUserGUID ) || (selectedDepartment.createdBy.userId === myUserGUID && removeUser != myUserGUID )) )) ||
+                    (this.activeDepartmentInMemberSection === 'AllDepartment' && ((removeUser == myUserGUID && team.createdBy.userId !== myUserGUID ) ||
+                    (team.createdBy.userId === myUserGUID && removeUser != myUserGUID )) ) )" (click)="openDeleteDialog(member)">
+                    <img style="width: 8px" src="../../../../assets/icons/Project/Remove-Member-white.svg">
+                  </div>
+                  <div class="rounded-circle user_img">
+                    <!--                  <img *ngIf="member.profileImageGuid == null" style="width: 20px" src="../../../../assets/icons/Project/User.svg">-->
+                    <span
+                      class="rounded-circle seventask-icon-task-header-assignee d-flex align-items-center justify-content-center"
+                      style="width: 20px;"
+                      *ngIf="member.profileImageGuid == null"></span>
+                    <img *ngIf="member.profileImageGuid != null"
+                      [src]="domainName + '/en-US/File/get?id=' + member.profileImageGuid + '&quality=100'"
+                      class="rounded-circle" style="overflow: hidden; width: 48px;height: 48px">
+                  </div>
+                </div>
+              </div>
+              <div class="row justify-content-center" style="overflow: hidden;text-overflow: ellipsis; width: 80px; margin-top: 43px">
+                <div class="p-2 add-member-title">{{member.nickName}}</div>
+              </div>
+            </div>
+          </div>
+  
+          <div style="margin-inline-start: auto" class="p-2 container no-gutters"
+            (click)="addMember()"
+            style="margin: 0; align-content: center; width: 150px; cursor: pointer">
+            <div class="row justify-content-center">
+              <div class="col-md-auto">
+                <div class="rounded-circle add-member-circle d-flex align-items-center">
+                  <span class="seventask-icon-add-AddMember" style="font-size: 20px"></span>
+                </div>
+              </div>
+            </div>
+            <div class="row justify-content-center">
+              <div class="seventask-theme-color p-2 add-member-title">{{'Team.addMember' | translate}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+    </div>
+  
+    <div class="project-list-container" *ngIf="activeProjects.length> 0">
+  
+      <div class="section-title">
+        {{'Project.openProjectTitle' | translate}}
+      </div>
+  
+      <div class="d-flex align-items-center flex-wrap">
+        <div *ngFor="let project of activeProjects"
+          (click)="selectedProject= project; openProjectOverviewPage(project.id)">
+          <app-project-card [project]="project" [projectHover]="projectHover"></app-project-card>
+        </div>
+      </div>
+  
+    </div>
+  
+    <div class="activity-log">
+      <div class="section-title">
+        {{ 'Team.activityLog' | translate}}
+      </div>
+  
+      <div class="activity-log-body">
+  
+        <div class="d-flex flex-column">
+  
+          <div class="p-2 activity" *ngFor="let teamHistory of teamHistoryArray">
+            <div class="p-2 activity-information d-flex flex-row">
+              <div class="p-2 activity-user-profile">
+                <div class="rounded-circle user_img">
+                  <!--                <img style="width: 20px" src="assets/icons/Project/User.svg">-->
+                  <span
+                    class="rounded-circle seventask-icon-task-header-assignee d-flex align-items-center justify-content-center"
+                    style="width: 20px;"
+                    *ngIf="SliceImgString(teamHistory.parameters) == null"></span>
+                  <img
+                    class="rounded-circle"
+                    style="width: 48px;height: 48px;"
+                    *ngIf="SliceImgString(teamHistory.parameters) != null"
+                    [src]="SliceImgString(teamHistory.parameters)" />
+                </div>
+              </div>
+              <div class="d-flex flex-column">
+                <div class="activity-description">
+                  <!--                {{projectHistory.message}}-->
+                  <span [innerHTML]="teamHistory.message | safeHtmlPipe"></span>
+                </div>
+                <div class="activity-time"><span></span>
+                  {{ teamHistory.time }}
+                </div>
+                <!--            <div class="p-2">Extra</div>-->
+              </div>
+            </div>
+          </div>
+  
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+
+<div *ngIf="selectedTab === 'PaymentHistory'" style="margin-bottom: 70px;">
+  <div class="table-container" *ngIf="gotPaymentHistory" id="paymentTable">
+    <table mat-table multiTemplateDataRows [dataSource]="dataSource" class="mat-elevation-z8 payment-table" matSort dir="auto">
+
+      <ng-container matColumnDef="position">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ "Team.number" | translate }} </th>
+        <td mat-cell *matCellDef="let element"> {{element.position | numToArabic}} </td>
+      </ng-container>
+    
+      <ng-container matColumnDef="creator">
+        <th mat-header-cell *matHeaderCellDef> {{ "Team.creator" | translate }} </th>
+        <td mat-cell *matCellDef="let element"> {{element.creator}} </td>
+      </ng-container>
+    
+      <ng-container matColumnDef="createdOn">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ "Team.createdOn" | translate }} </th>
+        <td mat-cell *matCellDef="let element"> {{element.createdOn | seventaskDatePipe: 'YYYY/M/D HH:mm' | async}} </td>
+      </ng-container>
+    
+      <ng-container matColumnDef="validUntil">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ "Team.validUntil" | translate }} </th>
+        <td mat-cell *matCellDef="let element"> {{element.validUntil | seventaskDatePipe: 'YYYY/M/D HH:mm' | async}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="seatCounts">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ "Team.seatCounts" | translate }} </th>
+        <td mat-cell *matCellDef="let element"> {{element.seatCounts | numToArabic}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ "Team.price" | translate }} </th>
+        <td mat-cell *matCellDef="let element"> {{element.price | numToArabic}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef> {{ "Team.status" | translate }} </th>
+        <td mat-cell *matCellDef="let element">
+           <div class="smooth-rectangle payment-button-container" [ngSwitch]="element.status">
+              <div *ngSwitchCase="paymentStatusEnum.failed" class="failed-button">{{ "Team.failed" | translate }}</div>
+              <div *ngSwitchCase="paymentStatusEnum.done" class="done-button">{{ "Team.successfulPayment" | translate }}</div>
+              <div *ngSwitchCase="paymentStatusEnum.inProgress" class="in-progress-button" (click)="getBillLink($event, element.id)">{{ "Team.inProgress" | translate }}</div>
+              <div *ngSwitchCase="paymentStatusEnum.bill" class="bill-button" (click)="getBillLink($event, element.id)">{{ "Team.pay" | translate }}</div>
+           </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="expand">
+        <th mat-header-cell *matHeaderCellDef>&nbsp;</th>
+        <td mat-cell *matCellDef="let element" style="cursor: pointer;">
+          <mat-icon *ngIf="expandedElement !== element">keyboard_arrow_down</mat-icon>
+          <mat-icon *ngIf="expandedElement === element">keyboard_arrow_up</mat-icon>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+          <div class="element-detail"
+               [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+            <div class="element-detail-box"
+                 [class]="'payment-row-' + element.id">
+              <div [ngSwitch]="element.selectedPlan" style="width: 100%;">
+                <div *ngSwitchCase="2" class="element-description-header">
+                  <div class="element-description">{{'Payment.basic' | translate}}</div>
+                </div>
+                <div *ngSwitchCase="3" class="element-description-header">
+                  <div class="element-description">{{'Payment.pro' | translate}}</div>
+                </div>
+                <div class="element-description-row">
+                  <div class="element-description">
+                    <strong>{{ "Team.creator" | translate }}: </strong>
+                    {{element.creator}}
+                  </div>
+                </div>
+                <div class="element-description-row">
+                  <div class="element-description">
+                    <strong>{{ "Team.price" | translate }}: </strong>
+                    {{element.price | numToArabic}}
+                  </div>
+                </div>
+                <div class="element-description-row">
+                  <div class="element-description">
+                    <strong>{{ "Team.seatCounts" | translate }}: </strong>
+                    {{element.seatCounts | numToArabic}}
+                  </div>
+                </div>
+                <div class="element-description-row">
+                  <div class="element-description">
+                    <strong>{{ "Team.createdOn" | translate }}: </strong>
+                    {{element.createdOn | seventaskDatePipe: 'YYYY/M/D HH:mm' | async}}
+                  </div>
+                </div>
+                <div class="element-description-row">
+                  <div class="element-description">
+                    <strong>{{ "Team.validUntil" | translate }}: </strong>
+                    {{element.validUntil | seventaskDatePipe: 'YYYY/M/D HH:mm' | async}}
+                  </div>
+                </div>
+                <div class="element-description-row">
+                  <div class="element-description">
+                    <strong>{{ "Team.status" | translate }}: </strong>
+                    <span [ngSwitch]="element.status">
+                      <span *ngSwitchCase="paymentStatusEnum.failed">{{ "Team.failed" | translate }}</span>
+                      <span *ngSwitchCase="paymentStatusEnum.done">{{ "Team.successfulPayment" | translate }}</span>
+                      <span *ngSwitchCase="paymentStatusEnum.inProgress">{{ "Team.inProgress" | translate }}</span>
+                      <span *ngSwitchCase="paymentStatusEnum.bill">{{ "Team.pay" | translate }}</span>
+                    </span>
+                  </div>
+                </div>
+                <div *ngSwitchCase="2" style="margin-top: 10px;">
+                  <strong style="margin-inline-start: 5px; font-size: 18px;">{{ "Team.planDetails" | translate }}: </strong>
+                  <div class="element-description-row">
+                    <div class="element-description">{{'Payment.usersBasic' | translate}}</div>
+                  </div>
+                  <div class="element-description-row">
+                    <div class="element-description">{{'Payment.sizeBasic' | translate}}</div>
+                  </div>
+                  <div class="element-description-row">
+                    <div class="element-description">{{'Payment.projectsBasic' | translate}}</div>
+                  </div>
+                </div>
+                <div *ngSwitchCase="3" style="margin-top: 10px;">
+                  <strong style="margin-inline-start: 5px; font-size: 18px;">{{ "Team.planDetails" | translate }}: </strong>
+                  <div class="element-description-row">
+                    <div class="element-description">{{'Payment.usersPro' | translate}}</div>
+                  </div>
+                  <div class="element-description-row">
+                    <div class="element-description">{{'Payment.sizePro' | translate}}</div>
+                  </div>
+                  <div class="element-description-row">
+                    <div class="element-description">{{'Payment.unlimited' | translate: {item: 'Payment.projects' | translate} }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="export-button-container">
+              <div (click)="downloadPaymentTable('payment-row-' + element.id)" class="export-button smooth-rectangle" mat-raised-button>
+                <div *ngIf="!isDownloadingPaymentDetails" class="button-content">{{ 'Team.exportToPdf' | translate }}</div>
+                <seventask-spinner *ngIf="isDownloadingPaymentDetails" [loadingType]="1" [color]="'white'" class="button-content"></seventask-spinner>
+              </div>
+            </div>
+          </div>
+        </td>
+      </ng-container>
+    
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let element; columns: displayedColumns" 
+          class="element-row"
+          [class.expanded-row]="expandedElement === element"
+          (click)="expandedElement = expandedElement === element ? null : element">
+      </tr>
+      <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
+    </table>
+  </div>
+
+  <div class="export-button-container" *ngIf="gotPaymentHistory">
+    <div (click)="downloadPaymentTable('payment-table')" class="export-button smooth-rectangle" mat-raised-button>
+      <div *ngIf="!isDownloadingPaymentHistory" class="button-content">{{ 'Team.exportToPdf' | translate }}</div>
+      <seventask-spinner *ngIf="isDownloadingPaymentHistory" [loadingType]="1" [color]="'white'" class="button-content"></seventask-spinner>
+    </div>
+  </div>
+
+  <div class="loading-spinner" *ngIf="!gotPaymentHistory">
+    <seventask-spinner [loadingType]="1"></seventask-spinner>
+  </div>
+</div>

@@ -1,0 +1,88 @@
+<div class="list-container d-flex flex-column" [style.height]="height + 'px'">
+  <div class="p-2 page-info">
+    <div class="page-info-logo">
+      <span style="font-size: 25px" class="seventask-icon-pages-my-calender"></span>
+    </div>
+    <div class="page-info-title">
+      {{'Calendar.myCalendar' | translate}}
+    </div>
+    <div class="page-number-title">
+      <span style="color: #1EC1C3">{{eventsNumber | numToArabic}}</span>
+      <span> {{'Calendar.tasksAndEvents' | translate}}</span>
+    </div>
+  </div>
+
+  <div *ngIf="!showTeamsAndProjectsLoading"
+       class="all-item-list-container p-2 d-flex flex-column">
+      <div *ngIf="googleCalendars.length > 0" style="margin-top: 20px" class="items-list p-2 d-flex flex-column">
+      <div class="item-title d-flex flex-row p-2 justify-content-around align-items-center" style="margin-inline-start: -10px;">
+        <div class="expand-button-container">
+              <div class="expand-button"
+              *ngIf="googleCalendars.length > 0"
+              (click)="showGoogleCalendars=!showGoogleCalendars">
+                <span class="seventask-icon-calendar-back expand-icon"
+                [style]="'transform: rotate(' + (showGoogleCalendars ? 90 : 270) + 'deg);'"></span>
+              </div>
+        </div>
+        <div class="project-name">
+          <div class="text item-title">{{'Calendar.googleCalendars'| translate}}</div>
+        </div>
+      </div>
+      <div *ngIf="showGoogleCalendars">
+        <div class="tasks-container" *ngFor="let googleCalendar of googleCalendars; let index = index" [@listAnimation]>
+          <div class="d-flex" style="align-items: center;">
+            <mat-checkbox style="margin-top: 10px;" color="primary"
+             [checked]="showGoogleCalendarMapper[googleCalendar.id]" (change)="matCheckBoxEvent($event.checked, googleCalendar.id)"></mat-checkbox>
+            <div style="margin: 0 10px;" class="google-calendar-name"
+                  [style.color]="googleCalendarsColorPalette[index%5]">{{googleCalendar.title}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="p-2 all-items d-flex flex-row item-name-hover"
+         [ngClass]="activeTab == 'all' ? 'active-tab' : 'tab'" (click)="activeTab = 'all'">
+      <div class="p-2">{{'Calendar.allTasksAndEvents' | translate}}</div>
+      <div class="selected-pointer" style="margin-inline-start: auto" *ngIf="activeTab == 'all'"
+           [style.border-radius]="direction == 'ltr' ? '10px 0px 0px 10px' : '0px 10px 10px 0px'"></div>
+    </div>
+
+    <div class="items-list p-2 d-flex flex-column">
+      <div class="item-title d-flex flex-row p-2 item-name-hover" (click)="changeViewer('personal')"
+           [ngClass]="activeTab == 'personal' ? 'active-tab' : 'tab'">
+        <div style="overflow-y: hidden;" class="p-2 text">{{ 'Project.personalProjectTitle' | translate}}</div>
+        <div style="overflow-y: hidden;" class="selected-pointer" style="margin-inline-start: auto"
+             *ngIf="activeTab == 'personal'"
+             [style.border-radius]="direction == 'ltr' ? '10px 0px 0px 10px' : '0px 10px 10px 0px'"></div>
+      </div>
+      <div *ngFor="let project of activeProjects">
+        <div class="item-name" *ngIf="project.teamId == null" (click)="changeViewer('personal')">
+          <div class="item-name-hover text">
+            {{project.name}}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="items-list p-2 d-flex flex-column" *ngFor="let team of teams">
+      <div class="item-title d-flex flex-row p-2 item-name-hover" (click)="changeViewer(team.id.toString())"
+           [ngClass]="activeTab == team.id.toString() ? 'active-tab' : 'tab'">
+        <div class="p-2 text">{{team.name}}</div>
+        <div class="selected-pointer" style="margin-inline-start: auto" *ngIf="activeTab == team.id.toString()"
+             [style.border-radius]="direction == 'ltr' ? '10px 0px 0px 10px' : '0px 10px 10px 0px'"></div>
+      </div>
+      <div *ngFor="let project of activeProjects">
+        <div class="item-name" *ngIf="team.id == project.teamId">
+          <div class="item-name-hover text">
+            {{project.name}}
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div *ngIf="showTeamsAndProjectsLoading" class="loading-container">
+    <seventask-spinner [loadingType]="1"></seventask-spinner>
+    <!--    <div style="margin-top: 10px;color: #2E4A77;">{{'Project.loadingLeftNavBarOfProjects' | translate}}</div>-->
+  </div>
+</div>

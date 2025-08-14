@@ -1,0 +1,539 @@
+<div class="project-container" style="margin-bottom: 50px;">
+
+  <div class="member">
+
+    <div class="section-title">
+      {{ 'Project.members' | translate}}
+    </div>
+
+    <div class="members-container d-flex align-items-center justify-content-between" >
+      <div class="d-flex flex-row members-list justify-content-start" style="padding-inline-start: 30px!important;height:110px; padding-top: 10px;">
+        <div class="" *ngFor="let member of members" style="margin-inline-end: 50px;"
+             (mouseleave)="removeUser = 'false'" (mouseenter)="removeUser = member.userId">
+          <div class="row justify-content-center" style="position: relative">
+            <div style="position: absolute;" *ngIf="member.userId != null">
+              <div class="rounded-circle remove_user" style="position: absolute;"
+                   *ngIf="removeUser == member.userId && project?.teamId == null && removeUser != myUserGUID && project?.createdBy.userId === myUserGUID" (click)="openDeleteDialog(member)">
+                <img style="width: 8px" src="../../../../assets/icons/Project/Remove-Member-white.svg">
+              </div>
+              <div class="rounded-circle user_img">
+<!--                <img *ngIf="member.profileImageGuid == null" style="width: 20px" src="../../../../assets/icons/Project/User.svg">-->
+                <span
+                  class="rounded-circle seventask-icon-task-header-assignee d-flex align-items-center justify-content-center"
+                  style="width: 20px;"
+                  *ngIf="member.profileImageGuid == null" ></span>
+                <img *ngIf="member.profileImageGuid != null"
+                     [src]="domainName + '/en-US/File/get?id=' + member.profileImageGuid + '&quality=100'"
+                     class="rounded-circle " style="overflow: hidden; width: 48px;height: 48px" >
+              </div>
+            </div>
+          </div>
+          <div class="row justify-content-center" style="margin-top: 54px; max-width: 80px;">
+            <div class="add-member-title" style="overflow: hidden;text-overflow: ellipsis;">{{member.nickName}}</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-inline-start: auto; align-content: center; width: 150px; cursor: pointer;"
+           class="container no-gutters" *ngIf="project?.teamId == null && myUserGUID == project?.createdBy.userId"
+           (click)="openAddMember()">
+        <div class="row justify-content-center">
+          <div class="col-md-auto">
+            <div class="rounded-circle add-member-circle d-flex align-items-center">
+              <span class="seventask-icon-add-AddMember" style="font-size: 20px" ></span>
+            </div>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="seventask-theme-color p-2 add-member-title" >{{ 'Project.addMember' | translate}}</div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="activity-log">
+    <div class="section-title">
+      {{ 'Project.activityLog' | translate}}
+    </div>
+
+    <div class="activity-log-body">
+
+      <div class="d-flex flex-column">
+
+        <div class="p-2 activity" *ngFor="let projectHistory of projectHistoryArray">
+          <div class="p-2 activity-information d-flex flex-row">
+            <div class="p-2 activity-user-profile">
+              <div class="rounded-circle user_img">
+<!--                <img style="width: 20px" src="assets/icons/Project/User.svg">-->
+                <span
+                  class="rounded-circle seventask-icon-task-header-assignee d-flex align-items-center justify-content-center"
+                  style="width: 20px;"
+                  *ngIf="SliceImgString(projectHistory.parameters) == null" ></span>
+                <img class="rounded-circle"
+                  style=" width: 48px;height: 48px;"
+                  *ngIf="SliceImgString(projectHistory.parameters)"
+                  [src]="SliceImgString(projectHistory.parameters)"/>
+              </div>
+            </div>
+            <div class=" d-flex flex-column">
+              <div class=" activity-description">
+<!--                {{projectHistory.message}}-->
+                <span [innerHTML]="projectHistory.message | safeHtmlPipe"></span>
+              </div>
+              <div class="p-2 activity-time"><span></span>
+                {{ projectHistory.time }}
+              </div>
+              <!--            <div class="p-2">Extra</div>-->
+            </div>
+          </div>
+        </div>
+
+<!--        <div class="p-2 activity">-->
+<!--          <div class="p-2 activity-information d-flex flex-row">-->
+<!--            <div class="p-2 activity-user-profile">-->
+<!--              <div class="rounded-circle user_img">-->
+<!--                <img src="assets/icons/Project/User.svg">-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="p-2 d-flex flex-column">-->
+<!--              <div class="p-2 activity-description">-->
+<!--                <span class="activity-username">Siroos Jahangiri</span> commented on <span class="activity-task-name">Search Design</span>-->
+<!--                task :-->
+<!--              </div>-->
+<!--              <div class="p-2 activity-time"><span></span>22:12 PM</div>-->
+
+<!--              <div class="p-2 ">-->
+<!--                <div class="activity-task-comment-body">-->
+<!--                  <div class="activity-task-comment-text">-->
+<!--                    I dont know what to write here , but I feel very bad that my last name is Jahangiri ,-->
+<!--                    reminds me of someone with some ruining actions in the past and ofcourse in future. may the god-->
+<!--                    bless our path.-->
+<!--                  </div>-->
+<!--                  <input class="activity-add-replay" placeholder="Add Replay">-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--        <div class="p-2 activity">-->
+<!--          <div class="p-2 activity-information d-flex flex-row">-->
+<!--            <div class="p-2 activity-user-profile">-->
+<!--              <div class="rounded-circle user_img">-->
+<!--                <img src="assets/icons/Project/User.svg">-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="p-2 d-flex flex-column">-->
+<!--              <div class="p-2 activity-description">-->
+<!--                <span class="activity-username">Rosegoal</span> uploaded 3 files on <span class="activity-task-name">Search Design</span>-->
+<!--                task :-->
+<!--              </div>-->
+<!--              <div class="p-2 activity-time"><span>Yesterday  -  </span>22:12 PM</div>-->
+
+<!--              <div class="p-2 d-flex align-items-center">-->
+<!--                <div class="activity-file">-->
+<!--                  <div class="d-flex flex-row">-->
+<!--                    <div class="p-2">-->
+<!--                      <div class="rounded-circle file-logo">-->
+<!--                        <img src="assets/icons/PDF.svg">-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                    <div class="file-info p-2 d-flex flex-column">-->
+<!--                      <div class="p-2 file-name">Final_Researh.pdf</div>-->
+<!--                      <div class="p-2 file-size">2.48 MB</div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--                <div class="activity-file">-->
+<!--                  <div class="d-flex flex-row">-->
+<!--                    <div class="p-2">-->
+<!--                      <div class="rounded-circle file-logo">-->
+<!--                        <img src="assets/icons/ImageFileIcon.svg">-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                    <div class="file-info p-2 d-flex flex-column">-->
+<!--                      <div class="p-2 file-name">Task-Inspiration.png</div>-->
+<!--                      <div class="p-2 file-size">1.52 MB</div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--                <div class="activity-file">-->
+<!--                  <div class="d-flex flex-row">-->
+<!--                    <div class="p-2">-->
+<!--                      <div class="rounded-circle file-logo">-->
+<!--                        <img src="assets/icons/PDF.svg">-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                    <div class="file-info p-2 d-flex flex-column">-->
+<!--                      <div class="p-2 file-name">NovemberArch.pdf</div>-->
+<!--                      <div class="p-2 file-size">18.41 MB</div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--        <div class="p-2 activity">-->
+<!--          <div class="p-2 activity-information d-flex flex-row">-->
+<!--            <div class="p-2 activity-user-profile">-->
+<!--              <div class="rounded-circle user_img">-->
+<!--                <img src="assets/icons/Project/User.svg">-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="p-2 d-flex flex-column">-->
+<!--              <div class="p-2 activity-description">-->
+<!--                <span class="activity-username">Tooraj Khan</span> created <span class="activity-task-name">Search Design</span>-->
+<!--                and assigned to-->
+<!--                <span class="activity-username">Rosegoal</span> and <span-->
+<!--                class="activity-username">Siroos Jahangiri</span>.-->
+<!--              </div>-->
+<!--              <div class="p-2 activity-time"><span></span>22:12 PM</div>-->
+<!--              &lt;!&ndash;            <div class="p-2">Extra</div>&ndash;&gt;-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--        <div class="p-2 align-items-end view-all-activity ">-->
+<!--          View All Activities-->
+<!--        </div>-->
+      </div>
+
+    </div>
+
+  </div>
+
+<!--  <div class="tasks">-->
+
+<!--    <div class="section-title">-->
+<!--      Tasks-->
+<!--    </div>-->
+
+<!--    <div class="tasks-body">-->
+
+<!--      <div class="d-flex flex-column">-->
+
+<!--        <div class="task d-flex flex-column">-->
+
+<!--          <div style="padding: 20px">-->
+<!--            <div class="p-2 d-flex">-->
+
+<!--              <div class="mr-auto p-2 task-title">Design Landing Page</div>-->
+
+<!--              <div class="ml-auto p-2 d-flex flex-row align-items-center">-->
+<!--                <div class="p-2 task-status">-->
+<!--                  <div class="label-high">-->
+<!--                    <img style="margin-right: 5px" src="assets/icons/Project/label-high.svg">-->
+<!--                    High-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--                &lt;!&ndash;              <div class="p-2 task-status">&ndash;&gt;-->
+<!--                &lt;!&ndash;                <div class="label-medium">&ndash;&gt;-->
+<!--                &lt;!&ndash;                  <img style="margin-right: 5px" src="assets/icons/Project/label-medium.svg">&ndash;&gt;-->
+<!--                &lt;!&ndash;                  Medium&ndash;&gt;-->
+<!--                &lt;!&ndash;                </div>&ndash;&gt;-->
+<!--                &lt;!&ndash;              </div>&ndash;&gt;-->
+<!--                &lt;!&ndash;              <div class="p-2 task-status">&ndash;&gt;-->
+<!--                &lt;!&ndash;                <div class="label-low">&ndash;&gt;-->
+<!--                &lt;!&ndash;                  <img style="margin-right: 5px" src="assets/icons/Project/label-low.svg">&ndash;&gt;-->
+<!--                &lt;!&ndash;                  Low&ndash;&gt;-->
+<!--                &lt;!&ndash;                </div>&ndash;&gt;-->
+<!--                &lt;!&ndash;              </div>&ndash;&gt;-->
+<!--                <div class="p-2 task-status">-->
+<!--                  <div class="in-progress">-->
+<!--                    <img style="margin-right: 5px" src="assets/icons/Project/InProgress.svg">-->
+<!--                    In Progress-->
+<!--                  </div>-->
+<!--                </div>-->
+
+<!--                <div class="p-2 task-status">-->
+<!--                  <span class="task-member-logo" style="background-color: #1EC1C3">A</span>-->
+<!--                  <sapn class="task-member-logo" style="background-color: #F86F8C">B</sapn>-->
+<!--                  <span class="task-member-logo" style="background-color: #306BDD">C</span>-->
+<!--                </div>-->
+
+<!--                <div class="p-2 task-status">-->
+<!--                  <div class="task-time">-->
+<!--                    Today-->
+<!--                  </div>-->
+<!--                </div>-->
+
+<!--              </div>-->
+
+<!--            </div>-->
+<!--            <div class="p-2 task-icon-list d-flex flex-row">-->
+<!--              <div class=" d-flex flex-row">-->
+<!--                <div class="p-2 task-icon">-->
+<!--                  <img src="../../../../assets/icons/Task/Disable/team.svg">-->
+<!--                  <span class="task-icon-title">Google Gostar</span>-->
+<!--                </div>-->
+<!--                <div class="p-2 task-icon">-->
+<!--                  <img src="../../../../assets/icons/Task/Enable/project.svg">-->
+<!--                  <span class="task-icon-title">Seven task</span>-->
+<!--                </div>-->
+<!--                <div class="p-2 task-icon">-->
+<!--                  <img src="../../../../assets/icons/Task/Disable/list.svg">-->
+<!--                  <span class="task-icon-title">Website Presentation</span>-->
+<!--                </div>-->
+<!--                <div class="p-2 task-icon">-->
+<!--                  <img src="../../../../assets/icons/Task/Disable/calender.svg">-->
+<!--                  <span class="task-icon-title">Seven task</span>-->
+<!--                </div>-->
+<!--                <div class="p-2 task-icon">-->
+<!--                  <img src="../../../../assets/icons/Task/Disable/timeTrack.svg">-->
+<!--                </div>-->
+<!--                <div class="p-2 task-icon">-->
+<!--                  <img src="../../../../assets/icons/Task/Disable/reminder.svg">-->
+<!--                </div>-->
+<!--                <div class="p-2 task-icon">-->
+<!--                  <img src="../../../../assets/icons/Task/Disable/grid.svg">-->
+<!--                </div>-->
+<!--                <div class="p-2 task-icon">-->
+<!--                  <img src="../../../../assets/icons/Task/Disable/progressbar.svg">-->
+<!--                </div>-->
+<!--                <div class="p-2 task-icon">-->
+<!--                  <img src="../../../../assets/icons/Task/Enable/checkList.svg">-->
+<!--                </div>-->
+<!--              </div>-->
+<!--              <div class="p-2 ml-auto  d-flex flex-row">-->
+<!--                <div class="task-mood-circle p-2"-->
+<!--                     style="background-color: #1EC1C3;box-shadow: 0 0 0 3px rgba(30, 193, 195, 0.3);"></div>-->
+<!--                <div class="task-mood-circle p-2"-->
+<!--                     style="background-color: #F86F8C;box-shadow: 0 0 0 3px rgba(248, 111, 140, 0.3);"></div>-->
+<!--                <div class="task-mood-circle p-2"-->
+<!--                     style="background-color: #EBAA45;box-shadow: 0 0 0 3px rgba(235, 170, 69, 0.3);"></div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--        <div class="task d-flex flex-column">-->
+
+<!--          <div style="padding: 20px">-->
+<!--            <div class="p-2 d-flex">-->
+
+<!--              <div class="mr-auto p-2 task-title">Design Landing Page</div>-->
+
+<!--              <div class="ml-auto p-2 d-flex flex-row align-items-center">-->
+<!--                &lt;!&ndash;              <div class="p-2 task-status">&ndash;&gt;-->
+<!--                &lt;!&ndash;                <div class="label-high">&ndash;&gt;-->
+<!--                &lt;!&ndash;                  <img style="margin-right: 5px" src="assets/icons/Project/label-high.svg">&ndash;&gt;-->
+<!--                &lt;!&ndash;                  High&ndash;&gt;-->
+<!--                &lt;!&ndash;                </div>&ndash;&gt;-->
+<!--                &lt;!&ndash;              </div>&ndash;&gt;-->
+<!--                &lt;!&ndash;              <div class="p-2 task-status">&ndash;&gt;-->
+<!--                &lt;!&ndash;                <div class="label-medium">&ndash;&gt;-->
+<!--                &lt;!&ndash;                  <img style="margin-right: 5px" src="assets/icons/Project/label-medium.svg">&ndash;&gt;-->
+<!--                &lt;!&ndash;                  Medium&ndash;&gt;-->
+<!--                &lt;!&ndash;                </div>&ndash;&gt;-->
+<!--                &lt;!&ndash;              </div>&ndash;&gt;-->
+<!--                <div class="p-2 task-status">-->
+<!--                  <div class="label-low">-->
+<!--                    <img style="margin-right: 5px" src="assets/icons/Project/label-low.svg">-->
+<!--                    Low-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--                <div class="p-2 task-status">-->
+<!--                  <div class="in-progress">-->
+<!--                    <img style="margin-right: 5px" src="assets/icons/Project/InProgress.svg">-->
+<!--                    In Progress-->
+<!--                  </div>-->
+<!--                </div>-->
+
+<!--                <div class="p-2 task-status">-->
+<!--                  <span class="task-member-logo" style="background-color: #1EC1C3">A</span>-->
+<!--                  <sapn class="task-member-logo" style="background-color: #F86F8C">B</sapn>-->
+<!--                  <span class="task-member-logo" style="background-color: #306BDD">C</span>-->
+<!--                </div>-->
+
+<!--                <div class="p-2 task-status">-->
+<!--                  <div class="task-time">-->
+<!--                    Today-->
+<!--                  </div>-->
+<!--                </div>-->
+
+<!--              </div>-->
+
+<!--            </div>-->
+<!--            <div class="p-2 task-icon-list d-flex flex-row">-->
+<!--              <div class="d-flex flex-row" style="opacity: 0.5">-->
+<!--                <div class="p-2 task-icon">-->
+<!--                  <img src="../../../../assets/icons/Task/Disable/team.svg">-->
+<!--                  &lt;!&ndash;              <span class="task-icon-title">Google Gostar</span>&ndash;&gt;-->
+<!--                </div>-->
+<!--                <div class="p-2 task-icon">-->
+<!--                  <img src="../../../../assets/icons/Task/Enable/project.svg">-->
+<!--                  &lt;!&ndash;              <span class="task-icon-title">Seven task</span>&ndash;&gt;-->
+<!--                </div>-->
+<!--                <div class="p-2 task-icon">-->
+<!--                  <img src="../../../../assets/icons/Task/Disable/list.svg">-->
+<!--                  &lt;!&ndash;              <span class="task-icon-title">Website Presentation</span>&ndash;&gt;-->
+<!--                </div>-->
+<!--                <div class="p-2 task-icon">-->
+<!--                  <img src="../../../../assets/icons/Task/Disable/calender.svg">-->
+<!--                  &lt;!&ndash;              <span class="task-icon-title">Seven task</span>&ndash;&gt;-->
+<!--                </div>-->
+<!--                <div class="p-2 task-icon">-->
+<!--                  <img src="../../../../assets/icons/Task/Disable/timeTrack.svg">-->
+<!--                </div>-->
+<!--                <div class="p-2 task-icon">-->
+<!--                  <img src="../../../../assets/icons/Task/Disable/reminder.svg">-->
+<!--                </div>-->
+<!--                <div class="p-2 task-icon">-->
+<!--                  <img src="../../../../assets/icons/Task/Disable/grid.svg">-->
+<!--                </div>-->
+<!--                <div class="p-2 task-icon">-->
+<!--                  <img src="../../../../assets/icons/Task/Disable/progressbar.svg">-->
+<!--                </div>-->
+<!--                <div class="p-2 task-icon">-->
+<!--                  <img src="../../../../assets/icons/Task/Enable/checkList.svg">-->
+<!--                </div>-->
+<!--              </div>-->
+<!--              <div class="p-2 ml-auto  d-flex flex-row">-->
+<!--                <div class="task-mood-circle p-2"-->
+<!--                     style="background-color: #1EC1C3;box-shadow: 0 0 0 3px rgba(30, 193, 195, 0.3);"></div>-->
+<!--                <div class="task-mood-circle p-2"-->
+<!--                     style="background-color: #F86F8C;box-shadow: 0 0 0 3px rgba(248, 111, 140, 0.3);"></div>-->
+<!--                &lt;!&ndash;              <div class="task-mood-circle p-2" style="background-color: #EBAA45;box-shadow: 0 0 0 3px rgba(235, 170, 69, 0.3);"></div>&ndash;&gt;-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+
+<!--          <div class="p-2 time-tracking-body d-flex flex-row align-items-center">-->
+
+<!--            <div class="p-2 mr-auto d-flex flex-row ">-->
+<!--              <div class="task-time-tracking d-flex align-items-center p-2">-->
+<!--                <img src="assets/icons/Project/play.svg" style="margin-right: 7.5px">-->
+<!--                <span> Start Time Tracking </span>-->
+<!--              </div>-->
+
+<!--              <div class="mark-as-done d-flex align-items-center p-2">-->
+<!--                <img src="assets/icons/Project/check.svg" style="margin-right: 7.5px">-->
+<!--                <span> Mark As Done </span>-->
+<!--              </div>-->
+<!--              <div class="task-following d-flex align-items-center p-2">-->
+<!--                <img src="assets/icons/Project/eye.svg" style="margin-right: 7.5px">-->
+<!--                <span> Following </span>-->
+<!--              </div>-->
+<!--            </div>-->
+
+<!--            <div class="p-2 ml-auto d-flex flex-row">-->
+<!--              <div class="p-2 d-flex flex-row">-->
+<!--                <div class="trash d-flex align-items-center p-2">-->
+<!--                  <img src="assets/icons/Project/trash.svg" style="margin-right: 7.5px">-->
+<!--                  <span> Delete Task </span>-->
+<!--                </div>-->
+<!--                <div class="more d-flex align-items-center p-2">-->
+<!--                  <img src="assets/icons/Project/threeDots.svg" style="margin-right: 7.5px">-->
+<!--                </div>-->
+<!--              </div>-->
+
+<!--            </div>-->
+<!--          </div>-->
+
+<!--          <div class="task d-flex flex-column">-->
+
+<!--            <div style="padding: 20px">-->
+<!--              <div class="p-2 d-flex">-->
+
+<!--                <div class="mr-auto p-2 task-title">Post About Progression on Instagram</div>-->
+
+<!--                <div class="ml-auto p-2 d-flex flex-row align-items-center">-->
+<!--                  &lt;!&ndash;              <div class="p-2 task-status">&ndash;&gt;-->
+<!--                  &lt;!&ndash;                <div class="label-high">&ndash;&gt;-->
+<!--                  &lt;!&ndash;                  <img style="margin-right: 5px" src="assets/icons/Project/label-high.svg">&ndash;&gt;-->
+<!--                  &lt;!&ndash;                  High&ndash;&gt;-->
+<!--                  &lt;!&ndash;                </div>&ndash;&gt;-->
+<!--                  &lt;!&ndash;              </div>&ndash;&gt;-->
+<!--                  &lt;!&ndash;              <div class="p-2 task-status">&ndash;&gt;-->
+<!--                  &lt;!&ndash;                <div class="label-medium">&ndash;&gt;-->
+<!--                  &lt;!&ndash;                  <img style="margin-right: 5px" src="assets/icons/Project/label-medium.svg">&ndash;&gt;-->
+<!--                  &lt;!&ndash;                  Medium&ndash;&gt;-->
+<!--                  &lt;!&ndash;                </div>&ndash;&gt;-->
+<!--                  &lt;!&ndash;              </div>&ndash;&gt;-->
+<!--                  &lt;!&ndash;              <div class="p-2 task-status">&ndash;&gt;-->
+<!--                  &lt;!&ndash;                <div class="label-low">&ndash;&gt;-->
+<!--                  &lt;!&ndash;                  <img style="margin-right: 5px" src="assets/icons/Project/label-low.svg">&ndash;&gt;-->
+<!--                  &lt;!&ndash;                  Low&ndash;&gt;-->
+<!--                  &lt;!&ndash;                </div>&ndash;&gt;-->
+<!--                  &lt;!&ndash;              </div>&ndash;&gt;-->
+<!--                  &lt;!&ndash;              <div class="p-2 task-status">&ndash;&gt;-->
+<!--                  &lt;!&ndash;                <div class="in-progress">&ndash;&gt;-->
+<!--                  &lt;!&ndash;                  <img style="margin-right: 5px" src="assets/icons/Project/InProgress.svg">&ndash;&gt;-->
+<!--                  &lt;!&ndash;                  In Progress&ndash;&gt;-->
+<!--                  &lt;!&ndash;                </div>&ndash;&gt;-->
+<!--                  &lt;!&ndash;              </div>&ndash;&gt;-->
+
+<!--                  <div class="p-2 task-status">-->
+<!--                    &lt;!&ndash;                <span class="task-member-logo" style="background-color: #1EC1C3">A</span>&ndash;&gt;-->
+<!--                    <sapn class="task-member-logo" style="background-color: #F86F8C">B</sapn>-->
+<!--                    <span class="task-member-logo" style="background-color: #306BDD">C</span>-->
+<!--                  </div>-->
+
+<!--                  <div class="p-2 task-status">-->
+<!--                    <div class="task-time">-->
+<!--                      Within 3 days-->
+<!--                    </div>-->
+<!--                  </div>-->
+
+<!--                </div>-->
+
+<!--              </div>-->
+<!--              <div class="p-2 task-icon-list d-flex flex-row">-->
+<!--                <div class=" d-flex flex-row">-->
+<!--                  <div class="p-2 task-icon">-->
+<!--                    <img src="../../../../assets/icons/Task/Disable/team.svg">-->
+<!--                    <span class="task-icon-title">Google Gostar</span>-->
+<!--                  </div>-->
+<!--                  <div class="p-2 task-icon">-->
+<!--                    <img src="../../../../assets/icons/Task/Enable/project.svg">-->
+<!--                    <span class="task-icon-title">Seven task</span>-->
+<!--                  </div>-->
+<!--                  <div class="p-2 task-icon">-->
+<!--                    <img src="../../../../assets/icons/Task/Disable/list.svg">-->
+<!--                    <span class="task-icon-title">Website Presentation</span>-->
+<!--                  </div>-->
+<!--                  <div class="p-2 task-icon">-->
+<!--                    <img src="../../../../assets/icons/Task/Disable/calender.svg">-->
+<!--                    <span class="task-icon-title">Seven task</span>-->
+<!--                  </div>-->
+<!--                  <div class="p-2 task-icon">-->
+<!--                    <img src="../../../../assets/icons/Task/Disable/timeTrack.svg" style="fill: #4278DF !important;">-->
+<!--                  </div>-->
+<!--                  <div class="p-2 task-icon">-->
+<!--                    <img src="../../../../assets/icons/Task/Disable/reminder.svg">-->
+<!--                  </div>-->
+<!--                  <div class="p-2 task-icon">-->
+<!--                    <img src="../../../../assets/icons/Task/Disable/grid.svg">-->
+<!--                  </div>-->
+<!--                  <div class="p-2 task-icon">-->
+<!--                    <img src="../../../../assets/icons/Task/Disable/progressbar.svg">-->
+<!--                  </div>-->
+<!--                  <div class="p-2 task-icon">-->
+<!--                    <img src="../../../../assets/icons/Task/Enable/checkList.svg">-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--                <div class="p-2 ml-auto  d-flex flex-row">-->
+<!--                  &lt;!&ndash;              <div class="task-mood-circle p-2" style="background-color: #1EC1C3;box-shadow: 0 0 0 3px rgba(30, 193, 195, 0.3);"></div>&ndash;&gt;-->
+<!--                  &lt;!&ndash;              <div class="task-mood-circle p-2" style="background-color: #F86F8C;box-shadow: 0 0 0 3px rgba(248, 111, 140, 0.3);"></div>&ndash;&gt;-->
+<!--                  &lt;!&ndash;              <div class="task-mood-circle p-2" style="background-color: #EBAA45;box-shadow: 0 0 0 3px rgba(235, 170, 69, 0.3);"></div>&ndash;&gt;-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+
+<!--          </div>-->
+
+<!--        </div>-->
+<!--        <div class="view-all-task" style="margin-top: 20px">-->
+<!--          View All Tasks-->
+<!--        </div>-->
+<!--      </div>-->
+
+<!--    </div>-->
+
+
+<!--  </div>-->

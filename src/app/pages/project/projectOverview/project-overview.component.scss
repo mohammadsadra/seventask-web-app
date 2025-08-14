@@ -1,0 +1,503 @@
+@import "variables";
+.project-container {
+  padding: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.section-title {
+  /* Members */
+  height: 25px;
+
+  font-style: normal;
+  font-weight: 300;
+  font-size: 18px;
+  line-height: 25px;
+  margin-bottom: 12px;
+  text-align: start;
+  /* Color 3 */
+  color: #A7AFBD;
+  opacity: 0.5;
+}
+
+.tasks,
+.activity-log,
+.member {
+  margin-bottom: 40px;
+  width: 85%;
+}
+
+.members-container {
+  /* Rectangle 48 */
+  height: 118px;
+  background: #FFFFFF;
+  /* Task Stroke */
+  border: 1px solid #F0F4F4;
+  box-sizing: border-box;
+  border-radius: 10px;
+}
+
+.add-member-title {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 15px;
+  text-align: center;
+  color: rgba(46, 74, 119, 1);
+}
+
+.add-member-circle {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-content: center;
+  vertical-align: center;
+  background: $theme-color-opacity-10;
+  border: 1px dashed $theme-color;
+  box-sizing: border-box;
+}
+
+.members-list {
+  overflow-x: auto;
+}
+.p-2{
+  padding: 5px!important;
+}
+
+.img_cont {
+  //position: relative;
+}
+
+.user_img {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-content: center;
+  vertical-align: center;
+  color: $theme-color;
+  background: #F8FBFD;
+}
+
+.file-logo {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-content: center;
+  vertical-align: center;
+  background: white;
+}
+
+//////////////////////////// ACTIVITY LOG
+.activity {
+  border-bottom: 1px solid #F3F6FA;
+  padding: 30px !important;
+}
+
+.activity .p-2 {
+  padding: 0 !important;
+}
+
+.activity-log-body {
+
+  min-height: 100px;
+  max-height: 663px;
+  overflow-y: auto;
+
+  /* Task Background */
+
+  background: #FFFFFF;
+  /* Task Stroke */
+
+  border: 1px solid #F0F4F4;
+  box-sizing: border-box;
+  border-radius: 10px;
+}
+
+.activity-user-profile {
+  margin-inline-end: 10px;
+}
+
+.activity-description {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 15px;
+  color: #2E4A77;
+}
+
+.activity-time {
+  font-style: normal;
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 16px;
+  margin-top: 10px;
+  text-align: start;
+  color: #A7AFBD;
+}
+
+.activity-username {
+  font-weight: 500;
+}
+
+.activity-task-name {
+  font-weight: 500;
+}
+
+.activity-file {
+
+  width: 200px;
+  height: 56px;
+  /* Theme Color */
+  background: rgba(66, 120, 223, 0.05);
+  border-radius: 10px;
+  padding: 10px;
+  margin: 0 10px 0 10px;
+
+}
+
+.file-info .p-2 {
+  padding: 0 !important;
+}
+
+.file-info {
+  //margin-left: 10px;
+  margin-inline-start: 10px;
+}
+
+.file-name {
+  /* Final_Researh.pdf */
+  height: 18px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 15px;
+  color: #2E4A77;
+  opacity: 0.7;
+}
+
+.file-size {
+  height: 16px;
+
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 14px;
+  color: #A7AFBD;
+}
+
+.view-all-task,
+.view-all-activity {
+  /* View All Activities */
+  height: 19px;
+
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+  text-align: center;
+
+  /* Theme Color */
+  color: $theme-color;
+}
+
+.activity-task-comment-body {
+  width: 670px;
+  min-height: 114px;
+
+  /* Theme Color */
+  background-color: rgba(66, 120, 223, 0.05);
+  border-radius: 10px;
+}
+
+.activity-task-comment-text {
+  //min-width: 630px;
+  //height: 40px;
+  padding: 15px 20px 15px 20px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 18px;
+
+  /* Color one */
+  color: #2E4A77;
+  opacity: 0.7;
+}
+
+.activity-add-replay {
+  width: 630px;
+  height: 34px;
+  margin: 0 20px 15px 20px;
+  padding: 1px 5px 1px 5px;
+  /* White */
+
+  background: #FFFFFF;
+  /* Task Stroke */
+  border: 1px solid #F0F4F4;
+  border-radius: 10px;
+}
+
+.tasks-body {
+  width: 820px;
+  min-height: 484px;
+
+  /* Task Background */
+
+  background: #FFFFFF;
+  /* Task Stroke */
+
+  border: 1px solid #F0F4F4;
+  box-sizing: border-box;
+  border-radius: 10px;
+}
+
+.tasks-body .p-2 {
+  padding: 0 !important;
+}
+
+.task {
+  //padding: 20px;
+  border-bottom: 1px solid #F3F6FA;
+}
+
+.task-title {
+  height: 22px;
+
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19px;
+  text-align: start;
+  /* Color one */
+
+  color: #2E4A77;
+}
+
+.in-progress {
+  padding: 6px !important;
+  width: 103px;
+  height: 28px;
+
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 14px;
+  color: $theme-color;
+
+  background-color: $theme-color-opacity-10;
+  border-radius: 5px;
+}
+
+.label-high {
+  padding: 6px !important;
+  background-color: rgba(255, 0, 0, 0.1);
+  color: #F86F8C;
+  height: 28px;
+  border-radius: 5px;
+  font-weight: 900;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.label-medium {
+  padding: 6px;
+  background-color: rgba(255, 165, 0, 0.1);
+  color: orange;
+  height: 28px;
+  border-radius: 5px;
+  font-weight: 900;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.label-low {
+  padding: 6px;
+  background-color: rgba(30, 193, 195, 0.1);
+  color: #1ec1c3;
+  height: 28px;
+  border-radius: 5px;
+  font-weight: 900;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.task-icon-list {
+  margin-top: 20px;
+}
+
+.task-icon {
+  margin-inline-end: 18px;
+}
+
+.task-icon-title {
+  height: 16px;
+
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 14px;
+  //margin-left: 9px;
+  margin-inline-start: 9px;
+
+  /* Color 3 */
+  color: #A7AFBD;
+
+}
+
+.task-member-logo {
+
+  width: 28px;
+  height: 28px;
+  display: inline-block;
+
+  /* White */
+  border: 2px solid #FFFFFF;
+  border-radius: 50%;
+  box-sizing: border-box;
+  text-align: center;
+  justify-content: center;
+
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 17px;
+  color: #FFFFFF;
+  //margin-left: -10px;
+  margin-inline-start: -10px;
+  padding-top: 4px;
+}
+
+.task-time {
+
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 16px;
+
+  color: #2E4A77;
+  opacity: 0.3;
+
+}
+
+.task-status {
+  margin: 0 10px 0 10px;
+}
+
+.task-mood-circle {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin: 0 5px 0 5px;
+}
+
+.task-icon .p-2 {
+  padding: 0 !important;
+}
+
+.time-tracking-body {
+  /* Rectangle 22 */
+
+  width: 818px;
+  height: 60px;
+
+  /* Theme Color */
+  background: $theme-color;
+  /* task shadow */
+  box-shadow: 0px 30px 15px -18px rgba(66, 120, 223, 0.25);
+  border-radius: 0px;
+  margin-bottom: 20px;
+  padding: 15px 0 15px 0;
+
+}
+
+.task-time-tracking {
+  width: 150px;
+  height: 30px;
+
+  background: #FFFFFF;
+  border: 1.5px solid #FFFFFF;
+  box-sizing: border-box;
+  border-radius: 10px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 14px;
+  justify-content: center;
+  //margin-left: 20px;
+  margin-inline-start: 20px;
+  color: $theme-color;
+
+}
+
+.mark-as-done {
+  width: 120px;
+  height: 30px;
+  //margin-left: 20px;
+  margin-inline-start: 20px;
+
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 14px;
+  color: #FFFFFF;
+  justify-content: center;
+}
+
+.task-following {
+  width: 120px;
+  height: 30px;
+
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 14px;
+  color: #FFFFFF;
+  justify-content: center;
+}
+
+.trash {
+  width: 120px;
+  height: 30px;
+
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 14px;
+  color: #FFFFFF;
+  justify-content: center;
+}
+
+.more {
+  width: 20px;
+  height: 30px;
+
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 14px;
+  color: #FFFFFF;
+  justify-content: center;
+  margin-inline-end: 20px;
+}
+
+.remove_user {
+  width: 15px;
+  height: 15px;
+  display: flex;
+  //margin-left: 20px;
+  justify-content: center;
+  text-align: center;
+  align-content: center;
+  vertical-align: center;
+  horiz-align: center;
+  cursor: pointer;
+  z-index: 1;
+  background: rgba(66, 120, 223, 0.5);
+}

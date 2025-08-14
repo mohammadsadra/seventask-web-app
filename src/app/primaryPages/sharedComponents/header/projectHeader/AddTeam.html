@@ -1,0 +1,21 @@
+<div [style]="'direction: ' + textDirection" class="add-team-container d-flex flex-column">
+  <div class="p-2 search" style=" margin: 20px 15px 20px 15px">
+    <input [class.placeholder-rtl]="textDirection === 'rtl'"
+           #teamSearch dir="auto" class="search" placeholder="{{ 'Placeholders.searchForTeam' | translate}}">
+  </div>
+
+  <div class="p-2 members-container">
+    <div class="member" *ngFor="let team of allTeams | teamSearch:teamSearch.value"
+         (click)="changeActiveTeam(team);dialogRef.close()">
+      <div class="d-flex flex-row align-items-center">
+        <div class="rounded-circle user_img p-2">
+          <img src="../../../../../assets/icons/Project/Team.svg">
+        </div>
+        <div class="p-2 team-title">
+          {{team.name}}
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,25 @@
+<div [formGroup]="addItemForm" class="add-checklist-item-container">
+  <!--  <div class="field">Item Title</div>-->
+  <div class="title-container">
+    <div>
+      <input dir="auto" [class.placeholder-rtl]="textDirection === 'rtl'"
+             formControlName="title" class="checklist-item-title"
+             placeholder="{{'Placeholders.enterChecklistTitle' | translate}}">
+    </div>
+    <button (click)="addItem()" class="add-item">
+      +
+    </button>
+  </div>
+
+  <div class="item-container">
+    <div *ngFor="let item of  this.inputData.checklistItems" class="item d-flex align-items-start">
+      <!--      <img (click)="removeItem(item)" src="assets/icons/cancel.svg" class="remove">-->
+      <input style="margin-top: 5px" type="checkbox" class="checkbox" disabled>
+      <span>{{item.title}}</span>
+    </div>
+  </div>
+
+  <button (click)="sumbit()" class="submit-button">
+    {{ 'Task.finishAddingItems' | translate}}
+  </button>
+</div>

@@ -1,0 +1,22 @@
+@import "variables";
+body{
+  background: white;
+  color: rgba(46, 74, 119, 0.5);
+  padding: 20px 40px 20px 40px;
+  text-align: center;
+  justify-content: center;
+  font-style: normal;
+  font-weight: normal;
+}
+.button-row{
+  padding: 10px 10px 10px 10px;
+}
+.btn{
+  margin: 0px 8px 0px 8px;
+  font-style: normal;
+  font-weight: normal;
+  color: white;
+  outline: none;
+  border: none;
+}
+

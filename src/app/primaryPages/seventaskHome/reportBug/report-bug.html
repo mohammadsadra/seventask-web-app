@@ -1,0 +1,71 @@
+<form [formGroup]="feedback" style="max-height: 95vh; overflow-x: hidden;">
+  <div class="main-container d-flex flex-column align-items-center">
+    <div class="p-2 page-title">
+      Report Bug
+    </div>
+    <div class="p-2 team-name-container">
+      <input  dir="auto" formControlName="title" class="team-name-container" placeholder="Enter your report title here"
+             [ngClass]="feedback.controls.title.errors?.required && feedback.controls.title.touched ? 'not-valid': ''"
+             style="padding: 15px">
+    </div>
+
+    <div class="tab-body p-2">
+
+      <div class="team-details-body">
+        <div class="description-selector d-flex flex-column align-items-center">
+
+          <div class="p-2 assignments-title">
+            <div class=" d-flex flex-row align-items-center">
+              <img class="p-2" src="../../../../assets/icons/Project/Description.svg">
+              <div class="p-2" style="margin-inline-start: 10px">
+                Description
+              </div>
+            </div>
+          </div>
+          <div class="description-container">
+            <textarea class="description-container" formControlName="description" style="padding: 15px;resize: none;"
+                      placeholder="Write your description..."></textarea>
+          </div>
+
+        </div>
+
+
+        <div class="uploader-container d-flex flex-column align-items-center">
+
+          <div class="p-2 assignments-title">
+            <div class=" d-flex flex-row align-items-center">
+              <img class="p-2" src="../../../../assets/icons/Project/Logo.svg">
+              <div class="p-2" style="margin-inline-start: 10px">
+                Documents
+              </div>
+            </div>
+          </div>
+
+          <div class="p-2 uploader d-flex flex-column">
+            <div class="p-2" style="margin-top: 19px">
+              <img class="p-2" src="../../../../assets/icons/Project/upload.svg">
+            </div>
+            <div class="p-2" style="margin-top: 13px">
+              Supported Formats : PNG | SVG
+            </div>
+            <div class="p-2">
+              Max Size : 1 MB
+            </div>
+
+          </div>
+
+
+        </div>
+      </div>
+
+    </div>
+    <button (click)="createFeedback()"
+            [ngClass]="feedback.valid ? 'creat-button-hover' : 'creat-button-off'"
+            class="creat-button d-flex flex-row align-items-center justify-content-center" [mat-dialog-close]="!feedback.valid"
+            type="submit" [disabled]="!feedback.valid" [ngStyle]="{'cursor': !feedback.valid  ? 'not-allowed' : 'pointer' }">
+      <div style="font-size: 12px">
+        Send Report
+      </div>
+    </button>
+  </div>
+</form>

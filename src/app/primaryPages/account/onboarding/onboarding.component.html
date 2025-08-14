@@ -1,0 +1,42 @@
+<!--<app-imageCrop [imageChangedEvent]="imageChangedEvent" (imageCropEvent)="onImageCrop($event)"></app-imageCrop>-->
+<!--<button (click)="openDialog()"></button>-->
+<div class="main-container">
+  <div class="form-container">
+    <div class="form">
+      <div class="form-title">
+        {{'Login.OnBoarding.completeProfile' | translate}}
+      </div>
+      <div class="logo-container">
+        <img [src]="croppedImage ? croppedImage : (ssoPhotoUrl ? ssoPhotoUrl : 'assets/images/default-profile.png')"
+             class="Profile-Image" (click)="addPhoto()">
+      </div>
+      <div class="login-guide">
+        <div style="cursor: pointer" (click)="addPhoto()">{{'Login.OnBoarding.addPhoto' | translate}}</div>
+      </div>
+      <form [formGroup]="signInForm" (ngSubmit)="submitSignInForm()" class="login-form">
+        <div class="input-row">
+          <div class="input-icon">
+            <img src="../../../../assets/icons/Project/User.svg">
+          </div>
+          <input dir="auto"
+                 formControlName="NickName" type="text" class="user-input"
+                 [placeholder]="'Placeholders.enterNickName' | translate"
+          >
+        </div>
+      </form>
+      <div class="input-description">
+        <span>{{'Login.OnBoarding.realNickName' | translate}}</span>
+      </div>
+      <div class="submit-login-form-button-container">
+        <button [disabled]="signInForm.invalid || pressedSubmitButton"
+                (click)="submitSignInForm()" class="submit-login-form-button">
+          <div class="submit-login-form-button-text" *ngIf="!pressedSubmitButton">
+            {{'Buttons.enjoySevenTask' | translate}}
+          </div>
+          <seventask-spinner [loadingType]="1" class="loading" [color]="'white'"
+                                 *ngIf="pressedSubmitButton"></seventask-spinner>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

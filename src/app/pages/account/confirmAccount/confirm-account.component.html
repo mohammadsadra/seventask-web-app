@@ -1,0 +1,85 @@
+<div class="main-container">
+  <div class="form-container">
+    <div class="form">
+      <div class="logo-container">
+        <img src="../../../../assets/icons/coolicon.svg" height="100">
+      </div>
+      <div class="form-title">
+        {{'Login.verifyYourEmail' | translate}}
+      </div>
+      <div class="login-guide">
+        <div style=" cursor: default">{{'Login.notReceivedYet' | translate}}</div>
+        <div [ngClass]="config.leftTime == 0 ? 'resend-email' : '' "
+             (click)="resendConfirmEmail()">{{'Login.resend' | translate}} <span
+          *ngIf="config.leftTime != 0"> {{'Login.againIn' | translate}}
+          <countdown [config]="config"
+                     (event)="handleEvent($event)"></countdown></span></div>
+      </div>
+      <form [formGroup]="confirmForm" (ngSubmit)="submitConfirmForm()" class="login-form">
+        <input dir="auto" [attr.disabled]="(apiCalled || wrongCode || correctCode) ? '' : null"
+               [class.loading-input]="apiCalled && !wrongCode" [class.correctCode-input]="correctCode"
+               [class.wrongCode-input]="wrongCode" formControlName="VerificationCode" type="text" class="user-input"
+               id="email-code-Id"
+               (keydown)="restrictNumeric($event)"
+               (keyup)="checkVerificationCodeForSubmit($event)"
+               placeholder=""
+        >
+      </form>
+      <button class="check-code-button" (click)="checkCode()">{{'Login.checkCode'|translate}}</button>
+    </div>
+  </div>
+</div>
+
+
+<!--<div class="main">-->
+<!--  <div class="confirm-container">-->
+<!--    <div class="confirm-form-container ">-->
+<!--      <div class="confirm-form-title">One more step to go!</div>-->
+<!--      <form [formGroup]="confirmForm" (ngSubmit)="submitConfirmForm()" id="login-page-new__main-form-row">-->
+<!--        <label class="confirm-input-label">Confirmation Code</label>-->
+<!--        <div class="input-group mb-3">-->
+<!--          <div class="input-group-prepend">-->
+<!--            <span class="input-group-text " id="basic-addon1">-->
+<!--              <mat-icon class="matIcon">how_to_reg</mat-icon>-->
+<!--            </span>-->
+<!--          </div>-->
+<!--          <input inputmode="numeric" required="required" type="text" class="form-control Input" placeholder="Code"-->
+<!--                 aria-label="Mail"-->
+<!--                 aria-describedby="basic-addon1"-->
+<!--                 formControlName="confirm">-->
+<!--        </div>-->
+<!--        <p class="mat-error"-->
+<!--           *ngIf="confirmForm.controls.confirm.errors?.required && confirmForm.controls.confirm.touched">-->
+<!--          Please enter confirmation code</p>-->
+<!--        <button [disabled]="confirmForm.invalid" type="submit" class="confirm-form-button">-->
+<!--          <mat-progress-spinner [diameter]="20"-->
+<!--                                *ngIf="apiCalled"-->
+<!--                                class="example-margin"-->
+<!--                                color="accent"-->
+<!--                                mode="indeterminate"-->
+<!--                                value="50">-->
+<!--          </mat-progress-spinner>-->
+<!--          <div *ngIf="!apiCalled" class="confirm-form-button-text">-->
+<!--            Let's start-->
+<!--          </div>-->
+<!--        </button>-->
+
+<!--        <button [disabled]="config.leftTime != 0" (click)="resendConfirmEmail()" class="confirm-form-button">-->
+<!--          <div class="confirm-form-button-text">-->
+<!--            <div *ngIf="config.leftTime == 0">-->
+<!--              Resend Email-->
+<!--            </div>-->
+<!--            <countdown *ngIf="config.leftTime != 0" [config]="config" (event)="handleEvent($event)"></countdown>-->
+<!--          </div>-->
+<!--        </button>-->
+<!--      </form>-->
+<!--    </div>-->
+
+<!--    <div class="login-page-new__main-bot">-->
+<!--      <div class="login-page-new__main-bot-text">Let's make the world more productive with 7Task, together.</div>-->
+<!--    </div>-->
+<!--  </div>-->
+
+<!--</div>-->
+
+

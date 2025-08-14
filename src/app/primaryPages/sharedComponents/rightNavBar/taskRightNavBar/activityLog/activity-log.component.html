@@ -1,0 +1,56 @@
+<div class="main-container">
+
+  <div [@inspectorAnimation]="inspectorAnimationOn ? 'in' : 'out'"
+    class="history-wrapper" [style.height.px]="columnHeight - 130">
+
+    <div *ngIf="selectedTask == null" style=" opacity: 1;">
+      <img src="../../../../../../assets/noDataImages/click.svg" width="85%" style="margin: 5px">
+      <div class="null-inspector">{{ 'Task.clickTaskMsg' | translate}}</div>
+    </div>
+
+    <!--    <div *ngIf="selectedTask != null && selectedTaskActivityLogs.length == 0 && !showGetTaskHistoryLoading"-->
+    <!--         style="opacity: 0.3;">-->
+    <!--      <img src="../../../../../../assets/noDataImages/comment.svg" width="50%" style="margin: 25px">-->
+    <!--      <div class="null-inspector"> {{'Task.noComments' | translate}}</div>-->
+    <!--    </div>-->
+
+    <div class="p-2 activity" *ngFor="let activityLog of selectedTaskActivityLogs">
+      <div *ngIf="this.selectedTask != null" class="activity-information d-flex flex-row">
+        <div class="activity-user-profile">
+          <div class="rounded-circle user_img">
+            <!--                <img style="width: 20px" src="assets/icons/Project/User.svg">-->
+            <span
+              class="rounded-circle seventask-icon-task-header-assignee d-flex align-items-center justify-content-center"
+              style="width: 20px;"
+              *ngIf="SliceImgString(activityLog.parameters) == null"></span>
+            <img class="rounded-circle"
+              style="width: 48px;height: 48px;"
+              *ngIf="SliceImgString(activityLog.parameters)"
+              [src]="SliceImgString(activityLog.parameters)" />
+          </div>
+        </div>
+        <div class="d-flex flex-column">
+          <div class="activity-description">
+            <!--                {{projectHistory.message}}-->
+            <span [innerHTML]="activityLog.message | safeHtmlPipe"></span>
+          </div>
+          <div *ngIf="activityLog.parameters[1].parameterType == 5">
+            <app-show-file [data]="activityLog.parameters[1].parameterBody"></app-show-file>
+          </div>
+          <div class="activity-time">
+            {{ activityLog.time | seventaskDatePipe: 'MMMM D, YYYY HH:mm' | async}}
+          </div>
+          <!--            <div class="p-2">Extra</div>-->
+        </div>
+      </div>
+    </div>
+
+
+    <div *ngIf="showGetTaskHistoryLoading && this.selectedTask != null" class="loading-container">
+      <seventask-spinner [loadingType]="1" *ngIf="showGetTaskHistoryLoading"></seventask-spinner>
+      <!--  <div style="margin-top: 10px;color: #2E4A77;">{{'Task.loadingTasks' |translate}}</div>-->
+    </div>
+
+  </div>
+
+</div>

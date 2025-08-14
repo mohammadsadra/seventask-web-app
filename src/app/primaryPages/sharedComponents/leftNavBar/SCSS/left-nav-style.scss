@@ -1,0 +1,230 @@
+@import 'variables';
+.list-container {
+  //width: 100%;
+  //max-width: 267px;
+}
+
+.list-container .p-2 {
+  padding: 0 !important;
+}
+
+.list-container {
+  padding-top: 13.75px;
+}
+
+////////////////////////////////////////
+.page-info {
+  border-bottom: 1px solid #f3f6fa;
+}
+
+.page-info .p-2 {
+  padding: 0 !important;
+}
+
+.page-info-title {
+  font-style: normal;
+  font-weight: 900;
+  font-size: 18px;
+  color: $theme-color;
+  margin-top: 10px;
+}
+
+.page-number-title {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  margin-top: 25px;
+  margin-bottom: 20px;
+
+  /* Color 3 */
+  color: rgba(167, 175, 189, 0.7);
+}
+
+///////////////////////////////////
+.all-item-list-container .items-list .p-2 {
+  padding: 0px !important;
+}
+
+.all-item-list-container .p-2 {
+  //padding: 0 0 0 30px!important;
+  padding-inline-start: 30px !important;
+}
+
+.all-items {
+  color: #2e4a77;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  margin-top: 20px;
+  margin-bottom: 40px;
+  text-align: start;
+  cursor: pointer;
+}
+
+.all-items .p-2 {
+  padding: 0 !important;
+}
+
+.selected-pointer {
+  width: 3px;
+  height: 20px;
+  background: $theme-color;
+}
+
+.items-list {
+  margin-bottom: 20px;
+}
+
+.item-title {
+  @include seventask-button-style-7;
+  cursor: pointer;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  color: #2e4a77;
+  text-align: start;
+  margin-bottom: 15px;
+}
+
+.item-name {
+  //@include seventask-button-style-7;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  margin-bottom: 15px;
+  color: rgba(6, 74, 119, 0.5);
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.item-name a {
+  text-decoration: none;
+  color: rgba(6, 74, 119, 0.5);
+}
+
+//.item-name a:hover {
+//  text-decoration: none;
+//  color: $theme-color;
+//}
+
+.item-name-hover {
+  @include seventask-button-style-7;
+}
+
+.all-item-list-container {
+  overflow-y: auto;
+}
+.gantt-chart-left-panel {
+  overflow-y: auto;
+  padding: 20px 0 0 0;
+  display: flex;
+  flex-direction: column;
+}
+.team-title {
+  opacity: 0.3;
+}
+.tasks-container {
+  display: flex;
+  flex-direction: column;
+}
+.task {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 0 5px;
+}
+.expand-button-container {
+  min-width: 15%;
+  max-width: 15%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.expand-button {
+  border-radius: 10px;
+  background-color: $theme-color-opacity-10;
+  width: 25px;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.expand-icon {
+  transition: all 0.3s ease-in-out;
+}
+.project-name {
+  width: 100%;
+  height: 25px;
+}
+.task-title {
+  width: 100%;
+  opacity: 0.7;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  margin: 15px 0;
+  text-align: start;
+  text-decoration: none;
+  color: #2E4A77;
+}
+.gantt-item-name {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  margin-bottom: 15px;
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+}
+.all-item-list-container:hover {
+  //overflow-y: auto;
+}
+
+.active-tab {
+  color: $theme-color;
+}
+
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  //margin-top: 20px;
+  flex-direction: column;
+  margin-top: 15%;
+  flex-basis: 50%;
+}
+
+.text {
+  overflow-x: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 95%;
+}
+
+.mat-spinner-small {
+  margin: 0px 0px;
+}
+
+::ng-deep .mat-spinner-showNumber circle {
+  stroke: $theme-color !important;
+}
+
+.show-hide-tasks-button {
+  @include seventask-button-style-7;
+  cursor: pointer;
+  color: $theme-color-opacity-85;
+  display: flex;
+  flex-direction: row;
+  margin: 10px 0;
+}
+
+.google-calendar-name {
+  text-align: start;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

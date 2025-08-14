@@ -1,0 +1,89 @@
+<div *ngIf="activeProjects.length == 0 && !showGetActiveProjectsLoading"
+  style="margin-top: 200px; opacity: 0.3;"
+  class="d-flex justify-content-center align-items-center flex-column">
+  <img style="width: 15%" src="../../../assets/noDataImages/project.svg">
+  <div class="no-data-message">
+    {{ 'Project.noProject' | translate}}
+  </div>
+</div>
+
+<div *ngIf="showGetActiveProjectsLoading" class="loading-container">
+  <seventask-spinner [loadingType]="3"></seventask-spinner>
+<!--  <div style="margin-top: 10px;color: #2E4A77;">{{'Project.loadingProject' |translate}}</div>-->
+</div>
+
+<div class="all-team d-flex flex-column" *ngIf="viewer == 'all' && activeProjects.length > 0">
+  <div class="team" *ngFor="let team of teams">
+    <div class="team-title" *ngIf="team.numberOfProjects> 0">{{team.name}}</div>
+
+    <div class="team-project-container d-flex flex-wrap" *ngIf="team.numberOfProjects> 0">
+      <div @listFade class="d-flex flex-row flex-wrap">
+        <div *ngFor="let project of activeProjects" (click)="openProjectOverviewPage(project.id)">
+          <app-project-card *ngIf="project.teamId == team.id" [project]="project" [projectHover]="projectHover"></app-project-card>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="team">
+    <div class="team-title" *ngIf="personalProjectNumber > 0">{{'Project.personalProjectTitle' | translate}}</div>
+
+    <div class="team-project-container d-flex flex-wrap" *ngIf="personalProjectNumber> 0">
+      <div @listFade class="d-flex flex-row flex-wrap">
+        <div *ngFor="let project of activeProjects" (click)="openProjectOverviewPage(project.id)">
+          <app-project-card *ngIf="project.teamId == null" [project]="project" [projectHover]="projectHover"></app-project-card>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="all-team d-flex flex-column" *ngIf="viewer == 'personal' && activeProjects.length> 0">
+  <div class="team">
+    <div class="team-title">{{ 'Project.personalProjectTitle' | translate}}</div>
+    <div *ngIf="personalProjectNumber == 0"
+      style="margin-top: 200px; opacity:0.3;"
+      class="d-flex justify-content-center align-items-center flex-column">
+      <img style="width: 15%" src="../../../assets/noDataImages/project.svg">
+      <div class="no-data-message flex-column d-flex align-items-center justify-content-center">
+        <div>{{'Project.noProjectInTeam' | translate}}</div>
+        <div>{{'Project.yourPersonalProject' | translate}}</div>
+      </div>
+    </div>
+
+    <div class="team-project-container d-flex flex-wrap"
+      *ngIf="personalProjectNumber> 0">
+      <div @listFade class="d-flex flex-row flex-wrap">
+        <div *ngFor="let project of activeProjects"
+          (click)="openProjectOverviewPage(project.id)">
+          <app-project-card *ngIf="project.teamId == null" [project]="project" [projectHover]="projectHover"></app-project-card>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="all-team d-flex flex-column" *ngIf="viewer != 'all' && viewer !='personal' && activeProjects.length > 0">
+  <div class="team" *ngFor="let team of teams">
+    <div *ngIf="viewer == team.id.toString()">
+      <div class="team-title" *ngIf="team.numberOfProjects> 0">{{team.name}}</div>
+      <div class="team-project-container d-flex flex-wrap" *ngIf="team.numberOfProjects> 0">
+        <div @listFade class="d-flex flex-row flex-wrap">
+          <div *ngFor="let project of activeProjects" (click)="openProjectOverviewPage(project.id)" >
+            <app-project-card *ngIf="project.teamId == team.id" [project]="project" [projectHover]="projectHover"></app-project-card>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="team.numberOfProjects == 0"
+        style="margin-top: 200px;opacity: 0.3;"
+        class="d-flex justify-content-center align-items-center flex-column">
+        <img style="width: 15%" src="../../../assets/noDataImages/project.svg">
+        <div class="no-data-message flex-column d-flex align-items-center
+          justify-content-center">
+          <div>{{'Project.noProjectInTeam' | translate}}</div>
+          <div><span>"{{team.name}}"</span> {{'Project.team' | translate}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

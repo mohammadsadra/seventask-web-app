@@ -1,0 +1,79 @@
+@import 'variables';
+.runningNoData {
+  opacity: 1;
+}
+.runningNoData img {
+  width: 85%;
+  height: auto;
+  margin: 35px 25px;
+}
+.noData-text {
+  font-style: normal;
+  font-size: 16px;
+  color: #2e4a77;
+}
+.running-tasks-wraper {
+  background-color: #f8fbfd;
+}
+.running-tasks-container {
+  width: 100%;
+  background-color: #ffffff;
+  border: 1px solid #f3f6fa;
+  border-bottom: #fff;
+  border-radius: 10px 10px 0px 0px;
+}
+.runningTask-item {
+  background: $theme-color-opacity-10;
+  border-radius: 10px;
+  height: 87px;
+  width: 90%;
+  margin: 16px auto 0px auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.Time-btn-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.runningIcons {
+  display: inline;
+  //noinspection CssInvalidPropertyValue
+  float: inline-end;
+  width: fit-content;
+  padding: 10px;
+}
+.runningIcons span {
+  margin-inline-end: 10px;
+}
+.runningTime {
+  //noinspection CssInvalidPropertyValue
+  float: inline-start;
+  display: inline;
+  width: fit-content;
+  padding: 10px;
+  font-weight: 500;
+  font-size: 17px;
+  line-height: 23px;
+  color: #a7afbd;
+}
+.runningTitle {
+  font-weight: 900;
+  font-size: 17px;
+  line-height: 23px;
+  color: $theme-color;
+  padding-top: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.tooltiptext {
+  color: #fff;
+  text-align: center;
+  padding: 5px 5px;
+  border-radius: 6px;
+  background: rgba(66, 120, 223, 1);
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+}

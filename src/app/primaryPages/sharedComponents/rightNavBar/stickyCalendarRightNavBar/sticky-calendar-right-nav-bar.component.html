@@ -1,0 +1,111 @@
+<div class="main-container" [style.height.px]="height - 80">
+  <div *ngIf="selectedEvent === null">
+    <div class="tiny-calendar">
+      <app-tiny-calendar [navigatorOn]="true"
+                         [headerOn]="true">
+      </app-tiny-calendar>
+    </div>
+    
+    <div class="d-flex flex-column events-list" id="events-list">
+      <seventask-spinner [loadingType]="1" class="loading" *ngIf="!gotEvents" style="margin: auto;"></seventask-spinner>
+    
+      <div class="events-section" *ngIf="todayEvents.length || passedEvents.length" id="today-events">
+        <div class="events-section-title">
+          {{ 'Calendar.today' | translate }}
+        </div>
+        <div class="passed-events" *ngIf="passedEvents.length > 0">
+          <div class="passed-events-button" (click)="showPassedEvents=!showPassedEvents">
+            {{ (showPassedEvents ? (('Calendar.hide' | translate) + ' ' + (passedEvents.length === 1 ? ('Calendar.passedEvent' | translate) : ('Calendar.passedEvents' | translate)))
+             : (('Calendar.show' | translate) + ' ' + (passedEvents.length === 1 ? ('Calendar.passedEvent' | translate) : (passedEvents.length | numToArabic) + ' ' + ('Calendar.passedEvents' | translate)))) }}
+          </div>
+          <div [hidden]="!showPassedEvents" style="opacity: 0.5;">
+            <div class="event" *ngFor="let event of passedEvents" dir="auto" (click)="selectedEvent=event">
+              <div class="left-part" [style.background-color]="event.color"></div>
+              <div class="event-data">
+                <div class="event-title" [style.color]="event.color">
+                  <span class="event-type-icon" 
+                  [className]="event.color ? 'seventask-icon-pages-my-calender-free-color' : 'seventask-icon-pages-my-calender'"></span>
+                  <div class="event-title-text">{{ event.title }}</div>
+                </div>
+                <div class="event-time">
+                  {{ event.startTime | date:'HH:mm' }} - {{ event.endTime | date:'HH:mm' }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="event" *ngFor="let event of todayEvents" dir="auto" (click)="selectedEvent=event">
+          <div class="left-part" [style.background-color]="event.color"></div>
+          <div class="event-data">
+            <div class="event-title" [style.color]="event.color">
+              <span class="event-type-icon" 
+                  [className]="event.color ? 'seventask-icon-pages-my-calender-free-color' : 'seventask-icon-pages-my-calender'"></span>
+              <div class="event-title-text">{{ event.title }}</div>
+            </div>
+            <div class="event-time">
+              {{ event.startTime | date:'HH:mm' }} - {{ event.endTime | date:'HH:mm' }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="events-section" *ngIf="tomorrowEvents.length">
+        <div class="events-section-title">
+          {{ 'Calendar.tomorrow' | translate }}
+        </div>
+        <div class="event" *ngFor="let event of tomorrowEvents" dir="auto" (click)="selectedEvent=event">
+          <div class="left-part" [style.background-color]="event.color"></div>
+          <div class="event-data">
+            <div class="event-title" [style.color]="event.color">
+              <span class="event-type-icon" 
+                  [className]="event.color ? 'seventask-icon-pages-my-calender-free-color' : 'seventask-icon-pages-my-calender'"></span>
+              <div class="event-title-text">{{ event.title }}</div>
+            </div>
+            <div class="event-time">
+              {{ event.startTime | date:'HH:mm' }} - {{ event.endTime | date:'HH:mm' }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="events-section" *ngIf="weekEvents.length">
+        <div class="events-section-title">
+          {{ 'Calendar.thisWeek' | translate }}
+        </div>
+        <div class="event" *ngFor="let event of weekEvents" dir="auto" (click)="selectedEvent=event">
+          <div class="left-part" [style.background-color]="event.color"></div>
+          <div class="event-data">
+            <div class="event-title" [style.color]="event.color">
+              <span class="event-type-icon" 
+                  [className]="event.color ? 'seventask-icon-pages-my-calender-free-color' : 'seventask-icon-pages-my-calender'"></span>
+              <div class="event-title-text">{{ event.title }}</div>
+            </div>
+            <div class="event-time">
+              {{ event.startTime | date:'HH:mm' }} - {{ event.endTime | date:'HH:mm' }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="events-section" *ngIf="monthEvents.length">
+        <div class="events-section-title">
+          {{ 'Calendar.thisMonth' | translate }}
+        </div>
+        <div class="event" *ngFor="let event of monthEvents" dir="auto" (click)="selectedEvent=event">
+          <div class="left-part" [style.background-color]="event.color"></div>
+          <div class="event-data">
+            <div class="event-title" [style.color]="event.color">
+              <span class="event-type-icon" 
+                  [className]="event.color ? 'seventask-icon-pages-my-calender-free-color' : 'seventask-icon-pages-my-calender'"></span>
+              <div class="event-title-text">{{ event.title }}</div>
+            </div>
+            <div class="event-time">
+              {{ event.startTime | date:'HH:mm' }} - {{ event.endTime | date:'HH:mm' }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="selectedEvent !== null">
+    <app-edit-event [selectedEvent]="selectedEvent" (backButton)="selectedEvent=null"></app-edit-event>
+  </div>
+</div>

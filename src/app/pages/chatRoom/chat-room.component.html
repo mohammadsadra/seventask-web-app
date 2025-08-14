@@ -1,0 +1,674 @@
+<div class="chat-main-container d-flex justify-content-center">
+
+  <div class="card main-card" [style.height]="mainCardHeight + 'px'">
+
+    <div [@valueChange]="activeChannel != null && !showGetMessagesLoading && pinnedMessagesArray.length> 0">
+      <div class="pin-container d-flex"
+           *ngIf="activeChannel != null && !showGetMessagesLoading && pinnedMessagesArray.length> 0">
+        <div class="d-flex flex-row align-items-center" style="padding: 5px; width: 100%">
+
+          <!--        <div class="seventask-icon-edit-Cancel-circle" style="margin-inline-end: 3px; cursor: pointer"></div>-->
+          <div class="line-pin-message"></div>
+
+          <div class="d-flex flex-column">
+            <div class="pinned-message-title">
+              Pinned Message
+            </div>
+            <div class="pinned-message" [@valueChange]="pinnedMessagesArray[0]">
+              <span dir="auto" *ngIf="pinnedMessagesArray[0].messageTypeId == 1">
+                {{pinnedMessagesArray[0].body.split('\n')[1] !== null ? pinnedMessagesArray[0].body.split('\n')[0] + '...' :
+                pinnedMessagesArray[0].body.split('\n')[0]}}
+              </span>
+              <span dir="auto" *ngIf="pinnedMessagesArray[0].messageTypeId != 1">
+                {{pinnedMessagesArray[0].body.split(':/:')[1]}}
+              </span>
+            </div>
+          </div>
+
+          <div [@valueChange]="pinnedMessagesArray.length> 1" style="margin-inline-start: auto;">
+            <div class="d-flex flex-column align-items-center justify-content-center" (click)="shiftPinMessageArray()"
+                 style="cursor: pointer" *ngIf="pinnedMessagesArray.length> 1">
+              <div class="d-flex justify-content-center" style="transform: rotate(90deg);margin-bottom: 5px">
+                <!--            <span class="seventask-ic"></span>-->
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24"
+                     height="24"
+                     viewBox="0 0 24 24">
+                  <path class="color-svg" d="M17,17H7V14L3,18L7,22V19H19V13H17M7,7H17V10L21,6L17,2V5H5V11H7V7Z"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div [@listFade] class="d-flex justify-content-center align-items-center flex-column" style="opacity: 0.3;">
+      <div *ngIf="activeChannel == null && !showGetMessagesLoading" style="width: 100%; margin-top: 200px;" class="d-flex justify-content-center
+          align-items-center flex-column">
+        <img style="width: 15%" src="assets/noDataImages/chat.svg">
+        <div class="no-data-message">
+          {{'Chat.selectChannel' | translate}}
+        </div>
+      </div>
+    </div>
+    <div class="page-overlay-wrapper" [style.visibility]="isHover ? 'visible' : 'hidden'"
+         [style.height.px]="mainCardHeight">
+      <app-upload-file [style.height]="height + 'px'" style="width: 100%;" mode="hidden-box" [auto_upload_File]="false"
+                       [multiple]="true"
+                       [uploadButtonDisplay]="'none'"
+                       [inputButtonDisplay]="'none'" [auto_upload_File]="true" (filesInformation)="uploadedFile($event)"
+                       (isDrag)="fileOver($event)" (progressEvent)="getUploadProgress($event)"
+                       (fileLengthEvent)="getUploadFileLength($event)">
+      </app-upload-file>
+    </div>
+
+    <div *ngIf="showGetMessagesLoading" class="loading-container">
+      <seventask-spinner [loadingType]="1" *ngIf="showGetMessagesLoading"></seventask-spinner>
+      <!--  <div style="margin-top: 10px;color: #2E4A77;">{{'Task.loadingTasks' |translate}}</div>-->
+    </div>
+
+    <!--          <div #scrollframe (scroll)="scrolled($event)" class="card-body" -->
+    <div appDragDrop (fileDraggedOver)="cradBodyHover($event)" appScrollToBottom [scrollNow$s]="scrollNow"
+         [stayAtBottom]="true"
+         cdkScrollable class="card-body" @listAnimationReversed
+         *ngIf="activeChannel != null && !showGetMessagesLoading"
+         [style.height]="height + 'px'"
+         (scroll)="onContainerScroll($event)">
+
+      <div *ngFor="let message of messagesArray;let i= index;" [@chatAnimation]="chatAnimationMode"
+           (contextmenu)="openContextMenu($event, message); $event.preventDefault(); $event.stopPropagation();"
+           (dblclick)="!replay || replayFormGroup.controls.replayMessageId.value.toString() != message.messageID.toString() ? replayMsg(message) :
+          clipboardCopy(message.body)"
+           [id]="message.messageID" #item>
+        <h6 class="header-message"
+            *ngIf="(message.sentOn | date: 'shortDate' | checkTime : index : 1)">
+          {{ message.sentOn | date: 'shortDate' | checkTime : i | TimedifferenceCalc}}
+        </h6>
+        <div class="d-flex justify-content-start sender-message flex-row align-items-center"
+             *ngIf="!message.isSentFromMe && messagesArray.length != 0" style="margin-bottom: 5px">
+          <div class="img_cont_msg p-2 d-flex align-items-center
+              justify-content-center rounded-circle"
+               style="background: rgba(66,120,223,0.05)"
+               *ngIf="(messagesArray.length == i + 1) || (messagesArray.length != i
+              + 1 && messagesArray[i+1].isSentFromMe) ||
+              activeChannel.channelTypeId != 1">
+            <!--            style="background: rgba(66,120,223,0.05)"*ngIf="(i == 0 || (i > 0 && !(!messagesArray[i - 1].isSentFromMe && !message.isSentFromMe)))">-->
+            <img *ngIf="activeChannel.profileImageGuid != null &&
+                activeChannel.channelTypeId == 1"
+                 [src]="domainName + '/en-US/File/get?id=' +
+                activeChannel.profileImageGuid + '&quality=100'"
+                 class="rounded-circle user_img_msg">
+
+            <img
+              *ngIf="activeChannel.channelTypeId != 1 && message.fromUserImageId
+                != null"
+              [src]="domainName + '/en-US/File/get?id=' +
+                message.fromUserImageId + '&quality=100'"
+              class="rounded-circle user_img_msg">
+
+            <div style="color: #1c5bff"
+                 *ngIf="activeChannel.profileImageGuid == null &&
+                activeChannel.channelTypeId == 1">{{activeChannel.title[0].toUpperCase()}}</div>
+            <div style="color: #1c5bff"
+                 *ngIf="activeChannel.channelTypeId != 1 && message.fromUserImageId
+                == null">
+              {{message.fromNickName[0].toUpperCase()}}
+            </div>
+          </div>
+          <div class="img_cont_msg p-2 d-flex align-items-center
+              justify-content-center rounded-circle"
+               *ngIf="!(messagesArray.length == i + 1) && !(messagesArray.length !=
+              i + 1 && messagesArray[i+1].isSentFromMe) &&
+              activeChannel.channelTypeId == 1">
+          </div>
+
+          <div class="replay-message-container flex-column"
+               *ngIf="message.replyTo != null && message.messageTypeId == 1">
+            <div class="sender-message-replay-part">
+              <div *ngIf="message.replyTo && messageFinder(message.replyTo);"
+                   (click)="scroll(message.replyTo)">
+                <div *ngFor="let m of messagesArray">
+                  <div *ngIf="m.messageID === message.replyTo">
+                    {{m.fromNickName}}
+                  </div>
+                  <div *ngIf="m.messageID === message.replyTo && m.messageTypeId
+                      == 1" dir="auto">
+                    {{m.body.split('\n')[1] ? m.body.split('\n')[0] + '...' : m.body.split('\n')[0]}}
+                  </div>
+                  <div *ngIf="m.messageID === message.replyTo && m.messageTypeId
+                      != 1" dir="auto">
+                    {{m.body.split(':/:')[1]}}
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="message.replyTo && !messageFinder(message.replyTo);">
+                {{'Chat.messageWasDeleted' | translate}}
+              </div>
+            </div>
+            <div>
+              <div class="sender-message-replay-message-part d-flex flex-row">
+                <div class="p-2">
+                  <div *ngIf="message.isForwarded" class="sender-message-forward">
+                    <div>{{"Chat.forwarded" | translate}}</div>
+                    <div>{{"Chat.from" | translate}}: {{message.forwardedFrom}}</div>
+                  </div>
+                  <div *ngFor="let line of message.body.split('\n')">
+                    <span class="text-break" [innerHTML]="(line | linkFinder:'#2e4a77')"></span>
+                    <div *ngIf="line == ''">
+                      <br>
+                    </div>
+                  </div>
+                </div>
+                <div class="sender-message-time align-self-end"
+                     style="margin-inline-start: auto">
+                  {{ message.sentOn | date:'H:mm' }}
+                  <div *ngIf="message.isEdited" class="sender-message-time">{{'Chat.edited'| translate}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div [style.font-size]="isMessageOnlyEmoji(message.body) ? '100px' : ''"
+               [class.sender-message-container]="!isMessageOnlyEmoji(message.body)"
+               class="d-flex flex-row"
+               *ngIf="message.replyTo == null && message.messageTypeId == 1">
+            <div class="p-2">
+              <div class="sender-message-username"
+                   *ngIf="i == 0 || (i> 0 && !(!messagesArray[i - 1].isSentFromMe
+                  && !message.isSentFromMe)) || activeChannel.channelTypeId != 1">
+                {{message.fromNickName}}
+              </div>
+              <div *ngIf="message.isForwarded" class="sender-message-forward">
+                <div>{{"Chat.forwarded" | translate}}</div>
+                <div>{{"Chat.from" | translate}}: {{message.forwardedFrom}}</div>
+              </div>
+              <div *ngFor="let line of message.body.split('\n')" dir="auto">
+                <span class="text-break" [innerHTML]="(line | linkFinder:'#2e4a77')"></span>
+                <div *ngIf="line == ''">
+                  <br>
+                </div>
+              </div>
+            </div>
+            <div class="sender-message-time align-self-end">
+              <!--              {{message.sentOn.toString().split('.')[0].split('T')[1].split(':')[0]}}-->
+              <!--              :{{message.sentOn.toString().split('.')[0].split('T')[1].split(':')[1]}}-->
+              <!--              {{message.sentOn.toString().split(' ')[4].split(':')[0]}}-->
+              <!--              :{{message.sentOn.toString().split(' ')[4].split(':')[1]}}-->
+              {{ message.sentOn | date:'H:mm'}}
+              <div [style.color]="isMessageOnlyEmoji(message.body) ? 'black' : ''" *ngIf="message.isEdited"
+                   class="sender-message-time">
+                {{'Chat.edited'| translate}}
+              </div>
+            </div>
+          </div>
+
+
+          <div *ngIf="message.messageTypeId == 2"
+               (click)="previewAddress= domainName + '/en-US/File/get?id=' + message.body.split(':/:')[0]; showPreview= true">
+            <img [src]="domainName + '/en-US/File/get?id=' +
+                message.body.split(':/:')[0]" class="preview-image" loading="lazy">
+          </div>
+
+
+          <!--            <div class="file-message-container d-flex align-items-center"-->
+          <!--              *ngIf="message.messageTypeId == 3">-->
+          <!--              <a [href]="domainName + '/en-US/File/get?id=' +-->
+          <!--                message.body.split(':/:')[0]" download>-->
+          <!--                <div class="d-flex flex-row align-items-center">-->
+          <!--                  <div class="p-2">-->
+          <!--                    <div class="rounded-circle file-logo">-->
+          <!--                      <img src="../../../assets/icons/File/FileIcon.svg"-->
+          <!--                        style="width: 16px">-->
+          <!--                    </div>-->
+          <!--                  </div>-->
+          <!--                  <div class="file-info p-2 d-flex flex-column">-->
+          <!--                    <div class="p-2 file-name">-->
+          <!--                      {{message.body.split(':/:')[1]}}-->
+          <!--                    </div>-->
+          <!--                    <div class="p-2 file-size">{{fileService.formatBytes(message.body.split(':/:')[3])}}</div>-->
+          <!--                    &lt;!&ndash;                <div class="p-2 file-size">{{(message.body.split(':/:')[3]/1000000) + ' Mb'}}</div>&ndash;&gt;-->
+          <!--                  </div>-->
+          <!--                </div>-->
+          <!--              </a>-->
+          <!--            </div>-->
+
+          <video *ngIf="message.messageTypeId != 1 && fileService.typeDetector(message.body.split(':/:')[1]) == 'video'"
+                 style="border-radius: 10px;
+              max-width: 350px; max-height: 500px;" controls muted>
+            <source [src]="domainName + '/en-US/File/get?id=' + message.body.split(':/:')[0]">
+          </video>
+
+          <audio *ngIf="message.messageTypeId != 1 && fileService.typeDetector(message.body.split(':/:')[1]) == 'audio'"
+                 controls muted>
+            <source [src]="domainName + '/en-US/File/get?id=' + message.body.split(':/:')[0]">
+          </audio>
+
+
+          <app-show-file type="chat"
+                         *ngIf="message.messageTypeId != 1 && fileService.typeDetector(message.body.split(':/:')[1]) == 'other'"
+                         [data]="message.body"></app-show-file>
+
+
+          <div class="d-flex flex-row">
+            <div class="message-button d-flex flex-row align-items-center
+                justify-content-center"
+                 matTooltip="{{ 'Chat.reply' | translate }}"
+                 style="margin-inline-start: 20px" (click)="replayMsg(message)">
+              <img src="../../../assets/icons/Chat/Replay.svg">
+            </div>
+            <div class="message-button d-flex flex-row align-items-center
+                justify-content-center"
+                 matTooltip="{{ 'Chat.pin' | translate }}"
+                 (click)="pinMessage(message)"
+                 style="margin-inline-start: 10px"
+                 *ngIf="!message.isPinned">
+              <img src="../../../assets/icons/Chat/pin.svg">
+            </div>
+            <div class="message-button d-flex flex-row align-items-center
+                justify-content-center"
+                 matTooltip="{{ 'Chat.unpin' | translate }}"
+                 (click)="unpinMessage(message)"
+                 style="margin-inline-start: 10px"
+                 *ngIf="message.isPinned">
+              <img src="../../../assets/icons/Chat/unpin.svg">
+            </div>
+            <div class="message-button d-flex flex-row align-items-center
+                justify-content-center"
+                 matTooltip="{{ 'Chat.forward' | translate }}"
+                 (click)="openChannelList(message)"
+                 style="margin-inline-start: 10px">
+              <img src="../../../assets/icons/Chat/Replay.svg"
+                   style="transform: scaleX(-1); -webkit-transform: scaleX(-1);-o-transform: scaleX(-1); -moz-transform: scaleX(-1);">
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end my-message flex-row
+            align-items-center" style="margin-bottom: 5px"
+             *ngIf="message.isSentFromMe && messagesArray.length !=0"
+             [style.opacity]="message.messageID == '-1' ? '0.5': '1'">
+          <div class="message-button d-flex flex-row align-items-center
+              justify-content-center"
+               style="margin-inline-end: 10px"
+               (click)="openMoreButton(message.messageID)"
+               *ngIf="moreButtonID != message.messageID">
+            <img src="../../../assets/icons/Chat/More.svg">
+          </div>
+          <div [@fadeInOut]="moreButton && moreButtonID == message.messageID ? 'show' : 'hide'" class="d-flex flex-row">
+            <div class="message-button d-flex flex-row align-items-center
+                justify-content-center"
+                 style="margin-inline-end: 10px" *ngIf="moreButton && moreButtonID ==
+                message.messageID"
+                 (click)="closeMoreButton()">
+              <img src="../../../assets/icons/Chat/CloseMore.svg">
+            </div>
+            <div class="message-button d-flex flex-row align-items-center
+                justify-content-center"
+                 style="margin-inline-end: 10px" *ngIf="moreButton && moreButtonID == message.messageID"
+                 matTooltip="{{ 'Chat.delete' | translate }}"
+                 (click)="openDeleteDialog(message)">
+              <img src="../../../assets/icons/Chat/Delete.svg">
+            </div>
+            <div class="message-button d-flex flex-row align-items-center
+                justify-content-center"
+                 style="margin-inline-end: 10px"
+                 matTooltip="{{ 'Chat.edit' | translate }}"
+                 *ngIf="moreButton && moreButtonID == message.messageID && message.messageTypeId == 1"
+                 (click)="editMsg(message)">
+              <img src="../../../assets/icons/Chat/Edit.svg">
+            </div>
+            <div class="message-button d-flex flex-row align-items-center
+                justify-content-center"
+                 style="margin-inline-end: 10px"
+                 matTooltip="{{ 'Chat.forward' | translate }}"
+                 (click)="openChannelList(message)"
+                 *ngIf="moreButton && moreButtonID == message.messageID">
+              <img src="../../../assets/icons/Chat/Replay.svg"
+                   style="transform: scaleX(-1); -webkit-transform: scaleX(-1);-o-transform: scaleX(-1); -moz-transform: scaleX(-1);">
+            </div>
+            <div class="message-button d-flex flex-row align-items-center
+                justify-content-center"
+                 matTooltip="{{ 'Chat.pin' | translate }}"
+                 (click)="pinMessage(message)"
+                 style="margin-inline-end: 10px"
+                 *ngIf="moreButton && moreButtonID == message.messageID && !message.isPinned">
+              <img src="../../../assets/icons/Chat/pin.svg">
+            </div>
+            <div class="message-button d-flex flex-row align-items-center
+                justify-content-center"
+                 (click)="unpinMessage(message)"
+                 style="margin-inline-end: 10px"
+                 *ngIf="moreButton && moreButtonID == message.messageID && message.isPinned">
+              <img src="../../../assets/icons/Chat/unpin.svg">
+            </div>
+          </div>
+          <div class="message-button d-flex flex-row align-items-center
+              justify-content-center"
+               matTooltip="{{ 'Chat.reply' | translate }}"
+               style="margin-inline-end: 20px" (click)="replayMsg(message)">
+            <img src="../../../assets/icons/Chat/Replay.svg">
+          </div>
+
+          <div class="replay-message-container flex-column"
+               *ngIf="message.replyTo != null && message.messageTypeId == 1">
+            <div class="my-message-replay-part">
+              <div *ngIf="message.replyTo && messageFinder(message.replyTo);"
+                   (click)="scroll(message.replyTo)">
+                <div *ngFor="let m of messagesArray">
+                  <div *ngIf="m.messageID === message.replyTo">
+                    {{m.fromNickName}}
+                  </div>
+                  <div *ngIf="m.messageID === message.replyTo && m.messageTypeId == 1">
+                      <span
+                        dir="auto">{{m.body.split('\n')[1] ? m.body.split('\n')[0] + '...' : m.body.split('\n')[0]}}</span>
+                  </div>
+                  <div *ngIf="m.messageID === message.replyTo && m.messageTypeId
+                      != 1">
+                    {{m.body.split(':/:')[1]}}
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="message.replyTo && !messageFinder(message.replyTo);">
+                {{'Chat.messageWasDeleted' | translate}}
+              </div>
+            </div>
+            <div>
+              <div class="my-message-replay-message-part d-flex flex-row">
+                <div class="p-2" dir="auto">
+                  <div *ngIf="message.isForwarded" class="my-message-forward">
+                    <div>{{"Chat.forwarded" | translate}}</div>
+                    <div>{{"Chat.from" | translate}}: {{message.forwardedFrom}}</div>
+                  </div>
+                  <div *ngFor="let line of message.body.split('\n')">
+                    <span class="text-break" [innerHTML]="(line | linkFinder:'#FFFFFF')"></span>
+                    <div *ngIf="line == ''">
+                      <br>
+                    </div>
+                  </div>
+                </div>
+                <div class="my-message-time align-self-end"
+                     style="margin-inline-start: auto">
+                  {{ message.sentOn | date:'H:mm' }}
+                  <div *ngIf="message.isEdited" class="my-message-time">{{'Chat.edited'
+                    | translate}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div [style.font-size]="isMessageOnlyEmoji(message.body) ? '100px' : ''"
+               [class.my-message-container]="!isMessageOnlyEmoji(message.body)"
+               class="d-flex
+              flex-row"
+               *ngIf="message.replyTo == null && message.messageTypeId == 1">
+            <div class="p-2" dir="auto">
+              <div *ngIf="message.isForwarded" class="my-message-forward">
+                <div>{{"Chat.forwarded" | translate}}</div>
+                <div>{{"Chat.from" | translate}}: {{message.forwardedFrom}}</div>
+              </div>
+              <div *ngFor="let line of message.body.split('\n')">
+                <span class="text-break" [innerHTML]="line | linkFinder:'#FFFFFF'"></span>
+                <div *ngIf="line == ''">
+                  <br>
+                </div>
+              </div>
+            </div>
+            <div [style.color]="isMessageOnlyEmoji(message.body) ? 'black' : ''" class="my-message-time align-self-end">
+              {{ message.sentOn | date:'H:mm' }}
+              <div *ngIf="message.isEdited" class="sender-message-time">
+                {{'Chat.edited'| translate}}
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="message.messageTypeId == 2"
+               (click)="previewAddress= domainName + '/en-US/File/get?id=' +
+              message.body.split(':/:')[0]; showPreview= true">
+            <img [src]="domainName + '/en-US/File/get?id=' +
+                message.body.split(':/:')[0]" class="preview-image" loading="lazy">
+          </div>
+
+          <!--          <div class="file-message-container d-flex align-items-center" *ngIf="message.messageTypeId == 2">-->
+          <!--            <a [href]="domainName + '/en-US/File/get?id=' + message.body.split(':/:')[0]" download>-->
+          <!--              <div class="d-flex flex-row align-items-center">-->
+          <!--                <div class="p-2">-->
+          <!--                  <div class="rounded-circle file-logo">-->
+          <!--                    <img src="../../../assets/icons/File/FileIcon.svg" style="width: 16px">-->
+          <!--                  </div>-->
+          <!--                </div>-->
+          <!--                <div class="file-info p-2 d-flex flex-column">-->
+          <!--                  <div class="p-2 file-name">-->
+          <!--                    {{message.body.split(':/:')[1]}}-->
+          <!--                  </div>-->
+          <!--                  <div class="p-2 file-size">{{fileService.formatBytes(message.body.split(':/:')[3])}}</div>-->
+          <!--                  &lt;!&ndash;                <div class="p-2 file-size">{{(message.body.split(':/:')[3]/1000000) + ' Mb'}}</div>&ndash;&gt;-->
+          <!--                </div>-->
+          <!--              </div>-->
+          <!--            </a>-->
+          <!--          </div>-->
+
+          <!--          <div class="file-message-container d-flex align-items-center"-->
+          <!--               *ngIf="message.messageTypeId == 3 && message.body.split(':/:')[1].split('.').slice(-1).toString().toLowerCase() != 'mp4'">-->
+          <!--            <a [href]="domainName + '/en-US/File/get?id=' +-->
+          <!--                message.body.split(':/:')[0]" download>-->
+          <!--              <div class="d-flex flex-row align-items-center">-->
+          <!--                <div class="p-2">-->
+          <!--                  <div class="rounded-circle file-logo">-->
+          <!--                    <img src="../../../assets/icons/File/FileIcon.svg"-->
+          <!--                         style="width: 16px">-->
+          <!--                  </div>-->
+          <!--                </div>-->
+          <!--                <div class="file-info p-2 d-flex flex-column">-->
+          <!--                  <div class="p-2 file-name">-->
+          <!--                    {{message.body.split(':/:')[1]}}-->
+          <!--                  </div>-->
+          <!--                  <div class="p-2 file-size ">{{fileService.formatBytes(message.body.split(':/:')[3])}}</div>-->
+          <!--                  &lt;!&ndash;                <div class="p-2 file-size">{{(message.body.split(':/:')[3]/1000000) + ' Mb'}}</div>&ndash;&gt;-->
+          <!--                </div>-->
+          <!--              </div>-->
+          <!--            </a>-->
+          <!--          </div>-->
+          <video *ngIf="message.messageTypeId != 1 && fileService.typeDetector(message.body.split(':/:')[1]) == 'video'"
+                 style="border-radius: 10px;
+              max-width: 350px; max-height: 500px;" controls muted>
+            <source [src]="domainName + '/en-US/File/get?id=' + message.body.split(':/:')[0]">
+          </video>
+
+          <audio *ngIf="message.messageTypeId != 1 && fileService.typeDetector(message.body.split(':/:')[1]) == 'audio'"
+                 controls muted>
+            <source [src]="domainName + '/en-US/File/get?id=' + message.body.split(':/:')[0]">
+          </audio>
+
+
+          <app-show-file type="chat"
+                         *ngIf="message.messageTypeId != 1 && fileService.typeDetector(message.body.split(':/:')[1]) == 'other'"
+                         [data]="message.body"></app-show-file>
+        </div>
+      </div>
+
+      <ng-template #userMenu let-message>
+        <section class="context-menu-container">
+          <div *ngIf="message.isSentFromMe" (click)="editMsg(message); close()" class="context-menu-item">
+            <span>{{ 'Chat.edit' | translate}}</span>
+            <span class="seventask-icon-edit-edit inside-logo"></span>
+          </div>
+          <div *ngIf="message.isSentFromMe" class="context-menu-line"></div>
+
+          <div (click)="replayMsg(message); close()" class="context-menu-item">
+            <span><span>{{ 'Chat.reply' | translate}}</span></span>
+            <span class="seventask-chat2-Replay inside-logo"></span>
+          </div>
+          <div class="context-menu-line"></div>
+
+          <div (click)="openChannelList(message); close()" class="context-menu-item">
+            <span><span>{{ 'Chat.forward' | translate}}</span></span>
+            <span class="seventask-chat2-Replay"
+                  style="transform: scaleX(-1); -webkit-transform: scaleX(-1);-o-transform: scaleX(-1); -moz-transform: scaleX(-1);"></span>
+          </div>
+          <div class="context-menu-line"></div>
+
+          <div *ngIf="message.messageTypeId == 1" (click)="clipboardCopy(message.body); close()"
+               class="context-menu-item">
+            <span><span>{{ 'Chat.copy' | translate}}</span></span>
+            <span class="inside-logo seventask-theme-color">
+                <i class="fa fa-copy"></i>
+              </span>
+          </div>
+          <div *ngIf="message.messageTypeId == 1" class="context-menu-line"></div>
+
+          <div class="context-menu-item"
+               (click)="message.isPinned ? unpinMessage(message) : pinMessage(message); close()">
+            <span *ngIf="message.isPinned">{{ 'Chat.unpin' | translate}}</span>
+            <span *ngIf="message.isPinned" style="font-size: 20px" class="seventask-chat2-unpin inside-logo"></span>
+            <span *ngIf="!message.isPinned">{{ 'Chat.pin' | translate}}</span>
+            <span *ngIf="!message.isPinned" style="font-size: 18px" class="seventask-chat2-pin inside-logo"></span>
+          </div>
+          <div *ngIf="message.isSentFromMe" class="context-menu-line"></div>
+
+          <div *ngIf="message.isSentFromMe" (click)="openDeleteDialog(message); close()" class="context-menu-item">
+            <span style="color: #ff5051"><span>{{ 'Chat.delete' | translate}}</span></span>
+            <span style="color: #ff5051!important;" class="seventask-icon-task-header-trash inside-logo"></span>
+          </div>
+        </section>
+      </ng-template>
+
+      <div class="d-flex align-items-center justify-content-center flex-column" [@listFade] style="opacity: 0.3;">
+        <div *ngIf="messagesArray.length == 0" class="d-flex align-items-center justify-content-center flex-column"
+             style="width: 100%; margin-top: 100px;">
+          <img src="assets/noDataImages/chat.svg" style="width: 15%;">
+          <div class="no-data-message">{{'Chat.noMessageYet' | translate}}</div>
+        </div>
+      </div>
+    </div>
+
+    <form [formGroup]="chatFormGroup">
+      <div class="card-footer footer d-flex justify-content-center"
+           *ngIf="activeChannel != null && !showGetMessagesLoading">
+
+        <div class="d-flex flex-column" style="width: 100%" [@valueChange]="edit || replay || uploadFileLength !== 0">
+          <div *ngIf="uploadFileLength !== 0" class="edit-replay-container">
+            <div class="d-flex flex-column justify-content-center align-items-center">
+              <div class="d-flex flex-row align-items-center justify-content-between mb-1">
+                <div>{{uploadFileLength | numToArabic}} {{'Chat.fileRemaining' | translate}}...</div>
+              </div>
+              <!--              <mat-progress-bar mode="buffer" bufferValue="0" [value]="67"></mat-progress-bar>-->
+              <div style="width:100%; height: 13px; font-size: 10px" class="progress">
+                <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar"
+                     aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="height: 13px"
+                     [style.width.%]="uploadPercentage">{{uploadPercentage | numToArabic}}%
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="edit-replay-container" *ngIf="edit || replay">
+            <div *ngIf="replay">
+              <div class="d-flex bd-highligh" style="border-left: 2px solid
+                  white;">
+                <div class="flex-shrink-1 bd-highlight align-self-center">
+                  <div class="cancel-button" (click)="replay= false;
+                      replayFormGroup.reset()">
+                    <img style="width: 16px" src="../../../assets/icons/Chat/Cancel.svg">
+                  </div>
+                </div>
+                <div class="w-100 bd-highlight">
+                  <div
+                    class="bd-highlight replay-edit-first-field">{{replayFormGroup.controls.replayUserName.value}}</div>
+                  <div class="bd-highlight replay-edit-body"
+                       *ngIf="replayFormGroup.controls.replayMessageTypeId.value == 1">
+                      <span dir="auto">
+                        {{replayFormGroup.controls.replayBody.value.split('\n')[1] ? replayFormGroup.controls.replayBody.value.split('\n')[0] + '...' :
+                        replayFormGroup.controls.replayBody.value.split('\n')[0]}}
+                      </span>
+                  </div>
+                  <div class="bd-highlight replay-edit-body"
+                       *ngIf="replayFormGroup.controls.replayMessageTypeId.value != 1">
+                    {{replayFormGroup.controls.replayBody.value.split(':/:')[1]}}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="edit">
+              <div class="d-flex bd-highligh" style="border-left: 2px solid
+                  white; padding-inline-end: 5px">
+                <div class="flex-shrink-1 bd-highlight align-self-center">
+                  <div class="cancel-button" (click)="edit= false;editFormGroup.reset(); chatFormGroup.reset()">
+                    <img style="width: 16px" src="../../../assets/icons/Chat/Cancel.svg">
+                  </div>
+                </div>
+                <div class="w-100 bd-highlight">
+                  <div class="bd-highlight replay-edit-first-field">Edit
+                    Message
+                  </div>
+                  <div class="bd-highlight replay-edit-body">
+                      <span dir="auto">
+                        {{editFormGroup.controls.editBody.value.split('\n')[1] ? editFormGroup.controls.editBody.value.split('\n')[0] + '...' :
+                        editFormGroup.controls.editBody.value.split('\n')[0]}}
+                      </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="footer-send-message-area d-flex flex-row align-items-center" style="width: 100%">
+            <mat-menu (close)="messageTextArea.focus()" class="emoji-menu" style="width: 500px !important;"
+                      #emojiMenu="matMenu" yPosition="below"
+                      xPosition="before">
+              <emoji-mart [color]="'#' + emojiPickerColor" (click)="$event.stopPropagation()"
+                          [style.width.%]="100" [style.display]="'inline-flex'"
+                          [showPreview]="false"
+                          [darkMode]="false"
+                          (emojiClick)="addEmoji($event)"
+                          [isNative]="false"
+                          [showSingleCategory]="true"
+                          [emojiTooltip]="true"></emoji-mart>
+            </mat-menu>
+            <textarea  #messageTextArea dir="auto"
+                      style="width: 100%"
+                      class="send-message-text-area"
+                      placeholder="{{ 'Placeholders.writeMessage' | translate}}"
+                      cdkAutosizeMinRows="1"
+                      cdkAutosizeMaxRows="5"
+                      formControlName="newMessage"
+                      [(ngModel)]="newMessageWithEmoji"
+                      (keypress)="sendWithEnter($event)"
+                      (keyup.enter)="resetIfMessageIsEmpty()"></textarea>
+            <button class="emoji-button" [matMenuTriggerFor]="emojiMenu">
+              <img style="opacity: 0.3" src="assets/icons/emoji.svg">
+            </button>
+            <div class="p-2" style="margin-inline-end: 5px;
+                margin-inline-start: 5px; cursor: pointer"
+                 (click)="clickSelectFile()">
+              <img src="../../../assets/icons/Chat/atach.svg">
+              <!--                upload file RIP-->
+            </div>
+            <div class="p-2" id="sendBtn" style="cursor: pointer" (click)="sendOrEditMessage()">
+              <div style="margin-inline-end:10px" [style]="'transform: rotate(' + iconRotationDegree + 'deg)'">
+                <span class="seventask-icon-chat-send"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+  </div>
+
+</div>
+
+
+<div *ngIf="showPreview" class="previewContainer" (click)="showPreview= false;
+    previewAddress= ''">
+  <div class="multimediaContainer">
+    <!--    <p class="tutorialTitle">In less than 2 minutes, learn how it works.</p>-->
+    <!--    <video controls class="previewMultimedia centerItem">-->
+    <!--      <source src="assets/videos/Intro_01.mp4" type="video/mp4">-->
+    <!--      Your browser does not support HTML video :(-->
+    <!--    </video>-->
+    <img class="previewMultimedia centerItem" style="max-height: 500px;
+        max-width: 500px" [src]="previewAddress" loading="lazy">
+    <!--    <div>-->
+    <!--&lt;!&ndash;      <button class="skipButton centerItem" (click)="showPreview= false; previewAddress = ''">Close</button>&ndash;&gt;-->
+    <!--    </div>-->
+  </div>
+</div>

@@ -1,0 +1,515 @@
+<div class="main-container">
+
+  <!--  <div class="tab-container">-->
+  <!--    <div class="tab" [ngClass]="viewValue == 'List' ? 'active-tab' : 'tab'"-->
+  <!--         (click)="viewValue = 'List';newMessage()">-->
+  <!--      <img class="view-icon" src="assets/icons/Task/disabled-list.svg">-->
+  <!--      <div class="view-name">{{'Task.list' | translate}}</div>-->
+  <!--    </div>-->
+  <!--    <div *ngIf="!isPersonalProjectSelected && !isAllTasksSelected" class="tab"-->
+  <!--         [ngClass]="viewValue == 'Board' ? 'active-tab' : 'tab'"-->
+  <!--         (click)="viewValue = 'Board';newMessage()">-->
+  <!--      <img class="view-icon" src="assets/icons/Task/board.svg">-->
+  <!--      <div class="view-name">{{'Task.board' | translate}}</div>-->
+  <!--    </div>-->
+  <!--  </div>-->
+  <div class="seventask-theme-color d-flex flex-row align-items-center justify-content-start mt-auto"
+       style="height: 100%">
+
+    <div style="cursor: pointer; padding-inline-end: 35px;height: 100%"
+         [style.opacity]="viewValue == 'List' ? '1' : '0.2' "
+         (click)="viewValue = 'List';newMessage()"
+         class="view-option d-flex flex-column">
+      <div class="d-flex flex-row align-items-center" style="height: 96%"
+           matTooltip="{{ headerIsSmall && viewValue !== 'List' ? ('Task.list' | translate) : null }}"
+           [matTooltipPosition]="'below'"
+           matTooltipShowDelay="100"
+           matTooltipHideDelay="100">
+        <span class="seventask-icon-task-header-list-view  view-icon"></span>
+        <div *ngIf="!headerIsSmall || viewValue === 'List'" class="">{{'Task.list' | translate}}</div>
+      </div>
+      <div [class.active-line]="viewValue == 'List'" [class.active-test]="viewValue != 'List'"></div>
+    </div>
+    <!--    && !isAllTasksSelected-->
+    <div
+      style="cursor: pointer; padding-inline-end: 35px;height: 100%"
+      [style.opacity]="viewValue == 'Board' ? '1' : '0.2' "
+      (click)="viewValue = 'Board';newMessage()"
+      class="view-option d-flex flex-column">
+      <div class="d-flex flex-row align-items-center" style="height: 96%"
+           matTooltip="{{ headerIsSmall && viewValue !== 'Board' ? ('Task.board' | translate) : null }}"
+           [matTooltipPosition]="'below'"
+           matTooltipShowDelay="100"
+           matTooltipHideDelay="100">
+        <span class="seventask-icon-task-header-board  view-icon"></span>
+        <div *ngIf="!headerIsSmall || viewValue === 'Board'" class="">{{'Task.board' | translate}}</div>
+      </div>
+      <div [class.active-line]="viewValue == 'Board'" [class.active-test]="viewValue != 'Board'"></div>
+    </div>
+
+    <div style="cursor: pointer; padding-inline-end: 35px;height: 100%"
+         [style.opacity]="viewValue == 'Gantt' ? '1' : '0.2' "
+         (click)="viewValue = 'Gantt';newMessage()"
+         class="view-option d-flex flex-column">
+      <div class="d-flex flex-row align-items-center" style="height:96%"
+           matTooltip="{{ headerIsSmall && viewValue !== 'Gantt' ? ('Task.gantt' | translate) : null }}"
+           [matTooltipPosition]="'below'"
+           matTooltipShowDelay="100"
+           matTooltipHideDelay="100">
+        <span class="seventask-icon-header-view2-gantt  view-icon"></span>
+        <div *ngIf="!headerIsSmall || viewValue === 'Gantt'" style="width: 90px"
+             class="">{{'Task.gantt' | translate}}</div>
+      </div>
+      <div [class.active-line]="viewValue == 'Gantt'" [class.active-test]="viewValue != 'Gantt'"></div>
+    </div>
+
+    <div style="cursor: pointer; padding-inline-end: 35px;height: 100%"
+         [style.opacity]="viewValue == 'Table' ? '1' : '0.2' "
+         (click)="viewValue = 'Table';newMessage()"
+         class="view-option d-flex flex-column">
+      <div class="d-flex flex-row align-items-center" style="height:96%"
+           matTooltip="{{ headerIsSmall && viewValue !== 'Table' ? ('Task.table' | translate) : null }}"
+           [matTooltipPosition]="'below'"
+           matTooltipShowDelay="100"
+           matTooltipHideDelay="100">
+        <span class="seventask-icon-header-view2-table  view-icon"></span>
+        <div *ngIf="!headerIsSmall || viewValue === 'Table'" class="">{{'Task.table' | translate}}</div>
+      </div>
+      <div [class.active-line]="viewValue == 'Table'" [class.active-test]="viewValue != 'Table'"></div>
+    </div>
+
+  </div>
+
+  <div style="margin-inline-end: 5px;opacity: 0"
+       (@slideInOut.done)="searchBox.focus()" [@slideInOut]="searchClicked ? 'out': 'in'"
+       class="task-title">
+    <input  #searchBox style="width: 100%" class="task-title-input"
+           [dir]="searchedTask == '' ? '' : 'auto'"
+           (keyup)="changeSearchedTask(searchedTask)"
+           [(ngModel)]="searchedTask"
+           placeholder="{{ 'Placeholders.searchTasks' | translate }}">
+    <div class="delete-search">
+      <span *ngIf="searchedTask.length > 0" style="font-size: 13px;cursor: pointer"
+            class="seventask-icon-edit-cancel-narrow" (click)="changeSearchedTask('')">
+      </span>
+    </div>
+
+  </div>
+
+  <div class="header-icons">
+
+    <div
+      (click)=" !searchClicked ? searchBox.focus() : ''; searchClicked = !searchClicked;searchedTask='';changeSearchedTask('')"
+      style="cursor: pointer;"
+      [style.background-color]="searchClicked ? '#91a2bb' : ''"
+      [style.color]="searchClicked ? '#fafbfb' : ''"
+      class="toolbar-button-icon hover-style-2">
+      <span class="seventask-icon-tools-search"></span>
+    </div>
+
+    <div matBadgeColor="primary"
+         matBadgeSize="small"
+         [matBadge]="enabledFilters != null ? enabledFilters.length : 0"
+         [matBadgeHidden]="enabledFilters == null || enabledFilters.length === 0"
+         (click)="loadFilters();" [matMenuTriggerFor]="filterControl" class="toolbar-button-icon hover-style-2">
+      <span *ngIf="enabledFilters == null || enabledFilters.length == 0" class="seventask-icon-tools-filter"></span>
+      <span *ngIf="enabledFilters != null && enabledFilters.length > 0"
+            class="seventask-icon-task-header-hasFilter"></span>
+    </div>
+
+    <div [matMenuTriggerFor]="sortControl" class="toolbar-button-icon hover-style-2">
+      <span class="seventask-icon-tools-sort" style="transform: rotate(90deg);"></span>
+    </div>
+
+    <mat-menu style="padding: 0 0 0 0" class="sort-container" #sortControl>
+      <div class="sort-content" (click)="$event.stopPropagation()">
+        <mat-radio-group
+          aria-labelledby="example-radio-group-label"
+          class="example-radio-group"
+          [(ngModel)]="sortName">
+          <mat-radio-button
+            [class.manual-sort]="sort.name === 'manual'"
+            #radio (change)="changeSortName($event)" class="example-radio-button"
+            *ngFor="let sort of sortCategories" [value]="sort.name">
+            {{'Sort.' + sort.name | translate}}
+          </mat-radio-button>
+        </mat-radio-group>
+        <mat-radio-group *ngIf="sortName != 'manual' && sortName != 'دستی'" [(ngModel)]="isAscending"
+                         class="example-radio-group" aria-label="Select an option">
+          <mat-radio-button (change)="changeIsAscending($event)" checked class="example-radio-button" [value]="true">
+            {{'Sort.ascending' | translate}}
+          </mat-radio-button>
+          <mat-radio-button (change)="changeIsAscending($event)" class="example-radio-button" [value]="false">
+            {{'Sort.descending' | translate}}
+          </mat-radio-button>
+        </mat-radio-group>
+
+        <!--        <div>{{sortName}}</div>-->
+      </div>
+      <div (click)="$event.stopPropagation();resetSort()"
+           class="filter-control">
+        <!--        <span style="margin-inline-end: 10px" class="seventask-icon-task-header-trash"></span>-->
+        <img style="margin-inline-end: 10px" src="assets/icons/reset.svg">
+        <span class="filter-control-buttons">
+            {{'Sort.resetSort' | translate}}
+          </span>
+      </div>
+    </mat-menu>
+
+    <mat-menu (close)="disableAnimation()" class="filter-container" #filterControl="matMenu">
+      <div style="padding-bottom: 5px" (click)="$event.stopPropagation()">
+        <mat-label>
+          <div (click)="$event.stopPropagation()" class="add-new-filter-text">
+            {{'Task.activeFilters' | translate}}
+          </div>
+        </mat-label>
+        <div [@fadeInOut]="activeFilters.length === 0 ? 'show' : 'hide'">
+          <div *ngIf="activeFilters.length === 0" class="d-flex align-items-center justify-content-center flex-column">
+            <img style="margin-inline-end: 5px;width: 50px" src="assets/noDataImages/filter.svg">
+            <br>
+            <div style="color:#dddddd;">
+              {{ 'Filter.noFilters'| translate}}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div [@listAnimation]
+           [@.disabled]="disabled"
+           *ngFor="let activeFilter of activeFilters;let i = index">
+        <!--        {{activeFilter}}-->
+
+        <div class="active-filter-row " *ngIf="activeFilter.name  === 'Priority' || activeFilter.name  === 'اولویت'">
+          <div style="width: 19%;padding: 10px" *ngIf="i === 0">
+            {{'Filter.where' | translate}}
+          </div>
+
+          <mat-select #andOrSelect (selectionChange)="changeAndOr(andOrSelect.value)" *ngIf="i !== 0"
+                      style="margin-inline-start: 0" [(ngModel)]="andOr" [disabled]="i > 1 || i ===0 "
+                      (click)="$event.stopPropagation()"
+                      class="is-or-isNot">
+            <mat-option [value]="true">{{'Filter.and' | translate}}</mat-option>
+            <mat-option [value]="false">{{'Filter.or' | translate}}</mat-option>
+          </mat-select>
+          <div (click)="$event.stopPropagation()" class="filter-name-container">
+            {{activeFilter.name}}
+            <img src="../../../../../assets/icons/Filter/priority-white.svg">
+          </div>
+          <mat-select (selectionChange)="filterTasks()" (ngModelChange)="activeFilter.is=$event"
+                      [ngModel]="(activeFilter| castToFilterPriorityModel).is" (click)="$event.stopPropagation()"
+                      class="is-or-isNot">
+            <mat-option [value]="true">{{'Filter.is' | translate}}</mat-option>
+            <mat-option [value]="false">{{'Filter.isNot' | translate}}</mat-option>
+          </mat-select>
+          <mat-select (selectionChange)="filterTasks()" multiple (ngModelChange)="activeFilter.priorityIds=$event"
+                      [ngModel]="(activeFilter|castToFilterPriorityModel).priorityIds"
+                      (click)="$event.stopPropagation()" class="priority-select">
+            <mat-option *ngFor="let priority of taskPriorities" [value]="priority.id">
+              <div class="priority-select-row">
+                {{priority.name}}
+                <div *ngIf="priority.id == 5"
+                     [class]="priority.id === 5 ? 'label-high':(priority.id === 3 ? 'label-medium' : 'label-low')">
+                  <img style="margin-inline-end: 5px" src="../../../../../assets/icons/Task/label-high.svg">
+                </div>
+                <div *ngIf="priority.id == 3"
+                     [class]="priority.id === 5 ? 'label-high':(priority.id === 3 ? 'label-medium' : 'label-low')">
+                  <img style="margin-inline-end: 5px" src="../../../../../assets/icons/Task/label-medium.svg">
+                </div>
+                <div *ngIf="priority.id == 1"
+                     [class]="priority.id === 5 ? 'label-high':(priority.id === 3 ? 'label-medium' : 'label-low')">
+                  <img style="margin-inline-end: 5px" src="../../../../../assets/icons/Task/label-low.svg">
+                </div>
+              </div>
+            </mat-option>
+          </mat-select>
+          <div (click)="$event.stopPropagation();removeFilter(i)" class="remove-filter">
+            <img style="margin-inline-end: 10px" src="../../../../../assets/icons/delete.svg">
+          </div>
+        </div>
+
+        <div class="active-filter-row " *ngIf="activeFilter.name  === 'Assignee' || activeFilter.name  === 'مسئول'">
+          <div style="width: 19%;padding: 10px" *ngIf="i === 0">
+            {{'Filter.where' | translate}}
+          </div>
+          <mat-select #andOrSelect2 (selectionChange)="changeAndOr(andOrSelect2.value)" *ngIf="i !== 0"
+                      style="margin-inline-start: 0;" [(ngModel)]="andOr" [disabled]="i > 1 || i ===0 "
+                      (click)="$event.stopPropagation()"
+                      class="is-or-isNot">
+            <mat-option [value]="true">{{'Filter.and' | translate}}</mat-option>
+            <mat-option [value]="false">{{'Filter.or' | translate}}</mat-option>
+          </mat-select>
+          <div (click)="$event.stopPropagation()" class="filter-name-container">
+            {{activeFilter.name}}
+            <img src="../../../../../assets/icons/Filter/assignee-white.svg">
+          </div>
+          <mat-select (selectionChange)="filterTasks()"
+                      [style]="selectAssignee.value === 'Is' || selectAssignee.value === 'Is Not' ?'' : 'width:70%'"
+                      #selectAssignee
+                      [(ngModel)]="activeFilter.query" (click)="$event.stopPropagation()"
+                      class="is-or-isNot">
+            <mat-option [value]="'Is'">{{'Filter.is' | translate}}</mat-option>
+            <mat-option [value]="'Is Not'">{{'Filter.isNot' | translate}}</mat-option>
+            <mat-option [value]="'Set'">{{'Filter.set' | translate}}</mat-option>
+            <mat-option [value]="'Is Not Set'">{{'Filter.notSet' | translate}}</mat-option>
+          </mat-select>
+          <mat-select *ngIf="selectAssignee.value === 'Is' || selectAssignee.value === 'Is Not'"
+                      (selectionChange)="filterTasks()" multiple [(ngModel)]="activeFilter.assigneesIds"
+                      (click)="$event.stopPropagation()" class="priority-select">
+            <mat-option *ngFor="let assignee of tasksUsers" [value]="assignee.userId">
+              <div class="assignee-select">
+                {{assignee.nickName}}
+                <div *ngIf="assignee.profileImageGuid == null" class="member-without-image"
+                     style="background-color: #1EC1C3">{{assignee.nickName.charAt(0)}}</div>
+
+                <img #tooltip="matTooltip"
+                     [matTooltip]="assignee.nickName"
+                     [matTooltipPosition]="'below'"
+                     matTooltipHideDelay="100" *ngIf="assignee.profileImageGuid != null"
+                     [src]="domainName + '/en-US/File/get?id=' + assignee.profileImageGuid + '&quality=100'"
+                     style="background-color: #86A8E7" class="member">
+              </div>
+            </mat-option>
+          </mat-select>
+          <div (click)="$event.stopPropagation();removeFilter(i)" class="remove-filter">
+            <img style="margin-inline-end: 10px" src="../../../../../assets/icons/delete.svg">
+          </div>
+        </div>
+
+        <div class="active-filter-row " *ngIf="activeFilter.name  === 'Creator' || activeFilter.name  === 'سازنده'">
+          <div style="width: 19%;padding: 10px" *ngIf="i === 0">
+            {{'Filter.where' | translate}}
+          </div>
+          <mat-select #andOrSelect2 (selectionChange)="changeAndOr(andOrSelect2.value)" *ngIf="i !== 0"
+                      style="margin-inline-start: 0" [(ngModel)]="andOr" [disabled]="i > 1 || i ===0 "
+                      (click)="$event.stopPropagation()"
+                      class="is-or-isNot">
+            <mat-option [value]="true">{{'Filter.and' | translate}}</mat-option>
+            <mat-option [value]="false">{{'Filter.or' | translate}}</mat-option>
+          </mat-select>
+          <div (click)="$event.stopPropagation()" class="filter-name-container">
+            {{activeFilter.name}}
+            <img src="../../../../../assets/icons/Filter/assignee-white.svg">
+          </div>
+          <mat-select (selectionChange)="filterTasks()"
+                      [style]="selectCreator.value === 'Is' || selectCreator.value === 'Is Not' ?'' : 'width:70%'"
+                      #selectCreator
+                      [(ngModel)]="activeFilter.query" (click)="$event.stopPropagation()"
+                      class="is-or-isNot">
+            <mat-option [value]="'Is'">{{'Filter.is' | translate}}</mat-option>
+            <mat-option [value]="'Is Not'">{{'Filter.isNot' | translate}}</mat-option>
+          </mat-select>
+          <mat-select *ngIf="selectCreator.value === 'Is' || selectCreator.value === 'Is Not'"
+                      (selectionChange)="filterTasks()" [(ngModel)]="activeFilter.assigneesId"
+                      (click)="$event.stopPropagation()" class="priority-select">
+            <mat-option *ngFor="let assignee of tasksUsers" [value]="assignee.userId">
+              <div class="assignee-select">
+                {{assignee.nickName}}
+                <div *ngIf="assignee.profileImageGuid == null" class="member-without-image"
+                     style="background-color: #1EC1C3">{{assignee.nickName.charAt(0)}}</div>
+
+                <img #tooltip="matTooltip"
+                     [matTooltip]="assignee.nickName"
+                     [matTooltipPosition]="'below'"
+                     matTooltipHideDelay="100" *ngIf="assignee.profileImageGuid != null"
+                     [src]="domainName + '/en-US/File/get?id=' + assignee.profileImageGuid + '&quality=100'"
+                     style="background-color: #86A8E7" class="member">
+              </div>
+            </mat-option>
+          </mat-select>
+          <div (click)="$event.stopPropagation();removeFilter(i)" class="remove-filter">
+            <img style="margin-inline-end: 10px" src="../../../../../assets/icons/delete.svg">
+          </div>
+        </div>
+
+        <div class="active-filter-row " *ngIf="activeFilter.name  === 'Urgent' || activeFilter.name  === 'اورژانسی'">
+          <div style="width: 19%;padding: 10px" *ngIf="i === 0">
+            {{'Filter.where' | translate}}
+          </div>
+          <mat-select #andOrSelect3 (selectionChange)="changeAndOr(andOrSelect3.value)" *ngIf="i !== 0"
+                      style="margin-inline-start: 0" [(ngModel)]="andOr" [disabled]="i > 1 || i ===0 "
+                      (click)="$event.stopPropagation()"
+                      class="is-or-isNot">
+            <mat-option [value]="true">{{'Filter.and' | translate}}</mat-option>
+            <mat-option [value]="false">{{'Filter.or' | translate}}</mat-option>
+          </mat-select>
+          <div (click)="$event.stopPropagation()" class="filter-name-container">
+            {{activeFilter.name}}
+            <img src="../../../../../assets/icons/Filter/urgent-white.svg">
+          </div>
+          <mat-select style="width: 70%" (selectionChange)="filterTasks()" (ngModelChange)="activeFilter.is=$event"
+                      [ngModel]="(activeFilter| castToFilterPriorityModel).is" (click)="$event.stopPropagation()"
+                      class="is-or-isNot">
+            <mat-option [value]="true">{{'Filter.is' | translate}}</mat-option>
+            <mat-option [value]="false">{{'Filter.isNot' | translate}}</mat-option>
+          </mat-select>
+
+          <div (click)="$event.stopPropagation();removeFilter(i)" class="remove-filter">
+            <img style="margin-inline-end: 10px" src="../../../../../assets/icons/delete.svg">
+          </div>
+        </div>
+
+        <div class="active-filter-row " *ngIf="activeFilter.name  === 'Status' || activeFilter.name  === 'وضعیت'">
+
+          <div style="width: 19%;padding: 10px" *ngIf="i === 0">
+            {{'Filter.where' | translate}}
+          </div>
+
+          <mat-select #andOrSelect (selectionChange)="changeAndOr(andOrSelect.value)" *ngIf="i !== 0"
+                      style="margin-inline-start: 0" [(ngModel)]="andOr" [disabled]="i > 1 || i ===0 "
+                      (click)="$event.stopPropagation()"
+                      class="is-or-isNot">
+            <mat-option [value]="true">{{'Filter.and' | translate}}</mat-option>
+            <mat-option [value]="false">{{'Filter.or' | translate}}</mat-option>
+          </mat-select>
+
+          <div (click)="$event.stopPropagation()" class="filter-name-container">
+            {{activeFilter.name}}
+            <img src="../../../../../assets/icons/Filter/status-white.svg">
+          </div>
+          <mat-select (selectionChange)="filterTasks()" (ngModelChange)="activeFilter.is=$event"
+                      [ngModel]="activeFilter.is" (click)="$event.stopPropagation()"
+                      class="is-or-isNot">
+            <mat-option [value]="true">{{'Filter.is' | translate}}</mat-option>
+            <mat-option [value]="false">{{'Filter.isNot' | translate}}</mat-option>
+          </mat-select>
+          <mat-select (selectionChange)="filterTasks()" multiple (ngModelChange)="activeFilter.statusNames=$event"
+                      [ngModel]="activeFilter.statusNames"
+                      (click)="$event.stopPropagation()" class="priority-select">
+            <mat-option *ngFor="let status of taskStatuses" [value]="status">
+              <div class="priority-select-row">
+                {{status}}
+
+              </div>
+            </mat-option>
+          </mat-select>
+          <div (click)="$event.stopPropagation();removeFilter(i)" class="remove-filter">
+            <img style="margin-inline-end: 10px" src="../../../../../assets/icons/delete.svg">
+          </div>
+        </div>
+
+        <div class="active-filter-row " *ngIf="activeFilter.name  === 'Tag' || activeFilter.name  === 'تگ'">
+
+          <div style="width: 19%;padding: 10px" *ngIf="i === 0">
+            {{'Filter.where' | translate}}
+          </div>
+          <mat-select #andOrSelect (selectionChange)="changeAndOr(andOrSelect.value)" *ngIf="i !== 0"
+                      style="margin-inline-start: 0" [(ngModel)]="andOr" [disabled]="i > 1 || i ===0 "
+                      (click)="$event.stopPropagation()"
+                      class="is-or-isNot">
+            <mat-option [value]="true">{{'Filter.and' | translate}}</mat-option>
+            <mat-option [value]="false">{{'Filter.or' | translate}}</mat-option>
+          </mat-select>
+
+          <div (click)="$event.stopPropagation()" class="filter-name-container">
+            {{activeFilter.name}}
+            <img src="../../../../../assets/icons/Filter/labels-white.svg">
+          </div>
+
+          <mat-select (selectionChange)="filterTasks()" (ngModelChange)="activeFilter.is=$event"
+                      [ngModel]="(activeFilter| castToFilterPriorityModel).is" (click)="$event.stopPropagation()"
+                      class="is-or-isNot">
+            <mat-option [value]="true">{{'Filter.is' | translate}}</mat-option>
+            <mat-option [value]="false">{{'Filter.isNot' | translate}}</mat-option>
+          </mat-select>
+
+          <div class="priority-select" [matMenuTriggerFor]="tagMenu"
+               style="height: 100%;cursor: pointer"
+               (click)="$event.stopPropagation()">
+            <span *ngIf="activeFilter.tags.length === 0"
+                  class="seventask-theme-color">{{'Filter.clickToAddFilter'| translate}}</span>
+            <span *ngIf="activeFilter.tags.length >= 1" class="seventask-theme-color">{{activeFilter.tags[0]}}</span>
+            <span *ngIf="activeFilter.tags.length >= 2" class="seventask-theme-color">, {{activeFilter.tags[1]}}</span>
+            <span *ngIf="activeFilter.tags.length >= 3" class="seventask-theme-color">, {{activeFilter.tags[2]}}</span>
+            <span *ngIf="activeFilter.tags.length >= 4" class="seventask-theme-color">, ...</span>
+          </div>
+          <mat-menu class="tags-menu" #tagMenu>
+            <mat-chip-list class="d-flex flex-column" #tagList aria-label="Fruit selection"
+                           (click)="$event.stopPropagation()">
+              <div class="d-flex flex-row justify-content-center align-items-center" style="width: 100%;height: 49px">
+                <input dir="auto" [class.placeholder-rtl]="textDirection === 'rtl'"
+                       #tag class="add-tag-input"
+                       placeholder="{{'Placeholders.addTagToFilter' | translate}}"
+                       [formControl]="tagCtrl"
+                       [matChipInputFor]="tagList"
+                       [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                       (matChipInputTokenEnd)="addTag($event,activeFilter)">
+                <button (click)="addTagFromButton(tag.value,activeFilter)" class="add-item">+</button>
+              </div>
+              <div style="height: 150px;overflow-y: auto">
+                <mat-chip style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap;"
+                          *ngFor="let tag of activeFilter.tags"
+                          (removed)="removeTag(tag,activeFilter)">
+                  {{tag}}
+                  <button class="d-flex justify-content-center align-items-center" style="border: none;outline: none"
+                          matChipRemove>
+                    <mat-icon>cancel</mat-icon>
+                  </button>
+                </mat-chip>
+              </div>
+            </mat-chip-list>
+          </mat-menu>
+
+
+          <div (click)="$event.stopPropagation();removeFilter(i)" class="remove-filter">
+            <img style="margin-inline-end: 10px" src="../../../../../assets/icons/delete.svg">
+          </div>
+        </div>
+
+
+      </div>
+
+      <div (click)="$event.stopPropagation()" class="filter-control-container">
+        <div #filtersToSelectTrigger="matMenuTrigger" [mat-menu-trigger-for]="filtersToSelect" class="filter-control">
+          <span style="margin-inline-end: 10px" class="seventask-icon-add-add1"></span>
+          <span class="filter-control-buttons">
+            {{'Filter.addFilter' | translate}}
+          </span>
+
+        </div>
+        <div *ngIf="enabledFilters != null && enabledFilters.length > 0" (click)="clearFilters()"
+             class="filter-control">
+          <span style="margin-inline-end: 10px" class="seventask-icon-task-header-trash"></span>
+          <span class="filter-control-buttons">
+            {{'Filter.clearFilters' | translate}}
+          </span>
+        </div>
+      </div>
+
+    </mat-menu>
+
+    <mat-menu id="filtersToSelect" (click)="$event.stopPropagation()" class="filters-to-select-container"
+              #filtersToSelect="matMenu">
+
+      <div (click)="$event.stopPropagation();addFilterToActiveFilters(filter);filtersToSelectTrigger.closeMenu()"
+           class="filter-to-select"
+           *ngFor="let filter of filters">
+        <div class="select-filter">
+          <div style="color:#2E4A77;">{{filter}}</div>
+          <span *ngIf="filter === 'Urgent' || filter === 'اورژانسی'" style="font-size: 20px"
+                class="seventask-icon-task-header-urgent"></span>
+          <span *ngIf="filter === 'Priority' || filter === 'اولویت'" class="seventask-icon-task-header-priority"></span>
+          <span *ngIf="filter === 'Assignee' || filter === 'مسئول'" class="seventask-icon-task-header-assignee"></span>
+          <span *ngIf="filter === 'Creator' || filter === 'سازنده'" class="seventask-icon-task-header-assignee"></span>
+          <span *ngIf="filter === 'Status' || filter === 'وضعیت'" class="seventask-icon-header-filter-status"></span>
+          <span *ngIf="filter === 'Tag' || filter === 'تگ'" class="seventask-icon-header-tag-labels"></span>
+        </div>
+      </div>
+
+    </mat-menu>
+
+  </div>
+
+  <div class="new-item hover-style-5 smooth-rectangle" (click)="openNewTaskDialog()">
+    <div class="new-item-add-logo">
+      <img src="../../../../../assets/icons/Project/Add.svg">
+    </div>
+    <div class="new-item-button-title">
+      {{'Task.newTask' | translate}}
+    </div>
+  </div>
+
+
+</div>
+<!--<div style="transform: scale(-1,1) ">-->
+<!--<span style=" color:red !important; font-size: 45px;" class="seventask-icon-CSSFile"></span>-->
+<!--</div>-->

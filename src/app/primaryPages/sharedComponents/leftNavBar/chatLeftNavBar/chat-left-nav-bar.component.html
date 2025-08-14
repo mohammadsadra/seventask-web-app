@@ -1,0 +1,122 @@
+<div class="list-container d-flex flex-column" [style.height]="height + 'px'"
+     dir="auto" (resized)="onResized($event)">
+
+  <div class="p-2 page-info">
+    <div class="page-info-logo">
+      <span style="font-size: 25px" class="seventask-icon-pages-my-chats"></span>
+    </div>
+    <div class="chat-info-title">
+      {{ 'Chat.myChats' | translate}}
+    </div>
+  </div>
+
+  <div class="p-2 d-flex flex-row justify-content-around tab-container">
+    <div class="p-2 tab" [ngClass]="activeTab == 'All' ? 'active-tab' : 'tab'"
+         (click)="activeTab= 'All'; typeFilter= null">
+      {{'Chat.all' | translate}}
+      <br><span *ngIf="activeTab == 'All'" style="margin-left: -2px">•</span>
+    </div>
+    <div class="p-2 align-self-start tab" [ngClass]="activeTab == 'private' ? 'active-tab' : 'tab'"
+         (click)="activeTab= 'private'; typeFilter= 1">
+      {{'Chat.private' | translate}}
+      <br><span *ngIf="activeTab == 'private'">•</span>
+    </div>
+    <div class="p-2 tab" [ngClass]="activeTab == 'Projects' ? 'active-tab' : 'tab'"
+         (click)="activeTab= 'Projects'; typeFilter= 3">
+      {{'Chat.projects' | translate}}
+      <br><span *ngIf="activeTab == 'Projects'">•</span>
+    </div>
+    <div class="p-2 tab" [ngClass]="activeTab == 'Teams' ? 'active-tab' : 'tab'"
+         (click)="activeTab= 'Teams'; typeFilter= 2">
+      {{'Chat.teams' | translate}}
+      <br><span *ngIf="activeTab == 'Teams'">•</span>
+    </div>
+    <!--    <div class="p-2 align-self-start tab" [ngClass]="activeTab == 'dots' ? 'active-tab' : 'tab'"-->
+    <!--             (click)="activeTab = 'dots'; typeFilter= 1">-->
+    <!--          <img class="align-self-start" style="padding-bottom: 10px" src="assets/icons/Chat/threedots-active.svg"-->
+    <!--               *ngIf="activeTab == 'dots'">-->
+    <!--          <img class="align-self-start" style="padding-bottom: 10px" src="assets/icons/Chat/threedots.svg"-->
+    <!--               *ngIf="activeTab != 'dots'">-->
+    <!--        </div>-->
+
+  </div>
+  <div class="d-flex justify-content-center">
+    <div class="p-2 justify-content-center align-items-center search">
+      <form [formGroup]="search">
+        <input [class.placeholder-rtl]="textDirection === 'rtl'"
+               class="search-input" placeholder="{{ 'Placeholders.searchForMember' | translate}}"
+               formControlName="searchField"
+               [dir]="search.controls.searchField.valid ? 'auto': ''"
+               (keyup)="searchFieldChanged()"
+               [style.padding-left.px]="((leftSidebarWidth*0.9)-116)/2"
+               [style.padding-right.px]="((leftSidebarWidth*0.9)-116)/2">
+      </form>
+    </div>
+  </div>
+
+  <div class="p-2 members-list d-flex flex-column">
+
+    <div [id]="channel.guid" *ngFor="let channel of channels | channelTypeFilter: typeFilter"
+         class="channel"
+         (click)="selectActiveChannel(channel)">
+      <div class="p-2 d-flex flex-row align-items-center member-container">
+
+        <div class="img_cont_msg p-2 d-flex align-items-center justify-content-center rounded-circle"
+             [matBadge]="channel.numberOfUnreadMessages" [matBadgeHidden]="!channel.numberOfUnreadMessages> 0"
+             matBadgePosition="below after" matBadgeSize="small"
+
+             style="background: rgba(66,120,223,0.05); position: relative">
+          <div *ngIf="channel.isOnline" class="is-online-badge">
+
+          </div>
+          <img *ngIf="channel.profileImageGuid != null"
+               [src]="domainName + '/en-US/File/get?id=' + channel.profileImageGuid + '&quality=100'"
+               class="rounded-circle user_img_msg">
+          <div class="seventask-theme-color d-flex flex-row align-items-center justify-content-center"
+               style="height: 40px; width: 40px"
+               *ngIf="channel.profileImageGuid == null">
+            {{channel.title[0].toUpperCase()}}
+          </div>
+
+        </div>
+
+        <div class="p-2 w-100 d-flex flex-column justify-content-between" style="height: 40px;">
+          <div class="p-2 username d-flex flex-row">
+            <div class="p-2"
+                 style="flex-grow: 2; text-overflow: ellipsis; width: 105px; overflow: hidden; white-space: nowrap;">
+              {{channel.title}}
+            </div>
+            <div style="margin-inline-start: auto" class="last-message-time">
+              {{channel.lastMessage == null ? channel.lastTransactionDateTime.toString() : channel.lastMessage.sendOn.toString()}}
+            </div>
+          </div>
+          <div class="p-2 message">
+            <div class="p-2 bd-highlight replay-edit-body"
+                 [style.width.px]="leftSidebarWidth - 70"
+                 *ngIf="channel.lastMessage !== null && channel.lastMessage.messageTypeId == 1">
+              {{channel.lastMessage.body.split('\n')[0]}}
+            </div>
+
+            <div class="p-2 bd-highlight replay-edit-body"
+                 [style.width.px]="leftSidebarWidth - 70"
+                 *ngIf="channel.lastMessage !== null && channel.lastMessage.messageTypeId != 1">
+              {{channel.lastMessage.body.split(':/:')[1]}}
+            </div>
+
+            <div class="p-2 message" *ngIf="channel.lastMessage == null">
+              {{'Chat.noMessageSend' | translate}}
+            </div>
+          </div>
+        </div>
+        <div *ngIf="activeChannelGuid != '0' && activeChannelGuid == channel.guid"
+             class="active-channel d-flex" style="margin-inline-start: auto"
+             [style.border-radius]="direction == 'ltr' ? '10px 0px 0px 10px' : '0px 10px 10px 0px'"></div>
+      </div>
+
+    </div>
+
+    <div *ngIf="showGetChannelsLoading" class="loading-container">
+      <seventask-spinner [loadingType]="1" *ngIf="showGetChannelsLoading"></seventask-spinner>
+      <!--  <div style="margin-top: 10px;color: #2E4A77;">{{'Task.loadingTasks' |translate}}</div>-->
+    </div>
+  </div>

@@ -1,0 +1,163 @@
+<div *ngIf="isLoading || !finishedGettingTeamInfo" class="loading-container main" style="min-height: 389px!important;">
+  <seventask-spinner [loadingType]="1"></seventask-spinner>
+  <!--  <div style="margin-top: 10px;color: #2E4A77;">{{'Project.loadingProject' |translate}}</div>-->
+</div>
+
+<div class="main"
+     *ngIf="(type == 'addMemberToTeam' || type == 'inviteMemberToEvent') && !isLoading && finishedGettingTeamInfo">
+
+  <div class="p-2 tab-container d-flex flex-row justify-content-around">
+    <div class="p-2 tab" [ngClass]="activeTab == 'AddMember' ? 'active-tab' : 'tab'"
+         (click)="activeTab= 'AddMember'">
+      {{'Team.addMember' | translate}}
+      <br><span *ngIf="activeTab == 'AddMember'">•</span>
+    </div>
+    <div class="p-2 tab" [ngClass]="activeTab == 'InviteByEmail' ? 'active-tab' : 'tab'"
+         (click)="activeTab= 'InviteByEmail'">
+      {{'Team.inviteByMail' | translate}}
+      <br><span *ngIf="activeTab == 'InviteByEmail'">•</span>
+    </div>
+  </div>
+
+  <div class="add-team-container d-flex flex-column" *ngIf="activeTab == 'AddMember'">
+    <div class="p-2 search" style="margin: 20px 15px 20px 15px">
+      <form [formGroup]="search">
+        <input [class.placeholder-rtl]="textDirection === 'rtl'"
+               autofocus dir="auto" class="search" placeholder="{{ 'Placeholders.searchForMember' | translate}}"
+               formControlName="searchField" #searchInTeam>
+      </form>
+    </div>
+
+    <div class="members-container"
+         *ngIf="(memberList | userSearch:searchInTeam.value).length> 0 && type != 'inviteMemberToEvent'">
+      <div @listAnimation class="member" (click)="checkbox.checked = onChange(member)"
+           *ngFor="let member of memberList | userSearch :searchInTeam.value">
+        <mat-checkbox (click)="$event.stopPropagation();" [checked]="finalMemberList.includes(member)"
+                      (change)='checkbox.checked = onChange(member)' disableRipple="false"
+                      #checkbox>{{member.nickName}}</mat-checkbox>
+      </div>
+    </div>
+
+    <div class="members-container"
+         *ngIf="(memberList | userSearch:searchInTeam.value).length> 0 && type == 'inviteMemberToEvent'">
+      <div @listAnimation class="member" (click)="checkbox.checked= !checkbox.checked; onChange(member)"
+           *ngFor="let member of memberList | userSearch :searchInTeam.value">
+        <mat-checkbox (click)="false; $event.stopPropagation();" [checked]="finalMemberList.includes(member)"
+                      (change)='onChange(member)' disableRipple="false"
+                      #checkbox>{{member.nickName}}</mat-checkbox>
+      </div>
+    </div>
+
+    <div *ngIf="(memberList | userSearch:searchInTeam.value).length == 0"
+         class="d-flex flex-column align-items-center justify-content-center"
+         style="min-height: 150px!important;">
+      <img src="assets/noDataImages/search-result.svg" width="28%" style="opacity: 0.3">
+      <div style="color: #2E4A77; opacity: 0.2; margin-top: 25px">
+        {{ 'Snackbar.memberNotFound' | translate }}
+      </div>
+    </div>
+
+    <div class="add-button-container p-2 mt-auto d-flex flex-column align-items-center">
+      <button *ngIf="!shouldUpgrade"
+              class="smooth-rectangle add-button p-2 d-flex flex-row align-items-center justify-content-center btn btn-default"
+              (click)="done()"
+              [mat-dialog-close]="[finalMemberList, mailList]">
+        {{ 'Team.done' | translate }}
+      </button>
+      <button *ngIf="shouldUpgrade"
+              class="smooth-rectangle add-button p-2 d-flex flex-row align-items-center justify-content-center btn btn-default"
+              (click)="goPro()" [style.background]="'#EBAA45'"
+              [style.color]="'white'" style="opacity: 0.7;">
+        {{ 'Team.upgradeTeamPlan' | translate }}
+      </button>
+    </div>
+  </div>
+
+  <div class="add-team-container d-flex flex-column" *ngIf="activeTab == 'InviteByEmail'">
+    <div class="p-2 add-mail-container d-flex flex-row justify-content-between" style="margin: 20px 15px 20px 15px">
+      <form [formGroup]="mail">
+        <input [class.placeholder-rtl]="textDirection === 'rtl'"
+               autofocus dir="auto" class="mail" placeholder="{{ 'Placeholders.enterNewEmail' | translate }}"
+               formControlName="newMail">
+        <button class="add-mail p-2" [disabled]="!mail.valid" [ngStyle]="{'opacity': mail.valid ? '1' : '0.5' }"
+                (click)="addMail()">
+          <div class="d-flex align-items-center justify-content-center">
+            <span class="seventask-icon-add-add"></span>
+          </div>
+        </button>
+      </form>
+    </div>
+
+    <div class="p-2 members-container">
+      <div class="mail-member" @listAnimation *ngFor="let mail of mailList">
+        <div class="d-flex flex-row align-items-center" style="padding-inline-start: 15px">
+          <div class="p-2 d-flex flex-row item-title">
+            <img class="p-2" src="../../../../assets/icons/Project/Remove-Member.svg"
+                 style="cursor: pointer; margin-inline-end: 5px"
+                 (click)="isLegalToAdd(-1) ? shouldUpgrade=false : null; removeItemFromList(mailList, mail)">
+            <div class="p-2">{{mail}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="add-button-container p-2 mt-auto d-flex flex-column align-items-center">
+      <button *ngIf="!shouldUpgrade"
+              class="smooth-rectangle add-button p-2 d-flex flex-row align-items-center justify-content-center btn btn-default"
+              (click)="done()"
+              [mat-dialog-close]="[finalMemberList, mailList]">
+        {{ 'Team.done' | translate }}
+      </button>
+      <button *ngIf="shouldUpgrade"
+              class="smooth-rectangle add-button p-2 d-flex flex-row align-items-center justify-content-center btn btn-default"
+              (click)="goPro()" [style.background]="'#EBAA45'"
+              [style.color]="'white'" style="opacity: 0.7;">
+        {{ 'Team.upgradeTeamPlan' | translate }}
+      </button>
+    </div>
+  </div>
+
+
+</div>
+
+<div class="main"
+     *ngIf="(type == 'addMemberToDepartment' || type == 'addMemberToTask' || type == 'addMemberToProject' || type == 'addMemberToReminder') && !isLoading && finishedGettingTeamInfo">
+  <div class="add-team-container d-flex flex-column" style="height: 380px !important;">
+    <div class="p-2 search" style="margin: 20px 15px 20px 15px">
+      <form [formGroup]="search">
+        <input [class.placeholder-rtl]="textDirection === 'rtl'"
+               autofocus dir="auto" style="outline: none !important;" class="search"
+               placeholder="{{ 'Placeholders.searchForMember' | translate}}" formControlName="searchField"
+               #searchInProject>
+      </form>
+    </div>
+
+    <div class="members-container" *ngIf="(memberList | userSearch:searchInProject.value).length> 0">
+      <div class="member" (click)="checkbox.checked= !checkbox.checked; onChange(member)" @listAnimation *ngFor="let member of memberList |
+        userSearch:searchInProject.value">
+        <mat-checkbox (click)="false; $event.stopPropagation();" [checked]="finalMemberList.includes(member)"
+                      (change)='onChange(member)' disableRipple="false" #checkbox>{{member.nickName}}</mat-checkbox>
+      </div>
+    </div>
+
+    <div *ngIf="(memberList | userSearch:searchInProject.value).length == 0"
+         class="d-flex flex-column align-items-center justify-content-center"
+         style="min-height: 230px!important;">
+      <img src="assets/noDataImages/search-result.svg" width="28%" style="opacity: 0.3">
+      <div style="color: #2E4A77; opacity: 0.2; margin-top: 25px">
+        {{ 'Snackbar.memberNotFound' | translate }}
+      </div>
+    </div>
+
+
+    <div class="add-button-container p-2 mt-auto d-flex flex-column align-items-center">
+      <button
+        class="smooth-rectangle add-button d-flex flex-row align-items-center justify-content-center btn btn-default"
+        [mat-dialog-close]="[finalMemberList]">
+        {{ 'Team.done' | translate }}
+      </button>
+    </div>
+  </div>
+
+
+</div>

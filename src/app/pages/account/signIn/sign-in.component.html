@@ -1,0 +1,103 @@
+<body *ngIf="!needConfirm || !emailSent" class="main-content">
+<app-header class="header" [button_text]="'signUp'" [button_link]="'../signUp'"
+            [header_text]="'Dont have an account?'"></app-header>
+
+<div class="login-container ">
+  <div class=" col-12 col-sm-10 col-md-8  col-lg-6 col-xl-4">
+    <div class="login-form-container ">
+      <div class="login-form-title" i18n="main header|Welecome">Welcome Back</div>
+      <form [formGroup]="signInForm" (ngSubmit)="submitSignInForm()" id="login-form-row">
+        <div class="form-group">
+          <label class="login-input-label" i18n="@@UsernameOrEmail">Username or Email</label>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon1">
+              <mat-icon>mail</mat-icon>
+              </span>
+            </div>
+            <input dir="auto" inputmode="email" formControlName="UsernameOrEmail" type="text" class="form-control"
+                   placeholder="Example@seventask.com"
+                   aria-label="Username"
+                   aria-describedby="basic-addon1">
+          </div>
+          <p class="mat-error"
+             *ngIf="(signInForm.controls.UsernameOrEmail.errors?.required || signInForm.controls.UsernameOrEmail.errors?.pattern) && signInForm.controls.UsernameOrEmail.touched"
+             i18n="@@UsernameOrEmailError">
+            Please enter your username or Email correctly</p>
+        </div>
+        <div class="login-form-row">
+          <label class="login-input-label" i18n="@@Password">Password</label>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon2">
+              <mat-icon>lock</mat-icon>
+              </span>
+            </div>
+            <input dir="auto" [type]="hide ? 'password' : 'text'" formControlName="Password" type="text" class="form-control"
+                   placeholder="Password"
+                   aria-label="Password"
+                   aria-describedby="basic-addon1" type="password" autocomplete="false" autocorrect="false"
+                   spellcheck="false">
+            <span class="input-group-text visibilitySpan">
+            <mat-icon matSuffix (click)="hide = !hide"
+                      style="cursor: pointer;">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </span>
+
+          </div>
+          <span class="mat-error"
+                *ngIf="signInForm.controls.Password.errors?.required && signInForm.controls.Password.touched"
+                i18n="@@PasswordError">
+            Please enter your password</span>
+        </div>
+        <div class="login-form-row">
+
+          <mat-checkbox color="primary" formControlName="RememberMe" name="remember" class="example-margin">
+            <span i18n="@@RememberMe">Remember me</span>
+          </mat-checkbox>
+          <a style="/*noinspection CssInvalidPropertyValue*/float: inline-end" routerLink="../forget-password" id="login-forgot" class="cu-show-pwd"
+             i18n="@@ForgetPassword">ForgotPassword?</a>
+
+        </div>
+        <button [disabled]="signInForm.invalid || ((needConfirm && !emailSent) || (hasRequestedSignIn && !isSignedIn))"
+                id="login-submit" class="login-page-new__main-form-button"
+                type="submit">
+          <div class="login-page-new__main-form-button-text">
+            <mat-progress-spinner [diameter]="20"
+                                  *ngIf="(needConfirm && !emailSent) || (hasRequestedSignIn && !isSignedIn)"
+                                  class="example-margin"
+                                  color="accent"
+                                  mode="indeterminate"
+                                  value="50">
+            </mat-progress-spinner>
+            <div *ngIf="!((needConfirm && !emailSent) || (hasRequestedSignIn && !isSignedIn))">Login</div>
+          </div>
+        </button>
+
+        <div routerLink="/sso" id="sign-in-sso-link__a" class="login-sso" i18n="@@SSO">or login with SSO
+        </div>
+      </form>
+    </div>
+
+    <div class="login-page-new__main-bot">
+      <div class="login-page-new__main-bot-text" i18n="Quotes|Quotes sentence">Let's make the world more productive with
+        SevenTask.
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+<app-confirm-account *ngIf="needConfirm && emailSent" [email]="email"
+                     [password]="signInForm.controls.Password.value">
+
+</app-confirm-account>
+
+<swal
+  #sweetAlert
+  title="Username Or Password Is Incorrect"
+  text="Something went wrong"
+  icon="error"
+  [showCancelButton]="false"
+  [focusCancel]="true">
+</swal>
+

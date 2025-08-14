@@ -1,0 +1,60 @@
+<div class="p-3 text-center" style="background: #F8FBFD;">
+  <div dir="auto" style="color: #2E4A77; opacity: 0.3; font-size: 18px">
+    <label>جابجایی پروژه‌ی</label>&nbsp;<label>«{{model.name}}»</label>
+  </div>
+  <p dir="auto" style="color: orange;">با انجام این عملیات، شما این پروژه را به یک تیم دیگر منتقل
+    می‌کنید. که این جابجایی شامل تمامی وظایف و تاریخچه‌ی این پروژه نیز می‌باشد.</p>
+  <div class="d-flex flex-wrap justify-content-center bg-white"
+       style="border: 1px solid #F0F4F4; border-radius: 10px; padding-bottom: 15px;">
+    <div style="width: 100%; padding-top: 15px;" *ngIf="!showReview">
+      <p style="color: #2e4a77; opacity: 0.3;">{{!teamIsFinal ? 'انتخاب تیم' : 'انتخاب دپارتمان‌ها'}}</p>
+      <p dir="auto" style="color: #2e4a77; opacity: 0.5; font-size: 14px;">
+        {{!teamIsFinal ?
+        'لطفا ابتدا تیم مقصد را که میخواهید این پروژه به آن منتقل شود انتخاب نمایید.' :
+        'میتوانید پروژه را به یک یا چند دپارتمان تخصیص دهید و یا با عدم انتخاب دپارتمان، پروژه را برای کل تیم تعریف نمایید.'}}
+      </p>
+    </div>
+    <div *ngIf="gettingDataFromApi" class="d-flex justify-content-center">
+      <seventask-spinner [loadingType]="1" class="loading"></seventask-spinner>
+    </div>
+    <div *ngIf="!teamIsFinal" class="d-flex flex-wrap justify-content-center">
+      <div *ngFor="let team of userTeams"
+           [ngClass]="(selectedTeam && selectedTeam.id == team.id) ? 'active-assignments-team' : 'assignments-team'"
+           class="smooth-rectangle assignments-team d-flex m-2 p-2 justify-content-center"
+           (click)="selectTeam(team)"
+           [appHoverClass] [active]="selectedTeam && selectedTeam.id == team.id">
+        {{team.name}}
+      </div>
+    </div>
+    <p dir="auto" style="color: #2e4a77; opacity: 0.7; font-size: 14px;"
+       *ngIf="!gettingDataFromApi && userTeams.length == 0">
+      تیمی یافت نشد. برای انتقال پروژه باید یک تیم داشته باشید.
+    </p>
+    <div *ngIf="teamIsFinal && !departmentsIsFinal && !gettingDataFromApi" class="d-flex" style="color: #2e4a77;">
+      <div dir="auto">عدم انتخاب دپارتمان و تعریف پروژه برای کل اعضای تیم</div>
+      &nbsp;
+      <mat-checkbox [checked]="checkedAllDepartments" [disabled]="lockAllDepartmentsCheckBox" color="primary"
+                    style="margin-top: 5px;"></mat-checkbox>
+    </div>
+    <div *ngIf="teamIsFinal && !departmentsIsFinal" class="d-flex flex-wrap justify-content-center">
+      <div *ngFor="let department of teamDepartments"
+           [ngClass]="(selectedDepartments.indexOf(department.id)>-1) ? 'active-assignments-team' : 'assignments-team'"
+           class="smooth-rectangle assignments-team d-flex m-2 p-2 justify-content-center"
+           (click)="selectDepartment(department)"
+           [appHoverClass] [active]="(selectedDepartments.indexOf(department.id)>-1)">
+        {{department.name}}
+      </div>
+    </div>
+    <p dir="auto" style="color: #2e4a77; opacity: 0.7; font-size: 14px;"
+       *ngIf="!gettingDataFromApi && teamIsFinal &&  teamDepartments.length == 0">
+      این تیم هیچ دپارتمانی ندارد. بطور پیشفرض پروژه برای تمام اعضای تیم تعریف میشود.
+    </p>
+  </div>
+  <button class="submit-button" [class.submit-button-off]="!selectedTeam" (click)="nextStep()">
+    <div class="submit-button-text">{{!teamIsFinal ? 'تایید و ادامه' : 'تایید نهایی'}}</div>
+  </button>
+  &nbsp;
+  <button class="submit-button" *ngIf="teamIsFinal && !departmentsIsFinal" (click)="prevStep()">
+    <div class="submit-button-text">بازگشت و اصلاح تیم</div>
+  </button>
+</div>

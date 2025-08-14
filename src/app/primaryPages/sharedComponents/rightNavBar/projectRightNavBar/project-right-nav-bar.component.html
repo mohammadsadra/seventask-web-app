@@ -1,0 +1,431 @@
+<div class="main-container d-flex flex-column" [style.height.px]="height">
+  <form [formGroup]="editForm">
+    <div *ngIf="selectedProject != null">
+      <div (mouseleave)="editTitle= false" (mouseenter)="editTitle= true"
+           class="item d-flex flex-column align-self-start" style="height: 120px; overflow: hidden">
+        <div class="title p-2 d-flex flex-row align-items-center">
+          <div class="p-2">
+            <img [style]="'transform: rotate(' + iconRotationDegree + 'deg)'"
+                 class="title-label" src="../../../../../assets/icons/Task/task-title.svg">
+          </div>
+          <div class="p-2">
+            {{ 'Project.projectTitle' | translate }}
+          </div>
+          <div style="margin-inline-start: auto" class="logo-container smooth-square
+            justify-content-center align-items-center d-flex"
+               (click)="editTitleClicked= true;
+            editForm.controls.Title.setValue(selectedProject.name);"
+               [@showHideButton]="editTitle && editTitleClicked === false ? 'show' : 'hide'">
+            <span class="seventask-icon-edit-edit" style="font-size: 12px"></span>
+          </div>
+
+          <div style="margin-inline-start: auto" class="flex-row
+            justify-content-center align-items-center d-flex"
+               *ngIf="editTitleClicked === true">
+            <div class="smooth-square logo-container d-flex justify-content-center align-items-center"
+                 (click)="editTitleClicked= false"
+                 style="margin: 0 5px 0 5px">
+              <span class="seventask-icon-edit-cancel-medium" style="font-size: 12px"></span>
+            </div>
+            <div class="smooth-square logo-container d-flex justify-content-center align-items-center"
+                 (click)="modifyTitle()">
+              <span class="seventask-icon-edit-tick-thick" style="font-size: 12px"></span>
+            </div>
+          </div>
+
+        </div>
+        <div class="content p-2">
+          <div *ngIf="editTitleClicked === false">{{selectedProject.name}}</div>
+          <input [class.placeholder-rtl]="iconRotationDegree == 180"
+                 autofocus autoSelect *ngIf="editTitleClicked" formControlName="Title"
+                 id="title-edit"
+                 class="title-container" placeholder="{{selectedProject.name}}">
+        </div>
+      </div>
+
+      <div (mouseleave)="editDescription= false" (mouseenter)="editDescription=
+        true"
+           class="item d-flex flex-column align-self-start" style="min-height:
+        20px">
+        <div class="title p-2 d-flex flex-row align-items-center">
+          <div class="p-2">
+            <img [style]="'transform: rotate(' + iconRotationDegree + 'deg)'"
+                 class="title-label"
+                 src="../../../../../assets/icons/Task/Inspector/description.svg">
+          </div>
+          <div class="p-2">
+            {{ 'Project.description' | translate }}
+          </div>
+
+          <div style="margin-inline-start: auto" class="logo-container smooth-square
+            justify-content-center align-items-center d-flex"
+               (click)="editDescriptionClicked=
+            true;editForm.controls.Description.setValue(selectedProject.description);"
+               [@showHideButton]="editDescription && editDescriptionClicked === false ? 'show' : 'hide'">
+            <span class="seventask-icon-edit-edit" style="font-size: 12px"></span>
+          </div>
+
+          <div style="margin-inline-start: auto" class="flex-row
+            justify-content-center align-items-center d-flex"
+               *ngIf="editDescriptionClicked === true">
+            <div class="smooth-squarelogo-container d-flex justify-content-center align-items-center"
+                 (click)="editDescriptionClicked= false"
+                 style="margin: 0 5px 0 5px">
+              <span class="seventask-icon-edit-cancel-medium" style="font-size: 12px"></span>
+            </div>
+            <div class="logo-container d-flex justify-content-center align-items-center"
+                 (click)="modifyDescription()">
+              <span class="seventask-icon-edit-tick-thick" style="font-size: 12px"></span>
+            </div>
+          </div>
+
+        </div>
+        <div class="content p-2">
+          <div *ngIf="editDescriptionClicked === false">{{selectedProject.description}}</div>
+          <textarea autofocus autoSelect *ngIf="editDescriptionClicked" formControlName="Description"
+                    id="description-edit"
+                    class="description-container"
+                    placeholder="{{selectedProject.description}}"></textarea>
+        </div>
+      </div>
+
+      <div (mouseleave)="editTeamHover= false" (mouseenter)="editTeamHover= true"
+           class="item d-flex flex-column align-self-start" style="height: 113px">
+        <div class="title p-2 d-flex flex-row align-items-center">
+          <div class="p-2">
+            <img class="title-label"
+                 src="../../../../../assets/icons/Project/Team-right-nav.svg">
+          </div>
+          <div class="p-2">
+            {{ 'Project.teamTitle' | translate}}
+          </div>
+
+          <div style="margin-inline-start: auto" class="logo-container smooth-square
+            justify-content-center align-items-center d-flex"
+               (click)="editProjectTeam()"
+               [@showHideButton]="editTeamHover ? 'show' : 'hide'">
+            <span class="seventask-icon-edit-edit" style="font-size: 12px"></span>
+          </div>
+
+        </div>
+        <div class="content p-2 d-flex flex-column">
+          <div class="d-flex flex-row align-items-center">
+            <div class="p-2">
+              <img
+                src="../../../../../assets/icons/Task/Disable/team.svg"
+                class="rounded-circle user_img_msg">
+            </div>
+            <div class="p-2">{{selectedProject.teamName}}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="item d-flex flex-column align-self-start" style="height:
+        300px">
+        <div class="title p-2 d-flex flex-row align-items-center">
+          <div class="p-2">
+            <img class="title-label" src="../../../../../assets/icons/Team/assign.svg">
+          </div>
+          <div class="p-2">
+            {{ 'Project.assignees' | translate}}
+          </div>
+          <!--          <div class="p-2 ml-auto title-label">-->
+          <!--            <img src="assets/icons/Project/Add-right-nav.svg">-->
+          <!--          </div>-->
+        </div>
+        <div class="content p-2">
+          <div class="d-flex flex-column" class="assign">
+            <div class="p-2 assign-title d-flex align-items-center
+              justify-content-center">
+              {{ 'Project.projectMember' | translate}}
+            </div>
+            <div class="p-2 assign-container">
+              <div class="d-flex flex-column" *ngFor="let user of
+                selectedProject.users"
+                   style="padding: 5px!important;">
+                <div class="d-flex flex-row align-items-center" style="">
+                  <div class="p-2" style="margin-inline-start:
+                    10px;margin-inline-end: 10px">
+                    <div class="img_cont_msg p-2 d-flex align-items-center
+                      justify-content-center rounded-circle"
+                         style="background: rgba(66,120,223,0.05);">
+                      <img *ngIf="user.profileImageGuid != null"
+                           [src]="domainName + '/en-US/File/get?id=' +
+                        user.profileImageGuid + '&quality=100'"
+                           class="rounded-circle user_img_msg">
+                      <div style="color: #1c5bff"
+                           *ngIf="user.profileImageGuid == null">{{user.nickName[0].toUpperCase()}}</div>
+                    </div>
+                  </div>
+                  <div class="p-2" style="overflow: hidden;text-overflow:
+                    ellipsis; width: 180px">
+                    {{user.nickName}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--      <div class="item d-flex flex-column align-self-start" style="height: 158px">-->
+      <!--        <div class="title p-2 d-flex flex-row align-items-center">-->
+      <!--          <div class="p-2">-->
+      <!--            <img class="title-label" src="../../../../../assets/icons/Task/Inspector/dependency.svg">-->
+      <!--          </div>-->
+      <!--          <div class="p-2">-->
+      <!--            Dependency-->
+      <!--          </div>-->
+      <!--        </div>-->
+      <!--        <div class="content p-2 d-flex flex-column">-->
+
+      <!--          <div class="d-flex flex-row align-items-center">-->
+      <!--            <div class="p-2">-->
+      <!--              <img class="title-label" src="assets/icons/Project/Circle-check.svg">-->
+      <!--            </div>-->
+      <!--            <div class="p-2 active-dependency">Search Engine</div>-->
+      <!--            <div class="p-2 ml-auto d-flex justify-content-center dependency-label">-->
+      <!--              <div style="margin: 3px 10px 3px 10px;">Project</div>-->
+      <!--            </div>-->
+      <!--          </div>-->
+
+      <!--          <div class="d-flex flex-row align-items-center">-->
+      <!--            <div class="p-2">-->
+      <!--              <img class="title-label" src="assets/icons/Project/Circle-uncheck.svg">-->
+      <!--            </div>-->
+      <!--            <div class="p-2">15 Feb (3 days remaining)</div>-->
+      <!--            <div class="p-2 ml-auto d-flex justify-content-center dependency-label">-->
+      <!--              <div style="margin: 3px 10px 3px 10px;">Time</div>-->
+      <!--            </div>-->
+      <!--          </div>-->
+
+      <!--        </div>-->
+      <!--      </div>-->
+
+      <!--      <div class="item d-flex flex-column align-self-start" style="height: 175px">-->
+      <!--        <div class="title p-2 d-flex flex-row align-items-center">-->
+      <!--          <div class="p-2">-->
+      <!--            <img class="title-label" src="assets/icons/Project/Label.svg">-->
+      <!--          </div>-->
+      <!--          <div class="p-2">-->
+      <!--            Labels-->
+      <!--          </div>-->
+      <!--        </div>-->
+      <!--        <div class="content p-2 d-flex flex-column justify-content-start">-->
+      <!--          <div class="label p-2 d-flex align-items-center justify-content-center" style="background-color: #1EC1C3">-->
+      <!--            <div class="p-2">Product Design</div>-->
+      <!--          </div>-->
+      <!--          <div class="label p-2 d-flex align-items-center justify-content-center" style="background-color: #EBAA45">-->
+      <!--            <div class="p-2">Development</div>-->
+      <!--          </div>-->
+      <!--          <div class="label p-2 d-flex align-items-center justify-content-center" style="background-color: #F86F8C">-->
+      <!--            <div class="p-2">User Experience</div>-->
+      <!--          </div>-->
+      <!--        </div>-->
+      <!--      </div>-->
+
+      <!--      <div class="item d-flex flex-column align-self-start" style="height: 113px">-->
+      <!--        <div class="title p-2 d-flex flex-row align-items-center">-->
+      <!--          <div class="p-2">-->
+      <!--            <img class="title-label" src="assets/icons/Project/Event-right-nav.svg">-->
+      <!--          </div>-->
+      <!--          <div class="p-2">-->
+      <!--            Project Date-->
+      <!--          </div>-->
+      <!--        </div>-->
+      <!--        <div class="content flex-row align-items-center d-flex p-2">-->
+      <!--          <div class="p-2">-->
+      <!--            {{selectedProject.endDate | date:'yyyy/MM/dd'}}-->
+      <!--          </div>-->
+      <!--          <div class="p-2 ml-auto event-date">-->
+
+      <!--          </div>-->
+      <!--        </div>-->
+      <!--      </div>-->
+
+      <!--      <div class="item d-flex flex-column align-self-start" style="height: 113px">-->
+      <!--        <div class="title p-2 d-flex flex-row align-items-center">-->
+      <!--          <div class="p-2">-->
+      <!--            <img class="title-label" src="assets/icons/Project/Event-right-nav.svg">-->
+      <!--          </div>-->
+      <!--          <div class="p-2">-->
+      <!--            Event-->
+      <!--          </div>-->
+      <!--        </div>-->
+      <!--        <div class="content flex-row align-items-center d-flex p-2">-->
+      <!--          <div class="p-2">-->
+      <!--            Seven Task Presentation-->
+      <!--          </div>-->
+      <!--          <div class="p-2 ml-auto event-date">-->
+
+      <!--          </div>-->
+      <!--        </div>-->
+      <!--      </div>-->
+
+      <div class="item d-flex flex-column align-self-start" style="height:
+        120px"
+           (mouseleave)="editColor= false" (mouseenter)="editColor= true">
+        <div class="title p-2 d-flex flex-row align-items-center">
+          <div class="p-2">
+            <img class="title-label"
+                 src="../../../../../assets/icons/Project/Color-right-nav.svg">
+          </div>
+          <div class="p-2">
+            {{ 'Project.projectColor' | translate}}
+          </div>
+          <div style="margin-inline-start: auto" class="logo-container smooth-square
+            justify-content-center align-items-center d-flex"
+               (click)="editColorClicked= true; selectedColor=
+            selectedProject.color"
+               [@showHideButton]="editColor && editColorClicked === false ? 'show' : 'hide'">
+            <span class="seventask-icon-edit-edit" style="font-size: 12px"></span>
+          </div>
+
+          <div style="margin-inline-start: auto" class="flex-row
+            justify-content-center align-items-center d-flex"
+               *ngIf="editColorClicked === true">
+            <div class="smooth-square logo-container d-flex justify-content-center align-items-center"
+                 (click)="editColorClicked= false; selectedColor=
+              selectedProject.color"
+                 style="margin: 0 5px 0 5px">
+              <span class="seventask-icon-edit-cancel-medium" style="font-size: 12px"></span>
+            </div>
+            <div class="smooth-square logo-container d-flex justify-content-center align-items-center"
+                 (click)="modifyColor()">
+              <span class="seventask-icon-edit-tick-thick" style="font-size: 12px"></span>
+            </div>
+          </div>
+        </div>
+        <div class="content flex-row align-items-center justify-content-start
+          d-flex p-2">
+          <div class="circle p-2" [style.background-color]="'#'+
+            selectedProject.color"
+               *ngIf="editColorClicked === false"></div>
+          <div class="color-name" [style.color]="'#'+ selectedProject.color"
+               *ngIf="editColorClicked === false">
+            {{'Color.' + colorsId['#' + selectedProject.color] | translate}}
+          </div>
+
+          <div class="circle d-flex align-items-center justify-content-center
+            p-2"
+               style="margin-inline-end: 5px; cursor: pointer"
+               *ngIf="editColorClicked === true"
+               [ngStyle]="{'background-color': selectedColor == '7CAC95' ?
+            'rgba(124,172,149,0.1)' : 'rgba(124,172,149,1)'}">
+            <div class="p-2 color d-flex align-items-center
+              justify-content-center" style="background: #7CAC95;"
+                 (click)="selectedColor= '7CAC95'">
+              <img class="p-2" src="../../../../../assets/icons/Project/select-color.svg"
+                   *ngIf="selectedColor == '7CAC95'">
+            </div>
+          </div>
+
+
+          <div class="circle d-flex align-items-center justify-content-center
+            p-2"
+               style="margin-inline-end: 5px; cursor: pointer"
+               *ngIf="editColorClicked === true" (click)="selectedColor= '7CA0AC'"
+               [ngStyle]="{'background-color': selectedColor == '7CA0AC' ?
+            'rgba(124,160,172,0.1)' : 'rgba(124,160,172,1)'}">
+            <div class="p-2 color d-flex align-items-center
+              justify-content-center" style="background: #7CA0AC;">
+              <img class="p-2" src="../../../../../assets/icons/Project/select-color.svg"
+                   *ngIf="selectedColor == '7CA0AC'">
+            </div>
+          </div>
+
+          <div class="circle d-flex align-items-center justify-content-center
+            p-2"
+               style="margin-inline-end: 5px; cursor: pointer"
+               *ngIf="editColorClicked === true" (click)="selectedColor= '977CAC'"
+               [ngStyle]="{'background-color': selectedColor == '977CAC' ?
+            'rgba(151,124,172,0.1)' : 'rgba(151,124,172,1)'}">
+            <div class="p-2 color d-flex align-items-center
+              justify-content-center" style="background: #977CAC;">
+              <img class="p-2" src="../../../../../assets/icons/Project/select-color.svg"
+                   *ngIf="selectedColor == '977CAC'">
+            </div>
+          </div>
+
+          <div class="circle d-flex align-items-center justify-content-center
+            p-2"
+               style="margin-inline-end: 5px; cursor: pointer"
+               *ngIf="editColorClicked === true" (click)="selectedColor= 'AC7C8D'"
+               [ngStyle]="{'background-color': selectedColor == 'AC7C8D' ?
+            'rgba(172,124,141,0.1)' : 'rgba(172,124,141,1)'}">
+            <div class="p-2 color d-flex align-items-center
+              justify-content-center" style="background: #AC7C8D;">
+              <img class="p-2" src="../../../../../assets/icons/Project/select-color.svg"
+                   *ngIf="selectedColor == 'AC7C8D'">
+            </div>
+          </div>
+
+          <div class="circle d-flex align-items-center justify-content-center
+            p-2"
+               style="margin-inline-end: 5px; cursor: pointer"
+               *ngIf="editColorClicked === true" (click)="selectedColor= '7C87AC'"
+               [ngStyle]="{'background-color': selectedColor == '7C87AC' ?
+            'rgba(124,135,172,0.1)' : 'rgba(124,135,172,1)'}">
+            <div class="p-2 color d-flex align-items-center
+              justify-content-center" style="background: #7C87AC;">
+              <img class="p-2" src="../../../../../assets/icons/Project/select-color.svg"
+                   *ngIf="selectedColor == '7C87AC'">
+            </div>
+          </div>
+
+          <div class="circle d-flex align-items-center justify-content-center
+            p-2"
+               style="margin-inline-end: 5px; cursor: pointer"
+               *ngIf="editColorClicked === true" (click)="selectedColor= 'A8AC7C'"
+               [ngStyle]="{'background-color': selectedColor == 'A8AC7C' ?
+            'rgba(168,172,124,0.1)' : 'rgba(168,172,124,1)'}">
+            <div class="p-2 color d-flex align-items-center
+              justify-content-center" style="background: #A8AC7C;">
+              <img class="p-2" src="../../../../../assets/icons/Project/select-color.svg"
+                   *ngIf="selectedColor == 'A8AC7C'">
+            </div>
+          </div>
+
+          <div class="circle d-flex align-items-center justify-content-center
+            p-2" style="cursor: pointer"
+               *ngIf="editColorClicked === true" (click)="selectedColor= '74C8BE'"
+               [ngStyle]="{'background-color': selectedColor == '74C8BE' ?
+            'rgba(116,200,190,0.1)' : 'rgba(116,200,190,1)'}">
+            <div class="p-2 color d-flex align-items-center
+              justify-content-center" style="background: #74C8BE;">
+              <img class="p-2" src="../../../../../assets/icons/Project/select-color.svg"
+                   *ngIf="selectedColor == '74C8BE'">
+            </div>
+          </div>
+
+
+          <!--          <div class="p-2 event-date">-->
+          <!--            &lt;!&ndash;        Dark Blue&ndash;&gt;-->
+          <!--          </div>-->
+        </div>
+      </div>
+
+      <div class="item d-flex flex-column align-self-start" style="height: 90px"
+           *ngIf="myUserGUID == selectedProject.createdBy.userId">
+        <button class="delete-button" type="button" (click)="openDeleteDialog()">
+          <div class="p-2 d-flex flex-row align-items-center
+            justify-content-center">
+            <div class="p-2">
+              <img class="title-label"
+                   src="../../../../../assets/icons/Project/deleteTask.svg">
+            </div>
+            <div class="p-2">
+              {{ 'Project.deleteProject' | translate}}
+            </div>
+          </div>
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="selectedProject == null" style="opacity: 1;">
+      <img src="../../../../../assets/noDataImages/click.svg" width="85%" style="margin: 25px">
+      <div class="null-inspector">{{ 'Project.clickProjectMessage' | translate}}</div>
+    </div>
+
+  </form>
+</div>

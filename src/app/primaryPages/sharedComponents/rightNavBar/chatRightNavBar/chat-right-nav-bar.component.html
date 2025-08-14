@@ -1,0 +1,230 @@
+
+<div style="overflow: hidden;background-color: #f8fbfd;" *ngIf="activeChannel != null">
+  <div class="notification-header-tab">
+    <ul class="notificnav">
+      <li
+        class="notificnav-item tab"
+        [ngClass]="activeTab== 'general'? 'activeTab' : ''"
+        (click)="activeTab= 'general';">
+        {{'Chat.general' | translate}}
+        <span style="display: none;">.</span>
+      </li>
+      <li
+        class="notificnav-item tab"
+        [ngClass]="activeTab== 'file'? 'activeTab' : ''"
+        (click)="activeTab= 'file';">
+        {{'Chat.files' | translate}}
+        <span style="display: none;">.</span>
+      </li>
+    </ul>
+  </div>
+  <div class="main-container" [style.height.px]="height -100" *ngIf="activeTab == 'general'">
+    <div class="profile-container d-flex flex-column align-items-center">
+      <div class="smooth-square profile-image d-flex justify-content-center align-items-center">
+        <img *ngIf="activeChannel.profileImageGuid != null"
+          class="profile-image"
+          [src]="domainName + '/en-US/File/get?id=' +
+          activeChannel.profileImageGuid + '&quality=1000'">
+        <div class="seventask-theme-color" style="font-size: 120px"
+          *ngIf="activeChannel.profileImageGuid == null">
+          {{activeChannel.title[0].toUpperCase()}}</div>
+      </div>
+      <div class="nickname">
+        {{activeChannel.title}}
+      </div>
+      <!--    <div class="last-seen">-->
+      <!--      last seen 8 hours ago-->
+      <!--    </div>-->
+    </div>
+
+    <div style="min-height: 180px; overflow-y: auto"
+      *ngIf="activeChannel.channelTypeId != 1">
+      <div class="assign-title d-flex align-items-center justify-content-center">
+        {{ 'Chat.channelMembers' | translate}}
+      </div>
+      <div class="assign-container d-flex flex-column" *ngFor="let user of
+        members"
+        style="padding: 5px!important;">
+        <div class="d-flex flex-row align-items-center">
+          <div class="p-2" style="margin-inline-start: 10px;margin-inline-end:
+            10px">
+            <div class="img_cont_msg p-2 d-flex align-items-center
+              justify-content-center rounded-circle"
+              style="background: rgba(66,120,223,0.05);">
+              <img *ngIf="user.profileImageGuid != null"
+                [src]="domainName + '/en-US/File/get?id=' + user.profileImageGuid
+                + '&quality=100'"
+                class="rounded-circle user_img_msg">
+              <div style="color: #1c5bff"
+                *ngIf="user.profileImageGuid == null">{{user.nickName[0].toUpperCase()}}</div>
+            </div>
+          </div>
+          <div class="p-2 channel-member-name">
+            {{user.nickName}}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="padding: 30px" class="d-flex flex-column">
+
+      <div class="d-flex flex-row align-items-center" style="margin-bottom: 30px">
+        <div>
+          <img src="../../../../assets/icons/Chat/file.svg">
+        </div>
+        <div class="title">
+          Files
+        </div>
+      </div>
+
+      <div class="seventask-theme-color align-items-center" *ngIf="fileList.length == 0">
+        No file.
+      </div>
+
+      <div class="d-flex flex-row align-items-center justify-content-center">
+
+        <div class="file-container smooth-square" *ngFor="let file of fileList | slice:0:2; let i=index"
+          (click)="file.messageTypeId !== 2 ?
+          downloadMyFile(domainName + '/en-US/File/get?id=' + file.body.split(':/:')[0]+'&quality=50', file.body.split(':/:')[1]) :
+          previewImage(domainName + '/en-US/File/get?id=' + file.body.split(':/:')[0])">
+          <img style="object-fit: cover; width: 80px; height: 80px; border-radius: 10px" *ngIf="file.messageTypeId == 2"
+            [src]="domainName + '/en-US/File/get?id=' + file.body.split(':/:')[0]+'&quality=50'" loading="lazy">
+          <div class="file-container d-flex justify-content-center align-items-center flex-column"
+            *ngIf="file.messageTypeId != 2">
+            <span *ngIf="detectFileType(file.body.split(':/:')[1]) == 'other'" class="seventask-icon-SimpleFile"
+              style="font-size: 30px"></span>
+            <span *ngIf="detectFileType(file.body.split(':/:')[1]) == 'archive'" class="seventask-icon-ArchivedFile"
+              style="font-size: 30px"></span>
+            <span *ngIf="detectFileType(file.body.split(':/:')[1]) == 'css'" class="seventask-icon-CSSFile"
+              style="font-size: 30px"></span>
+            <span *ngIf="detectFileType(file.body.split(':/:')[1]) == 'html'" class="seventask-icon-HTMLFile"
+              style="font-size: 30px"></span>
+            <span *ngIf="detectFileType(file.body.split(':/:')[1]) == 'js'" class="seventask-icon-JSFile"
+              style="font-size: 30px"></span>
+            <span *ngIf="detectFileType(file.body.split(':/:')[1]) == 'pdf'" class="seventask-icon-PDFFile"
+              style="font-size: 30px"></span>
+            <span *ngIf="detectFileType(file.body.split(':/:')[1]) == 'svg'" class="seventask-icon-SVGFile"
+              style="font-size: 30px"></span>
+            <span class="file-name"> {{file.body.split(':/:')[1]}}</span>
+          </div>
+        </div>
+
+        <div class="file-container smooth-square" *ngIf="fileList.length == 3"
+          (click)="fileList[2].messageTypeId !== 2 ?
+          downloadMyFile(domainName + '/en-US/File/get?id=' + fileList[2].body.split(':/:')[0]+'&quality=50', fileList[2].body.split(':/:')[1]) :
+          previewImage(domainName + '/en-US/File/get?id=' + fileList[2].body.split(':/:')[0])">
+          <img style="object-fit: cover; width: 80px; height: 80px; border-radius: 10px"
+            *ngIf="fileList[2].messageTypeId == 2"
+            [src]="domainName + '/en-US/File/get?id=' + fileList[2].body.split(':/:')[0]+'&quality=50'" loading="lazy">
+          <div class="file-container d-flex justify-content-center align-items-center flex-column"
+            *ngIf="fileList[2].messageTypeId != 2">
+            <span *ngIf="detectFileType(fileList[2].body.split(':/:')[1]) == 'other'" class="seventask-icon-SimpleFile"
+              style="font-size: 30px"></span>
+            <span *ngIf="detectFileType(fileList[2].body.split(':/:')[1]) == 'archive'"
+              class="seventask-icon-ArchivedFile" style="font-size: 30px"></span>
+            <span *ngIf="detectFileType(fileList[2].body.split(':/:')[1]) == 'css'" class="seventask-icon-CSSFile"
+              style="font-size: 30px"></span>
+            <span *ngIf="detectFileType(fileList[2].body.split(':/:')[1]) == 'html'" class="seventask-icon-HTMLFile"
+              style="font-size: 30px"></span>
+            <span *ngIf="detectFileType(fileList[2].body.split(':/:')[1]) == 'js'" class="seventask-icon-JSFile"
+              style="font-size: 30px"></span>
+            <span *ngIf="detectFileType(fileList[2].body.split(':/:')[1]) == 'pdf'" class="seventask-icon-PDFFile"
+              style="font-size: 30px"></span>
+            <span *ngIf="detectFileType(fileList[2].body.split(':/:')[1]) == 'svg'" class="seventask-icon-SVGFile"
+              style="font-size: 30px"></span>
+            <span class="file-name"> {{fileList[2].body.split(':/:')[1]}}</span>
+          </div>
+        </div>
+
+        <div *ngIf="fileList.length> 3"
+          class="file-container smooth-square"
+          style="position: relative; text-align: center; background: white" (click)="activeTab = 'file'">
+          <img
+            style="object-fit: cover; width: 80px; height: 80px; filter: blur(1px);-webkit-filter: blur(1px); border-radius: 10px"
+            *ngIf="fileList[2].messageTypeId == 2"
+            [src]="domainName + '/en-US/File/get?id=' + fileList[2].body.split(':/:')[0]+'&quality=50'" loading="lazy">
+
+          <!--        <img style="object-fit: cover;width: 30px;border-radius: 10px;" *ngIf="fileList[2].messageTypeId != 2"-->
+          <!--             src="../../../assets/icons/File/FileIcon.svg">-->
+          <div *ngIf="fileList[2].messageTypeId != 2"
+            class="file-container d-flex justify-content-center align-items-center flex-column">
+            <span *ngIf="detectFileType(fileList[2].body.split(':/:')[1]) == 'other'" class="seventask-icon-SimpleFile"
+              style="font-size: 30px"></span>
+            <span *ngIf="detectFileType(fileList[2].body.split(':/:')[1]) == 'archive'"
+              class="seventask-icon-ArchivedFile" style="font-size: 30px"></span>
+            <span *ngIf="detectFileType(fileList[2].body.split(':/:')[1]) == 'css'" class="seventask-icon-CSSFile"
+              style="font-size: 30px"></span>
+            <span *ngIf="detectFileType(fileList[2].body.split(':/:')[1]) == 'html'" class="seventask-icon-HTMLFile"
+              style="font-size: 30px"></span>
+            <span *ngIf="detectFileType(fileList[2].body.split(':/:')[1]) == 'js'" class="seventask-icon-JSFile"
+              style="font-size: 30px"></span>
+            <span *ngIf="detectFileType(fileList[2].body.split(':/:')[1]) == 'pdf'" class="seventask-icon-PDFFile"
+              style="font-size: 30px"></span>
+            <span *ngIf="detectFileType(fileList[2].body.split(':/:')[1]) == 'svg'" class="seventask-icon-SVGFile"
+              style="font-size: 30px"></span>
+            <span class="file-name"> {{fileList[2].body.split(':/:')[1]}}</span>
+          </div>
+          <div class="centered show-more"> +{{ fileList.length - 2}}</div>
+        </div>
+
+      </div>
+
+    </div>
+
+
+  </div>
+
+  <div class="main-container d-flex align-items-center flex-column" style="padding: 10px 0 10px 0!important;" [style.height.px]="height -150" *ngIf="activeTab
+    == 'file'">
+    <div class="grid">
+      <div class="file-container smooth-square" *ngFor="let file of fileList"
+        style="margin-bottom: 10px"
+        (click)="file.messageTypeId !== 2 ?
+        downloadMyFile(domainName + '/en-US/File/get?id=' + file.body.split(':/:')[0]+'&quality=50', file.body.split(':/:')[1]) :
+        previewImage(domainName + '/en-US/File/get?id=' + file.body.split(':/:')[0])">
+        <img style="object-fit: cover; width: 80px; height: 80px; border-radius: 10px" *ngIf="file.messageTypeId == 2"
+          [src]="domainName + '/en-US/File/get?id=' + file.body.split(':/:')[0]+'&quality=50'" loading="lazy">
+        <div class="file-container d-flex justify-content-center align-items-center flex-column"
+          *ngIf="file.messageTypeId != 2">
+          <span *ngIf="detectFileType(file.body.split(':/:')[1]) == 'other'" class="seventask-icon-SimpleFile"
+            style="font-size: 30px"></span>
+          <span *ngIf="detectFileType(file.body.split(':/:')[1]) == 'archive'" class="seventask-icon-ArchivedFile"
+            style="font-size: 30px"></span>
+          <span *ngIf="detectFileType(file.body.split(':/:')[1]) == 'css'" class="seventask-icon-CSSFile"
+            style="font-size: 30px"></span>
+          <span *ngIf="detectFileType(file.body.split(':/:')[1]) == 'html'" class="seventask-icon-HTMLFile"
+            style="font-size: 30px"></span>
+          <span *ngIf="detectFileType(file.body.split(':/:')[1]) == 'js'" class="seventask-icon-JSFile"
+            style="font-size: 30px"></span>
+          <span *ngIf="detectFileType(file.body.split(':/:')[1]) == 'pdf'" class="seventask-icon-PDFFile"
+            style="font-size: 30px"></span>
+          <span *ngIf="detectFileType(file.body.split(':/:')[1]) == 'svg'" class="seventask-icon-SVGFile"
+            style="font-size: 30px"></span>
+          <span class="file-name"> {{file.body.split(':/:')[1]}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="activeChannel == null" style="opacity: 1;">
+  <img src="../../../../../assets/noDataImages/click.svg" width="85%" style="margin: 25px">
+  <div class="null-inspector">{{ 'Chat.selectChannelMessage' | translate}}</div>
+</div>
+
+<div *ngIf="showPreview" class="previewContainer" (click)="showPreview= false;
+  previewAddress= ''">
+  <div class="multimediaContainer">
+    <!--    <p class="tutorialTitle">In less than 2 minutes, learn how it works.</p>-->
+    <!--    <video controls class="previewMultimedia centerItem">-->
+    <!--      <source src="assets/videos/Intro_01.mp4" type="video/mp4">-->
+    <!--      Your browser does not support HTML video :(-->
+    <!--    </video>-->
+    <img class="previewMultimedia centerItem" style="max-height: 500px;
+      max-width: 500px" [src]="previewAddress" loading="lazy">
+    <!--    <div>-->
+    <!--&lt;!&ndash;      <button class="skipButton centerItem" (click)="showPreview= false; previewAddress = ''">Close</button>&ndash;&gt;-->
+    <!--    </div>-->
+  </div>
+</div>

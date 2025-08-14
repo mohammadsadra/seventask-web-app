@@ -1,0 +1,48 @@
+<div class="main-container" dir="auto" *ngIf="selectedEvent === null" [style.height.px]="height - 80">
+    <div class="today-date-information">
+        <div class="day-in-month">
+            {{ (todayDateInformation.date | numToArabic) + ' ' + todayDateInformation.month }}
+        </div>
+
+        <div class="day-in-week">
+            {{ todayDateInformation.weekDay }}
+        </div>
+    </div>
+
+    <div class="today-calendar">
+        <div class="hour" [style.height.px]="hourFieldHeight" *ngFor="let hour of hours; index as hourIndex">
+            <div class="hour-string">
+                {{ hour }}
+            </div>
+            <div class="events-field">
+                <div *ngIf="hourIndex === 0">
+                    <div class="calendar-weekday-event"
+                      [class.calendar-weekday-event-not-starting]="!rangeEvent.isStartingAtCurrentDay"
+                      [class.calendar-weekday-event-not-ending]="!rangeEvent.isEndingAtCurrentDay"
+                      [class.calendar-weekday-event-all-day]="!rangeEvent.isEndingAtCurrentDay && !rangeEvent.isStartingAtCurrentDay"
+                      [style.top.px]="rangeEvent.yOffset"
+                      [style.height.px]="rangeEvent.length"
+                      [style.width.%]="rangeEvent.width"
+                      [style.left.%]="rangeEvent.xOffset"
+                      [style.z-index]="rangeEvents[0].indexOf(rangeEvent)+1"
+                      (click)="selectedEvent=rangeEvent.event"
+                      *ngFor="let rangeEvent of rangeEvents[0]">
+                      <div [style.height.px]="eventCardMinimumHeight" class="weekday-event-details" *ngIf="rangeEvent.isStartingAtCurrentDay && eventCardMinimumHeight * 0.5 <= rangeEvent.length">
+                        <div class="title" dir="auto" *ngIf="eventCardMinimumHeight * 0.5 <= rangeEvent.length">
+                          <span class="event-type-icon seventask-icon-pages-my-calender"></span>
+                          <span class="calendar-day-event-title">{{rangeEvent.event.title}}</span>
+                        </div>
+                        <div class="time" *ngIf="eventCardMinimumHeight <= rangeEvent.length">
+                          <span>{{ rangeEvent.event.startTime | date : 'shortTime' }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="main-container" dir="auto" *ngIf="selectedEvent !== null" [style.height.px]="height - 80">
+  <app-edit-event [selectedEvent]="selectedEvent" (backButton)="selectedEvent=null"></app-edit-event>
+</div>

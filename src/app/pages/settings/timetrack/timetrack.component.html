@@ -1,0 +1,174 @@
+<div class="main-container d-flex flex-column" [style.height.px]="innerHeight">
+  <div *ngIf="showGetTimeTrackLoading" class="loading-container">
+    <seventask-spinner [loadingType]="1" *ngIf="showGetTimeTrackLoading"></seventask-spinner>
+    <!--  <div style="margin-top: 10px;color: #2E4A77;">{{'Task.loadingTasks' |translate}}</div>-->
+  </div>
+
+  <div class="d-flex flex-column" *ngFor="let timeTrack of timeTracks; let index= index">
+    <div class="d-flex flex-row justify-content-between display-date-sum-box"
+         *ngIf="timeTrack.startDate | checkTimeRepeat: index:1">
+      <div class="display-date">
+        {{ timeTrack.startDate | checkTimeRepeat: index:0 | trackerTimeDate }}
+      </div>
+      <div class="sum-times-box">
+        {{ totalTracks | trackerTotal }}
+      </div>
+    </div>
+
+    <div *ngIf="timeTrack.totalTimeInMinutes === null" class="task-badge-container d-flex">
+      <div class="task-badge">{{ 'RunningTask.running' | translate }}</div>
+    </div>
+
+    <div (click)="selectTimeTrack(timeTrack)" class="time-track-box d-flex flex-row justify-content-between">
+      <div [class.past-time-box]="!isEditingTimeTrack[index]" class="d-flex flex-column justify-content-center"
+           style="width: 17%">
+        <!-- time Box -->
+        <div class="d-flex justify-content-center align-items-center" *ngIf="!isEditingTimeTrack[index]">
+          <div class="runningTime align-self-center time-active" *ngIf="timeTrack.totalTimeInMinutes === null">
+            {{ timerShow | timeTracker: timeTrack.startDate:0:false }}
+          </div>
+          <div class="runningTime align-self-center" *ngIf="timeTrack.totalTimeInMinutes !== null">
+            {{ 0 | timeTracker : timeTrack.startDate : timeTrack.totalTimeInMinutes : true }}
+          </div>
+        </div>
+
+        <div *ngIf="isEditingTimeTrack[index]" class="d-flex flex-column justify-content-center align-items-center"
+             style="padding: 5px">
+          <div style="width: 100%; margin-bottom: 5px" (click)="openDatePickerDialog(index, timeTrack.startDate)"
+               class="field-container">
+            {{ this.selectedDate | seventaskDatePipe: 'YYYY/M/D' | async }}
+            <img style="margin-inline-start: 16px; opacity: 0.4" src="assets/icons/timeTrackDate.svg"/>
+          </div>
+          <div class="d-flex flex-row justify-content-between align-items-center"
+               [class.flex-row-reverse]="dirStatus != 'en-US'">
+            <div style="width: 50%" class="field-container" [class.flex-row-reverse]="dirStatus != 'en-US'">
+              <!--    {{startTime.toDate() | date: 'HH:mm'}}-->
+              <input (change)="changeHourEdit($event, true)" [value]="startTime.hour()" style="opacity: 0.4; width: 50%"
+                     placeholder="00" maxlength="2" [max]="23" oninput="this.value=
+                                this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
+                                javascript: if (this.value.length> this.maxLength) this.value=
+                            this.value.slice(0, this.maxLength);
+                            if (this.value > this.max && this.value.length >= this.maxLength)
+                            this.value= this.max" max="23" type="number" #title class="field-input"/>
+              <span style="opacity: 0.4" class="seventask-theme-color">:</span>
+              <input style="opacity: 0.4; width: 50%" (change)="changeMinuteEdit($event, true)"
+                     [value]="startTime.minute()" placeholder="00" maxlength="2" oninput="this.value=
+                                this.value.replace(/[^0-9.]/g,
+                                '').replace(/(\..*)\./g, '$1');
+                                javascript: if (this.value.length> this.maxLength)this.value =
+                            this.value.slice(0, this.maxLength);
+                            javascript: if (this.value > 59) this.value = this.value = 59" max="59" type="number" #title
+                     class="field-input"/>
+            </div>
+            <div style="width: 50%" class="field-container" [class.flex-row-reverse]="dirStatus != 'en-US'">
+              <!--    {{endTime.toDate() | date: 'HH:mm'}}-->
+              <input (change)="changeHourEdit($event, false)" [value]="endTime.hour()" style="opacity: 0.4; width: 50%"
+                     placeholder="00" maxlength="2" [max]="23" oninput="this.value=
+                                this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
+                                javascript: if (this.value.length> this.maxLength) this.value=
+                            this.value.slice(0, this.maxLength);
+                            if (this.value > this.max && this.value.length >= this.maxLength)
+                            this.value= this.max" max="23" type="number" #title class="field-input"/>
+
+              <span style="opacity: 0.4" class="seventask-theme-color">:</span>
+              <input style="opacity: 0.4; width: 50%" (change)="changeMinuteEdit($event, false)"
+                     [value]="endTime.minute()" placeholder="00" maxlength="2" oninput="this.value=
+                                this.value.replace(/[^0-9.]/g,
+                                '').replace(/(\..*)\./g, '$1');javascript: if
+                                (this.value.length> this.maxLength)
+                            this.value
+                            = this.value.slice(0, this.maxLength);javascript: if (this.value >
+                            59) this.value = this.value = 59" max="59" type="number" #title class="field-input"/>
+            </div>
+          </div>
+        </div>
+        <!-- Time Box -->
+      </div>
+
+      <div class="space-line"></div>
+
+      <div class="title-box d-flex flex-column flex-grow-1 justify-content-center px-3">
+        <div *ngIf="!isEditingTimeTrack[index]">
+          <div class="title-show d-flex flex-row">
+                        <span class="align-self-start">{{
+                          timeTrack.generalTask.title
+                          }}</span>
+          </div>
+          <div class="team-project-box d-flex flex-row mt-2">
+            <div class="d-flex flex-row">
+              <div class="seventask-icon-task-card-disable-team align-self-center"></div>
+              <div class="mx-1">{{ timeTrack.generalTask.teamName }}</div>
+            </div>
+            <div class="d-flex flex-row mx-2">
+              <div class="seventask-icon-task-card-disable-project align-self-center"></div>
+              <div class="mx-1">{{ timeTrack.generalTask.projectName }}</div>
+            </div>
+          </div>
+        </div>
+        <div style="border: 1px solid #f0f4f4;
+                    border-radius: 10px;
+                    padding: 7px;
+                    width: 100%;" class="title-box" *ngIf="isEditingTimeTrack[index]">
+          <mat-select [value]="timeTrack.generalTask.id" (opened)="searchValue.value= ''"
+                      placeholder="{{ 'TimeTrack.selectTask' | translate }}"
+                      (selectionChange)="taskAddingTimeTrack= $event.value" class="select-task" name="tasks" id="tasks">
+            <input dir="auto" [class.placeholder-rtl]="textDirection === 'rtl'"
+                   placeholder="{{ 'Placeholders.searchTasks' | translate }}"
+                   #searchValue class="search-box"/>
+            <div style="overflow-y: auto">
+              <mat-option *ngIf="showGetAllTasksLoading &&
+                                (allTasks == null || allTasks.length == 0)" style="height: 300px"
+                          class="d-flex justify-content-center align-items-center" disabled>
+                <seventask-spinner class="d-flex justify-content-center align-items-center"
+                                   [loadingType]="3"></seventask-spinner>
+              </mat-option>
+
+              <mat-option *ngIf="!showGetAllTasksLoading &&
+                                (allTasks == null || allTasks.length == 0)" style="height: 300px"
+                          class="d-flex justify-content-center align-items-center" disabled>
+                <div class="d-flex justify-content-center align-items-center" style="margin-top: 20px; opacity: 0.3">
+                  {{ 'Task.noTaskFound' | translate }}
+                </div>
+              </mat-option>
+
+              <mat-option dir="auto" style="text-align: start" *ngFor="let task of allTasks | search: searchValue.value"
+                          [value]="task.id">{{ task.title }}
+              </mat-option>
+            </div>
+          </mat-select>
+        </div>
+      </div>
+
+      <div class="manage-icon-box d-flex mx-4">
+        <div class="d-flex flex-row justify-content-between" *ngIf="!isEditingTimeTrack[index]">
+          <!--                    <div class="align-self-center delete-icon">-->
+          <!--                        <span class="seventask-icon-time-track-start"></span>-->
+          <!--                    </div>-->
+          <div *ngIf="timeTrack.totalTimeInMinutes !== null" (click)="editTimeTrackClick(timeTrack, index)"
+               class="align-self-center mx-3 delete-icon">
+            <span class="seventask-icon-time-track-edit"></span>
+          </div>
+          <div class="align-self-center delete-icon" (click)="deleteTimeTrackDialog(timeTrack)">
+            <span class="seventask-icon-time-track-delete"></span>
+          </div>
+        </div>
+        <div *ngIf="isEditingTimeTrack[index]" class="d-flex flex-column justify-content-center align-items-center">
+          <div (click)="editTimeTrack(timeTrack, index)" style="background: #1ec1c3"
+               class="edit-time-track-button hover-style-5 smooth-rectangle">
+            {{ 'Buttons.save' | translate }}
+          </div>
+          <div style="background: #e65070" class="edit-time-track-button hover-style-5 smooth-rectangle"
+               (click)="isEditingTimeTrack[index]= false">
+            {{ 'Buttons.cancel' | translate }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- No data -->
+  <div *ngIf="timeTracks?.length === 0 && !showGetTimeTrackLoading" class="timeTrack-noData">
+    <img src="assets/noDataImages/RunningTask-1.svg">
+    <div class="null-inspector">{{ 'TimeTrack.noData' | translate}}</div>
+  </div>
+  <!-- -->
+</div>

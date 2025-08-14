@@ -1,0 +1,88 @@
+<div [style.height.px]="columnHeight - 130" class="main-container">
+
+  <div [style.height.px]="columnHeight - 130" class="comment-wrapper">
+    <div>
+      <div class="d-flex flex-column align-items-center justify-content-center" *ngIf="selectedTask == null" style="opacity: 1;">
+        <img src="../../../../../../assets/noDataImages/click.svg" width="85%" style="margin: 5px">
+        <div class="null-inspector">{{ 'Task.clickTaskMsg' | translate}}</div>
+      </div>
+
+      <div *ngIf="selectedTask != null && selectedTaskComments.length == 0 && !showGetCommentsLoading"
+        style="opacity: 1;">
+        <img src="../../../../../../assets/noDataImages/comment.svg" width="85%" style="margin: 5px">
+        <div class="null-inspector"> {{'Task.noComments' | translate}}</div>
+      </div>
+    </div>
+    <div class="comments" appScrollToBottom [scrollNow$s]="scrollNow" [stayAtBottom]="true" cdkScrollable
+      [style.height.px]="columnHeight - 260"
+      *ngIf="selectedTask != null && selectedTaskComments.length> 0 && !showGetCommentsLoading">
+      <div class="comment-container" *ngFor="let comment of selectedTaskComments;let i= index">
+        <div class="comment-header">
+          <div *ngIf="comment.commentedBy.profileImageGuid == null"
+            class="member-without-image"
+            style="background-color: #1EC1C3">{{comment.commentedBy.nickName.charAt(0)}}</div>
+          <img #tooltip="matTooltip" [matTooltip]="comment.commentedBy.nickName" [matTooltipPosition]="'below'"
+            matTooltipHideDelay="100"
+            *ngIf="comment.commentedBy.profileImageGuid != null"
+            [src]="domainName + '/en-US/File/get?id=' + comment.commentedBy.profileImageGuid + '&quality=100'"
+            style="background-color: #86A8E7" class="member">
+          <div class="comment-commented-by">
+            {{comment.commentedBy.nickName}}
+          </div>
+          <div class="comment-time">
+            {{ comment.commentedOn | date: 'shortTime'}}
+            {{ comment.commentedOn | seventaskDatePipe: 'YYYY/M/D' | async}}
+          </div>
+        </div>
+        <div dir="auto" class="comment-body">
+          <!--          <div *ngFor="let line of comment.body.split('\n')">-->
+          <!--            {{comment.body.split('\n').length > i ? line + '\n' : line}}-->
+          <!--          </div>-->
+          <div *ngFor="let line of comment.body.split('\n')">
+            <span [innerHTML]="(line | linkFinder:'#2e4a77')"></span>
+            <!--            {{line}}-->
+            <div *ngIf="line == ''">
+              <br>
+            </div>
+          </div>
+          <!--        {{comment.body}}-->
+        </div>
+      </div>
+    </div>
+    <div
+      *ngIf="selectedTask != null && !showGetCommentsLoading"
+      class="preset-message-box d-flex flex-row flex-nowrap bg-white">
+      <div class="inner-preset-message" *ngFor="let presetItem of presetMessage">
+        <div class="preset-item" (click)="addPreset(presetItem)">{{presetItem}}</div>
+      </div>
+    </div>
+    <div *ngIf="selectedTask != null && !showGetCommentsLoading" class="add-comment-container">
+
+      <mat-menu class="emoji-menu" style="width: 500px !important;" #emojiMenu="matMenu" yPosition="below" xPosition="before">
+        <emoji-mart [color]="'#' + emojiPickerColor" (click)="$event.stopPropagation()"
+          [style.width.%]="100" [style.display]="'inline-flex'"
+          [showPreview]="false"
+          [darkMode]="false"
+          (emojiClick)="addEmoji($event)"
+          [isNative]="false"
+          [showSingleCategory]="true"
+          [emojiTooltip]="true"></emoji-mart>
+      </mat-menu>
+      <textarea autofocus (keypress)="sendWithEnter($event)" dir="auto" [(ngModel)]="newComment"
+        class="new-comment" placeholder="{{'Task.addComment' | translate}}">
+      </textarea>
+      <button style="margin: 0;padding: 0;margin-inline-end: 5px" class="emoji-button" [matMenuTriggerFor]="emojiMenu">
+        <img style="opacity: 0.3" src="assets/icons/emoji.svg">
+      </button>
+      <span (click)="addComment()" [style]="'transform: rotate(' + iconRotationDegree + 'deg)'"
+        class="seventask-icon-chat-send send-comment"></span>
+    </div>
+
+    <div *ngIf="showGetCommentsLoading && this.selectedTask != null" class="loading-container">
+      <seventask-spinner [loadingType]="1" *ngIf="showGetCommentsLoading"></seventask-spinner>
+      <!--  <div style="margin-top: 10px;color: #2E4A77;">{{'Task.loadingTasks' |translate}}</div>-->
+    </div>
+
+  </div>
+
+</div>

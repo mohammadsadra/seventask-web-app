@@ -1,0 +1,104 @@
+@import "variables";
+.main-container {
+  background-color: white;
+  width: 670px;
+  max-height: 95vh;
+  padding: 30px;
+  overflow-x: hidden;
+}
+
+.edit-team-and-project-title {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 25px;
+  text-align: center;
+  color: #2E4A77;
+  opacity: 0.3;
+  border-radius: 10px;
+}
+
+.assignments-title {
+  height: 19px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 17px;
+  color: rgba(46, 74, 119, 0.3);
+  margin: 15px 0 15px 0;
+}
+
+.assignments-team-description {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 24px;
+  text-align: center;
+  color: #2E4A77;
+  opacity: 0.5;
+  margin-bottom: 30px;
+}
+
+.assignments-teams-list .p-2 {
+  padding: 0 !important;
+}
+
+.assignments-team {
+  width: 183px;
+  height: 42px;
+  background: rgba(66, 120, 223, 0.05);
+  border-radius: 10px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 15px;
+  color: #2E4A77;
+  text-align: center;
+  cursor: pointer;
+}
+
+.active-assignments-team {
+  width: 183px;
+  height: 42px;
+  background: $theme-color;
+  border-radius: 10px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 15px;
+  color: #FFFFFF;
+  text-align: center;
+  cursor: pointer;
+}
+
+.assignments-teams-list {
+  padding: 0 20px 30px 20px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 15px;
+}
+
+.submit-button {
+  //border: 1px solid $theme-color;
+  outline: none;
+  border: 1px solid rgba(46, 74, 119, 0.3);
+  box-sizing: border-box;
+  border-radius: 10px;
+  alignment: center;
+  text-align: center;
+  background-color: white;
+  padding: 15px;
+}
+
+.submit-button-text {
+  font-style: normal;
+  font-weight: 900;
+  font-size: 14px;
+  line-height: 19px;
+  letter-spacing: 0.1em;
+  color: $theme-color;
+}

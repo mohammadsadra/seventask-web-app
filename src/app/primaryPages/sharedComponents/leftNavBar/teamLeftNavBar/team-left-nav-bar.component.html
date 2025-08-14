@@ -1,0 +1,56 @@
+<div class="list-container d-flex flex-column" [style.height]="height + 'px'" dir="auto">
+
+  <div class="p-2 page-info">
+    <div class="page-info-logo">
+      <span style="font-size: 25px" class="seventask-icon-pages-my-teams"></span>
+    </div>
+    <div class="page-info-title">
+      {{ 'Team.myTeams' | translate}}
+    </div>
+    <div class="page-number-title d-flex flex-row justify-content-center">
+
+      <mat-spinner *ngIf="showSpinner"
+        class="mat-spinner-small mat-spinner-showNumber ml-1 mr-1"
+        strokeWidth="3" [diameter]="20">
+      </mat-spinner>
+
+      <span *ngIf="!showSpinner"
+        class="ml-1 mr-1" style="color: #1EC1C3">{{teams.length | numToArabic}}
+      </span>
+      <span *ngIf="teams.length> 1"> {{ 'Team.teams' | translate}}</span>
+      <span *ngIf="teams.length <= 1"> {{ 'Team.team' | translate}}</span>
+    </div>
+  </div>
+
+  <div *ngIf="!showTeamsAndDepartmentsLoading" class="all-item-list-container p-2 d-flex flex-column">
+
+    <div style="margin-top: 20px" class="p-2 all-items d-flex flex-row" (click)="activeTab= 'all'">
+
+      <div style="overflow-y: hidden;" class="p-2 text" [ngClass]="activeTab == 'all' ? 'active-tab' : 'tab'">{{ 'Team.allTeams' | translate}}</div>
+      <div class="selected-pointer" style="margin-inline-start: auto" *ngIf="activeTab == 'all'"
+        [style.border-radius]="direction == 'ltr' ? '10px 0px 0px 10px' : '0px 10px 10px 0px'"></div>
+    </div>
+
+    <div class="items-list p-2 d-flex flex-column" *ngFor="let team of teams">
+      <div class="item-title d-flex flex-row p-2" (click)="activeTab= team.id.toString(); openTeamOverviewPage(team.id)">
+        <div class="p-2 item-title text" [ngClass]="activeTab == team.id.toString() ? 'active-tab' : 'tab'">{{team.name}}</div>
+        <div class="selected-pointer" style="margin-inline-start: auto" *ngIf="activeTab == team.id.toString()"
+          [style.border-radius]="direction == 'ltr' ? '10px 0px 0px 10px' : '0px 10px 10px 0px'"></div>
+      </div>
+      <div *ngFor="let department of allDepartments">
+        <div class="item-name item-name-hover" *ngIf="team.id == department.teamId">
+          <div class="text">
+            {{department.name}}
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div *ngIf="showTeamsAndDepartmentsLoading" class="loading-container">
+    <seventask-spinner [loadingType]="1"></seventask-spinner>
+    <!--    <div style="margin-top: 10px">{{'Team.loadingLeftNavBarOfTeams' | translate}}</div>-->
+  </div>
+
+</div>

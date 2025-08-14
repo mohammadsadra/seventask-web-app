@@ -1,0 +1,348 @@
+@import "variables";
+
+* {
+    text-align: start;
+}
+
+.main-container {
+    padding: 0 38px 44px;
+}
+
+.page-title {
+    padding-top: 44px;
+    text-align: start;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 38px !important;
+    line-height: 56px;
+    color: #2E4A77;
+}
+
+.profile-pic-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 27px;
+    position: relative;
+}
+
+.profile-pic {
+    position: absolute;
+    height: 101px;
+    width: 101px;
+    border-radius: 50%;
+    z-index: 0;
+}
+
+.change-pic {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    opacity: 0.7;
+    font-style: normal;
+    font-weight: 100;
+    width: 101px;
+    height: 101px;
+    border-radius: 50%;
+    background-color: white;
+    cursor: pointer;
+}
+
+.edit-button {
+    color: $theme-color;
+}
+
+.information {
+    margin-inline-start: 50px;
+    padding-top: 27px;
+}
+
+.full-name-title {
+    width: 200px;
+    height: 34px;
+    font-style: normal;
+    font-weight: 100;
+    font-size: 22px;
+    line-height: 30px;
+    color: #476088;
+}
+
+.user-input {
+    padding-top: 22px;
+    text-align: start;
+}
+
+.username {
+    width: 400px;
+    height: 45px;
+    background: #FFFFFF;
+    border: 1px solid #F0F4F4;
+    padding: 0 15px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    font-style: normal;
+    font-weight: 100;
+    font-size: 20px;
+    line-height: 34px;
+}
+
+.option {
+    padding-top: 44px;
+}
+
+.option-icon {
+    color: #2E4A77;
+    margin-inline-end: 10px;
+}
+
+.option-icon.rtl {
+    transform: scaleX(-1);
+}
+
+.option-title {
+    font-style: normal;
+    font-weight: 100;
+    font-size: 22px;
+    color: #2E4A77;
+}
+
+.options {
+    text-align: start;
+}
+
+.label-item {
+    @include seventask-button-style-4;
+    text-align: center;
+    display: inline-block;
+    border-radius: 10px;
+    padding: 10px 40px;
+    font-style: normal;
+    margin-inline-end: 25px;
+    margin-top: 22px;
+    font-weight: 100;
+    font-size: 17px;
+    line-height: 21px;
+    background: #E6EEFA;
+    color: #2E4A77;
+    cursor: pointer;
+}
+
+.change-button {
+    text-align: center;
+    display: inline-block;
+    border-radius: 10px;
+    padding: 16px 10px;
+    font-style: normal;
+    margin-inline-start: 20px;
+    font-weight: 100;
+    font-size: 15px;
+    line-height: 10px;
+    background: rgba(30, 193, 195, 0.2);
+    color: #1DB954;
+    cursor: pointer;
+}
+
+.selected-label {
+    background: $theme-color;
+    color: #FFFFFF;
+}
+
+.color-theme-options {
+    align-content: center;
+    margin-top: 22px;
+    margin-inline-end: 48px;
+    height: 45px;
+    width: 45px;
+    min-height: 45px;
+    min-width: 45px;
+    border-radius: 50%;
+}
+
+.color-item {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.color-item.ltr {
+    transform: translate(2.5px, 2.5px);
+}
+
+.color-item.rtl {
+    transform: translate(-2.5px, 2.5px);
+}
+
+#second-calendar-toggle {
+    margin-inline-start: 125px;
+}
+
+.info-box {
+    margin-top: 22px;
+    display: inline-block;
+    border-radius: 10px;
+    font-style: normal;
+    margin-inline-end: 25px;
+    background: #E6EEFA;
+    color: #2E4A77;
+}
+
+.info-item {
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+
+.info {
+    padding-inline-start: 22px;
+    padding-inline-end: 50px;
+    font-weight: 100;
+    font-size: 21px;
+    line-height: 25px;
+}
+
+.termination {
+    text-align: center;
+    border-radius: 0 0 8px 8px;
+    font-style: normal;
+    font-weight: 100;
+    font-size: 17px;
+    line-height: 20px;
+    padding: 8px 0 8px 0;
+    background: #FFD7DE;
+    color: #FF4D6C;
+    cursor: pointer;
+}
+
+.dark-mode-toggle {
+    margin-inline-start: 320px;
+}
+
+.second-calendar-toggle {
+    margin-inline-start: 125px;
+}
+
+::ng-deep {
+    .mat-accent .mat-slider-track-fill {
+        background-color: $theme-color;
+    }
+
+    .mat-accent .mat-slider-thumb {
+        background-color: $theme-color;
+    }
+
+    .mat-slider-horizontal {
+        width: 1000px;
+    }
+
+    .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb {
+        background-color: #FFFFFF;
+    }
+
+    .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
+        background-color: $theme-color;
+    }
+}
+
+.input-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: center;
+    padding: 0 15px;
+    flex-direction: row;
+    height: 45px;
+    border-radius: 10px;
+    background: #FFFFFF;
+    border: 1px solid #F0F4F4;
+    max-width: 425px;
+}
+
+.user-password {
+    width: 400px;
+    border: none;
+    outline: none;
+    color: #2E4A77;
+    font-style: normal;
+    font-weight: 100;
+    font-size: 22px;
+    line-height: 34px;
+}
+
+.hide-show {
+    height: 49px;
+    width: 50px;
+    line-height: 52px;
+    text-align: center;
+    background: rgb(233, 235, 239);
+    cursor: pointer;
+}
+
+.modal {
+    position: fixed;
+    inset: 0;
+    background-color: #000;
+    opacity: 0.85;
+
+    &.show {
+        display: block;
+    }
+
+    &.hide {
+        display: hidden;
+    }
+}
+
+.my-overlay {
+    left: 0 !important;
+    top: 0 !important;
+    z-index: 10000 !important;
+    width: 100% !important;
+    height: 100% !important;
+    position: fixed !important;
+    background-color: rgba(29, 24, 24, 0.93) !important;
+    cursor: pointer !important;
+    color: white;
+    visibility: visible !important;
+    transition: visibility 0s, opacity 0.4s linear !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    //cursor: wait !important;
+}
+
+.my-overlay i.fa.fa-spinner.fa-spin,
+.spinner-big {
+    font-size: 100px !important;
+}
+
+.is-pending {
+    background-color: transparent !important;
+    color: white;
+    box-shadow: 0 0 40px 40px $theme-color-opacity-60 inset;
+}
+
+.notification-state-container {
+    cursor: pointer;
+    border-radius: 10px;
+    transition: box-shadow 300ms ease-in-out, color 300ms ease-in-out;
+    text-align: center;
+    display: inline-block;
+    padding: 10px 40px;
+    font-style: normal;
+    -webkit-margin-end: 25px;
+    margin-inline-end: 25px;
+    margin-top: 22px;
+    font-weight: 100;
+    font-size: 17px;
+    line-height: 21px;
+    background: #E6EEFA;
+    color: #2E4A77;
+    width: 150px;
+}
+
+.notification-help {
+    color: #2E4A77;
+    font-weight: 100;
+    font-size: 17px;
+}

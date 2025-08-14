@@ -1,0 +1,59 @@
+@import "variables";
+@font-face {
+  font-family: 'seventask-edit-icon';
+  src:  url('../assets/fonts/seventask-edit-icon/seventask-edit-icon.eot?hjcj30');
+  src:  url('../assets/fonts/seventask-edit-icon/seventask-edit-icon.eot?hjcj30#iefix') format('embedded-opentype'),
+  url('../assets/fonts/seventask-edit-icon/seventask-edit-icon.ttf?hjcj30') format('truetype'),
+  url('../assets/fonts/seventask-edit-icon/seventask-edit-icon.woff?hjcj30') format('woff'),
+  url('../assets/fonts/seventask-edit-icon/seventask-edit-icon.svg?hjcj30#seventask-edit-icon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="seventask-icon-edit-"], [class*=" seventask-icon-edit-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'seventask-edit-icon' !important;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.seventask-icon-edit-Remove-Member:before {
+  content: "\e900";
+  color: $theme-color;
+}
+.seventask-icon-edit-cancel-narrow:before {
+  content: "\e901";
+  color: red;
+}
+.seventask-icon-edit-tick-narrow:before {
+  content: "\e903";
+  color: $theme-color;
+}
+.seventask-icon-edit-Cancel-circle:before {
+  content: "\e904";
+  color: $theme-color;
+}
+.seventask-icon-edit-cancel-thick:before {
+  content: "\e905";
+  color: red;
+}
+.seventask-icon-edit-cancel-medium:before {
+  content: "\e906";
+  color: red;
+}
+.seventask-icon-edit-edit:before {
+  content: "\e907";
+  color: $theme-color;
+}
+.seventask-icon-edit-tick-thick:before {
+  content: "\e908";
+  color: $theme-color;
+}

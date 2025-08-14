@@ -1,0 +1,287 @@
+<div class="selected-event-preview">
+<form [formGroup]="editForm">
+    <div class="week-navigator" (click)="backButtonSelected()">
+        <span class="seventask-icon-calendar-back" style="color: inherit;"
+            [style]="'transform: rotate(' + iconRotationDegree + 'deg)'">
+        </span>
+        {{ 'Calendar.Event.back' | translate }}
+    </div>
+
+    <div class="field">
+    <div class="field-title" (mouseenter)="hoveredOn.title=true" (mouseleave)="hoveredOn.title=false">
+        <img [class]="iconRotationDegree === 180 ?
+        'title-label-rtl':'title-label'"
+        [style]="'transform: rotate(' + iconRotationDegree + 'deg)'"
+        src="../../../../../assets/icons/Task/task-title.svg">
+        <div style="cursor: pointer;"
+            #tooltip="matTooltip"
+            matTooltip="{{ 'Task.copy' | translate }}"
+            [matTooltipPosition]="'above'"
+            matTooltipClass="m-0 tooltip-color"
+            [cdkCopyToClipboard]="selectedEvent.title">
+        {{ 'Calendar.Event.eventTitle' | translate}}
+        </div>
+        <div style="margin-inline-start: auto" class="d-flex flex-row">
+        <span *ngIf="hoveredOn.title && !edited.title"
+            (click)="edited.title=true; editForm.controls.Title.setValue(selectedEvent.title);"
+            style="margin-inline-start: auto"
+            class="smooth-square logo-container justify-content-center align-items-center
+            d-flex">
+            <span class="seventask-icon-edit-edit" style="font-size: 12px"></span>
+        </span>
+
+        <span (click)="edited.title=false"
+            class="smooth-square logo-container justify-content-center align-items-center
+            d-flex" style="margin: 0px 5px 0 5px"
+            *ngIf="edited.title === true">
+            <span class="seventask-icon-edit-cancel-medium" style="font-size: 12px"></span>
+        </span>
+
+        <button [disabled]="this.editForm.controls.Title.value ===''"
+            (click)="modifyTitle()"
+            [style.cursor]="this.editForm.controls.Title.value === '' ?
+            'default' : 'pointer'"
+            class="smooth-square justify-content-center align-items-center d-flex"
+            [class]="this.editForm.controls.Title.value === '' ?
+            'disabled-logo-container' : 'logo-container'"
+            *ngIf="edited.title === true">
+            <span class="seventask-icon-edit-tick-thick" style="font-size: 12px"></span>
+        </button>
+        </div>
+    </div>
+    <div class="title-content">
+        <div style="padding-inline-start: 5px" dir="auto" *ngIf="!edited.title">
+        <div dir="auto" *ngFor="let line of selectedEvent.title.split('\n')">
+            {{line}}
+            <div *ngIf="line == ''">
+            <br>
+            </div>
+        </div>
+        </div>
+        <textarea  (keyup.enter)="modifyTitle()" autoSelect autofocus dir="auto" #title *ngIf="edited.title"
+                formControlName="Title"
+                id="title-edit"
+                class="title-container"></textarea>
+    </div>
+    </div>
+
+    <div class="field">
+    <div class="field-title" (mouseenter)="hoveredOn.description=true" (mouseleave)="hoveredOn.description=false">
+        <img [class]="iconRotationDegree === 180
+        ?'title-label-rtl':'title-label'"
+        [style]="'transform: rotate(' + iconRotationDegree + 'deg)'"
+        src="../../../../../assets/icons/Task/Inspector/description.svg">
+        <div [ngStyle]="selectedEvent.description === null ? '': {'cursor': 'pointer'}"
+            #tooltip="matTooltip"
+            matTooltip="{{ 'Task.copy' | translate }}"
+            [matTooltipPosition]="'above'"
+            matTooltipClass="m-0 tooltip-color"
+            [cdkCopyToClipboard]="selectedEvent.description">
+        {{ 'Calendar.Event.eventDescription' | translate}}
+        </div>
+        <div style="margin-inline-start: auto" class="d-flex flex-row">
+        <span *ngIf="hoveredOn.description && !edited.description"
+            (click)="edited.description=true; editForm.controls.Description.setValue(selectedEvent.description);"
+            style="margin-inline-start: auto"
+            class="smooth-square logo-container justify-content-center align-items-center
+            d-flex">
+            <span class="seventask-icon-edit-edit" style="font-size: 12px"></span>
+        </span>
+
+        <span (click)="edited.description=false"
+            class="smooth-square logo-container justify-content-center align-items-center
+            d-flex" style="margin: 0px 5px 0 5px"
+            *ngIf="edited.description === true">
+            <span class="seventask-icon-edit-cancel-medium" style="font-size: 12px"></span>
+        </span>
+
+        <button [disabled]="this.editForm.controls.Description.value ===''"
+            (click)="modifyDescription()"
+            [style.cursor]="this.editForm.controls.Description.value === '' ?
+            'default' : 'pointer'"
+            class="smooth-square justify-content-center align-items-center d-flex"
+            [class]="this.editForm.controls.Description.value === '' ?
+            'disabled-logo-container' : 'logo-container'"
+            *ngIf="edited.description === true">
+            <span class="seventask-icon-edit-tick-thick" style="font-size: 12px"></span>
+        </button>
+        </div>
+    </div>
+    <div class="title-content">
+        <div style="padding-inline-start: 5px;" dir="auto" *ngIf="selectedEvent.description !== null && !edited.description">
+        <div dir="auto" *ngFor="let line of selectedEvent.description.split('\n')">
+            {{line}}
+            <div *ngIf="line == ''">
+            <br>
+            </div>
+        </div>
+        </div>
+        <textarea (keyup.enter)="modifyDescription()" autoSelect autofocus dir="auto"
+                *ngIf="edited.description" formControlName="Description"
+                id="description-edit"
+                class="description-container"></textarea>
+    </div>
+    </div>
+
+    <div class="field">
+    <div class="field-title" (mouseenter)="hoveredOn.link=true" (mouseleave)="hoveredOn.link=false">
+        <img [class]="iconRotationDegree === 180
+        ?'title-label-rtl':'title-label'"
+        [style]="'transform: rotate(' + iconRotationDegree + 'deg)'"
+        src="../../../assets/icons/Team/link.svg">
+        <div [ngStyle]="selectedEvent.link === null ? '': {'cursor': 'pointer'}"
+            #tooltip="matTooltip"
+            matTooltip="{{ 'Task.copy' | translate }}"
+            [matTooltipPosition]="'above'"
+            matTooltipClass="m-0 tooltip-color"
+            [cdkCopyToClipboard]="selectedEvent.link">
+        {{ 'Calendar.Event.eventLink' | translate}}
+        </div>
+        <div style="margin-inline-start: auto" class="d-flex flex-row">
+        <span *ngIf="hoveredOn.link && !edited.link"
+            (click)="edited.link=true; editForm.controls.Link.setValue(selectedEvent.link);"
+            style="margin-inline-start: auto"
+            class="smooth-square logo-container justify-content-center align-items-center
+            d-flex">
+            <span class="seventask-icon-edit-edit" style="font-size: 12px"></span>
+        </span>
+
+        <span (click)="edited.link=false"
+            class="smooth-square logo-container justify-content-center align-items-center
+            d-flex" style="margin: 0px 5px 0 5px"
+            *ngIf="edited.link === true">
+            <span class="seventask-icon-edit-cancel-medium" style="font-size: 12px"></span>
+        </span>
+
+        <button [disabled]="this.editForm.controls.Link.value ===''"
+            (click)="modifyLink()"
+            [style.cursor]="this.editForm.controls.Link.value === '' ?
+            'default' : 'pointer'"
+            class="smooth-square justify-content-center align-items-center d-flex"
+            [class]="this.editForm.controls.Link.value === '' ?
+            'disabled-logo-container' : 'logo-container'"
+            *ngIf="edited.link === true">
+            <span class="seventask-icon-edit-tick-thick" style="font-size: 12px"></span>
+        </button>
+        </div>
+    </div>
+    <div class="title-content">
+        <div style="padding-inline-start: 5px;" dir="auto" *ngIf="selectedEvent.link !== null && !edited.link">
+        <a [href]="selectedEvent.link" target="_blank">
+            {{ selectedEvent.link }}
+        </a>
+        </div>
+        <textarea (keyup.enter)="modifyLink()" autoSelect autofocus dir="auto"
+                *ngIf="edited.link" formControlName="Link"
+                class="description-container"></textarea>
+    </div>
+    </div>
+
+    <div class="field">
+        <div class="field-title">
+            <div class="d-flex align-items-center">
+                <mat-checkbox class="title-label" 
+                (change)="editAllDay()"
+                [checked]="selectedEvent.isAllDay" 
+                color="primary"></mat-checkbox>
+                <div class="is-all-day">{{ 'Calendar.NewEvent.allDay' | translate }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="field">
+    <div class="field-title" (mouseenter)="hoveredOn.startDate=true" (mouseleave)="hoveredOn.startDate=false">
+        <img class="title-label" src="../../../../../assets/icons/Task/task-date.svg">
+        {{'Calendar.Event.startDate' | translate}}
+        <div *ngIf="hoveredOn.startDate"
+            (click)="openEditDate('start')"
+            class="smooth-square smooth-square add-assignee-icon">
+            <span class="seventask-icon-edit-edit" style="font-size: 12px"></span>
+        </div>
+    </div>
+    <div class="title-content">
+        {{selectedEvent.startTime | seventaskDatePipe: 'YYYY/M/D HH:mm' | async}}
+    </div>
+    </div>
+
+    <div class="field">
+    <div class="field-title" (mouseenter)="hoveredOn.endDate=true" (mouseleave)="hoveredOn.endDate=false">
+        <img class="title-label" src="../../../../../assets/icons/Task/task-date.svg">
+        {{'Calendar.Event.endDate' | translate}}
+        <div *ngIf="hoveredOn.endDate"
+            (click)="openEditDate('end')"
+            class="smooth-square smooth-square add-assignee-icon">
+            <span class="seventask-icon-edit-edit" style="font-size: 12px"></span>
+        </div>
+    </div>
+    <div class="title-content">
+        {{selectedEvent.endTime | seventaskDatePipe: 'YYYY/M/D HH:mm' | async }}
+    </div>
+    </div>
+
+    <div class="field">
+    <div class="field-title">
+        <img class="title-label"
+        src="../../../../../assets/icons/Task/Inspector/assignee.svg">
+        {{'Task.assignees' | translate}}
+    </div>
+    <div *ngFor="let assignee of selectedEvent.users;let k= index"
+        class="title-content">
+        <div class="assignee">
+        <div *ngIf="assignee.profileImageGuid == null"
+            class="member-without-image"
+            style="background-color: #1EC1C3">{{assignee.nickName.charAt(0)}}</div>
+        <img #tooltip="matTooltip" [matTooltip]="assignee.nickName"
+            [matTooltipPosition]="'below'"
+            matTooltipHideDelay="100"
+            *ngIf="assignee.profileImageGuid != null"
+            [src]="domainName + '/en-US/File/get?id='
+            +assignee.profileImageGuid + '&quality=100'"
+            style="background-color: #86A8E7" class="member">
+        <div class="assignee-name">{{assignee.nickName}}</div>
+        </div>
+    </div>
+    </div>
+
+    <div class="field">
+    <div class="field-title" (mouseleave)="hoveredOn.attachment= false" (mouseenter)="hoveredOn.attachment= true">
+        <img class="title-label"
+        src="../../../../../assets/icons/Task/Inspector/dependency.svg">
+        {{'Task.attachments' | translate}}
+        <div *ngIf="hoveredOn.attachment"
+        (click)="selectFileToUpload()"
+        class="add-assignee-icon">
+        <span style="font-size: 12px" class="seventask-icon-add-add"></span>
+        </div>
+        <app-upload-file [componentId]="'fileInInspector'" [multiple]="false" [uploadButtonDisplay]="'none'"
+        [inputButtonDisplay]="'none'" [auto_upload_File]="true"
+        style="display: none" (filesInformation)="uploadFile($event)"></app-upload-file>
+    </div>
+
+    <div *ngFor="let file of selectedEvent.attachments,let k=index"
+            (mouseleave)="isRemovingAttachment=''" (mouseenter)="isRemovingAttachment=file.fileContainerGuid"
+        class="uploaded-files">
+        <div class="file-row">
+        <span *ngIf="isRemovingAttachment == file.fileContainerGuid" (click)="removeAttachment(file.fileContainerGuid)"
+                class="seventask-icon-edit-cancel-narrow remove-assignee-icon"></span>
+        <app-show-file [data]="file" type="file"></app-show-file>
+        </div>
+    </div>
+    </div>
+
+    <div class="item d-flex flex-column align-self-start" style="height: 90px">
+        <button class="delete-button" (click)="openDeleteEventDialog()">
+        <div class="d-flex flex-row align-items-center
+            justify-content-center">
+            <div>
+            <img class="title-label"
+                src="../../../../../assets/icons/Project/deleteTask.svg">
+            </div>
+            <div>
+            {{ 'Calendar.deleteEvent' | translate}}
+            </div>
+        </div>
+        </button>
+    </div>
+</form>
+</div>

@@ -1,0 +1,88 @@
+<div class="list-container d-flex flex-column" [style.height]="height + 'px'">
+
+  <div class="p-2 page-info">
+    <div class="page-info-logo">
+      <span style="font-size: 25px" class="seventask-icon-pages-my-projects"></span>
+    </div>
+    <div class="page-info-title">
+      {{ 'Project.myProjectTitle' | translate}}
+    </div>
+    <div class="page-number-title">
+      <span style="color: #1EC1C3">{{projectNumber | numToArabic}}</span>
+      <span> {{ 'Project.openProjectTitle' | translate}}</span>
+    </div>
+  </div>
+
+  <div class="all-item-list-container p-2 d-flex flex-column">
+
+    <div style="margin-top: 20px" class="p-2 all-items d-flex flex-row" (click)="activeTab= 'Overview'">
+
+      <div class="p-2" [ngClass]="activeTab == 'Overview' ? 'active-tab' : 'tab'"> {{ 'Project.overviewTitle' | translate}}</div>
+      <div class="selected-pointer" style="margin-inline-start: auto" *ngIf="activeTab == 'Overview'"
+        [style.border-radius]="direction == 'ltr' ? '10px 0px 0px 10px' : '0px 10px 10px 0px'"></div>
+    </div>
+  </div>
+
+  <!--  <div class="p-2 d-flex flex-column all-tabs">-->
+
+  <!--    <div class="p-2 tab  d-flex flex-row align-items-center" (click)="activeTab = 'Overview'"-->
+  <!--         [ngClass]="activeTab == 'Overview' ? 'active-tab' : 'tab'">-->
+  <!--      <div class="p-2">-->
+  <!--        {{ 'Project.overviewTitle' | translate}}-->
+  <!--      </div>-->
+  <!--      <div class="selected-pointer" style="margin-inline-start: auto" *ngIf="activeTab == 'Overview'"-->
+  <!--           [style.border-radius]="direction == 'ltr' ? '10px 0px 0px 10px' : '0px 10px 10px 0px'"></div>-->
+  <!--    </div>-->
+
+  <!--&lt;!&ndash;    <div class="p-2 tab  d-flex flex-row align-items-center" (click)="activeTab = 'Tasks'"&ndash;&gt;-->
+  <!--&lt;!&ndash;         [ngClass]="activeTab == 'Tasks' ? 'active-tab' : 'tab'">&ndash;&gt;-->
+  <!--&lt;!&ndash;      <div class="p-2">&ndash;&gt;-->
+  <!--&lt;!&ndash;        Tasks&ndash;&gt;-->
+  <!--&lt;!&ndash;      </div>&ndash;&gt;-->
+  <!--&lt;!&ndash;      <div class="selected-pointer ml-auto" *ngIf="activeTab == 'Tasks'" [style.border-radius]="direction == 'ltr' ? '10px 0px 0px 10px' : '0px 10px 10px 0px'"></div>&ndash;&gt;-->
+  <!--&lt;!&ndash;    </div>&ndash;&gt;-->
+
+  <!--&lt;!&ndash;    <div class="p-2 tab d-flex flex-row align-items-center" (click)="activeTab = 'Activity Log'"&ndash;&gt;-->
+  <!--&lt;!&ndash;          [ngClass]="activeTab == 'Activity Log' ? 'active-tab' : 'tab'">&ndash;&gt;-->
+  <!--&lt;!&ndash;      <div class="p-2">&ndash;&gt;-->
+  <!--&lt;!&ndash;        Activity Log&ndash;&gt;-->
+  <!--&lt;!&ndash;      </div>&ndash;&gt;-->
+  <!--&lt;!&ndash;      <div class="selected-pointer ml-auto" *ngIf="activeTab == 'Activity Log'" [style.border-radius]="direction == 'ltr' ? '10px 0px 0px 10px' : '0px 10px 10px 0px'"></div>&ndash;&gt;-->
+  <!--&lt;!&ndash;    </div>&ndash;&gt;-->
+
+  <!--&lt;!&ndash;    <div class="p-2 tab  d-flex flex-row align-items-center" (click)="activeTab = 'Calendar'"&ndash;&gt;-->
+  <!--&lt;!&ndash;         [ngClass]="activeTab == 'Calendar' ? 'active-tab' : 'tab'">&ndash;&gt;-->
+  <!--&lt;!&ndash;      <div class="p-2">&ndash;&gt;-->
+  <!--&lt;!&ndash;        Calendar&ndash;&gt;-->
+  <!--&lt;!&ndash;      </div>&ndash;&gt;-->
+  <!--&lt;!&ndash;      <div class="selected-pointer ml-auto" *ngIf="activeTab == 'Calendar'" [style.border-radius]="direction == 'ltr' ? '10px 0px 0px 10px' : '0px 10px 10px 0px'"></div>&ndash;&gt;-->
+  <!--&lt;!&ndash;    </div>&ndash;&gt;-->
+
+  <!--&lt;!&ndash;    <div class="p-2 tab  d-flex flex-row align-items-center" (click)="activeTab = 'Report'"&ndash;&gt;-->
+  <!--&lt;!&ndash;         [ngClass]="activeTab == 'Report' ? 'active-tab' : 'tab'">&ndash;&gt;-->
+  <!--&lt;!&ndash;      <div class="p-2">&ndash;&gt;-->
+  <!--&lt;!&ndash;        Report&ndash;&gt;-->
+  <!--&lt;!&ndash;      </div>&ndash;&gt;-->
+  <!--&lt;!&ndash;      <div class="selected-pointer ml-auto" *ngIf="activeTab == 'Report'" [style.border-radius]="direction == 'ltr' ? '10px 0px 0px 10px' : '0px 10px 10px 0px'"></div>&ndash;&gt;-->
+  <!--&lt;!&ndash;    </div>&ndash;&gt;-->
+
+  <!--&lt;!&ndash;    <div class="p-2 tab  d-flex flex-row align-items-center" (click)="activeTab = 'File Management'"&ndash;&gt;-->
+  <!--&lt;!&ndash;         [ngClass]="activeTab == 'File Management' ? 'active-tab' : 'tab'">&ndash;&gt;-->
+  <!--&lt;!&ndash;      <div class="p-2">&ndash;&gt;-->
+  <!--&lt;!&ndash;        File Management&ndash;&gt;-->
+  <!--&lt;!&ndash;      </div>&ndash;&gt;-->
+  <!--&lt;!&ndash;      <div class="selected-pointer ml-auto" *ngIf="activeTab == 'File Management'" [style.border-radius]="direction == 'ltr' ? '10px 0px 0px 10px' : '0px 10px 10px 0px'"></div>&ndash;&gt;-->
+  <!--&lt;!&ndash;    </div>&ndash;&gt;-->
+
+  <!--&lt;!&ndash;    <div class="p-2 tab  d-flex flex-row align-items-center" (click)="activeTab = 'Settings'"&ndash;&gt;-->
+  <!--&lt;!&ndash;         [ngClass]="activeTab == 'Settings' ? 'active-tab' : 'tab'">&ndash;&gt;-->
+  <!--&lt;!&ndash;      <div class="p-2">&ndash;&gt;-->
+  <!--&lt;!&ndash;        Settings&ndash;&gt;-->
+  <!--&lt;!&ndash;      </div>&ndash;&gt;-->
+  <!--&lt;!&ndash;      <div class="selected-pointer ml-auto" *ngIf="activeTab == 'Settings'" [style.border-radius]="direction == 'ltr' ? '10px 0px 0px 10px' : '0px 10px 10px 0px'"></div>&ndash;&gt;-->
+  <!--&lt;!&ndash;    </div>&ndash;&gt;-->
+
+  <!--  </div>-->
+
+
+</div>

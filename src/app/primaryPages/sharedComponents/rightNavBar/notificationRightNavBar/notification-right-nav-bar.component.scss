@@ -1,0 +1,348 @@
+@import 'variables';
+
+.notification-header-tab {
+    height: 60px;
+    width: 100%;
+    background-color: #f8fbfd;
+}
+
+.noDataImage {
+    opacity: 1;
+    width: 85%;
+    height: auto;
+    margin: 35px 25px;
+}
+
+.noData-text {
+    font-style: normal;
+    font-size: 16px;
+    color: #2e4a77;
+}
+
+.notification-tasks-container {
+    background-color: #f8fbfd;
+    min-height: 100%;
+}
+
+.notification-tasks-content {
+    width: 100%;
+    min-height: 500px;
+    background: #ffffff;
+    border: 1px solid #f3f6fa;
+    border-bottom: #fff;
+    box-sizing: border-box;
+    border-radius: 10px 10px 0px 0px;
+    overflow-x: hidden;
+}
+
+.notificnav {
+    list-style: none;
+    padding: 0px;
+    margin: 0px auto;
+    padding-top: 15px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.notificnav-item {
+    color: #2e4a77;
+    opacity: 0.3;
+    font-weight: 500;
+    font-size: 13px;
+    cursor: pointer;
+    padding: 0px 3px;
+}
+
+.notificnav-item:hover {
+    color: $theme-color !important;
+    opacity: 1 !important;
+}
+
+.activeTab {
+    color: $theme-color !important;
+    opacity: 1 !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.activeTab span {
+    display: inline-block !important;
+    justify-items: end;
+    font-size: 20px;
+    margin-top: -8px;
+}
+
+.header-notific {
+    font-size: 11px;
+    line-height: 15px;
+    text-align: center;
+    color: #2e4a77;
+    opacity: 0.3;
+    margin: 0px auto 10px auto;
+    padding: 4px;
+    border-radius: 4px;
+    background-color: #fff;
+}
+
+.notific-body {
+    margin: 0px;
+    text-align: start;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.notific-body-animation {
+    animation-name: notificationAnimation;
+    animation-duration: 0.7s;
+    animation-timing-function: ease-in;
+    animation-fill-mode: forwards;
+}
+
+@keyframes notificationAnimation {
+    from {
+        height: 0px;
+        opacity: 0;
+    }
+
+    to {
+        height: 100%;
+        opacity: 1;
+    }
+}
+
+.notific-body:hover {
+    //overflow-y: auto;
+}
+
+.selectedDate {
+    opacity: 0.7;
+    position: fixed;
+    top: 140px;
+    border-radius: 10px 10px 0px 0px;
+    text-align: center;
+}
+
+.notific-wraper {
+    padding: 12px 0px;
+    height: fit-content;
+    margin: 10px 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.notific-OnName {}
+
+.notific-OnName-flex {
+    width: fit-content;
+    max-width: 97%;
+    overflow: hidden;
+    justify-content: space-around;
+    padding: 0px 5px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    margin: 0px auto;
+    border-radius: 10px;
+    height: 30px;
+    background-color: $theme-color-opacity-10;
+    color: $theme-color;
+    font-weight: 500;
+    font-size: 12px;
+}
+
+.notific-OnName_text {
+    padding: 7px 0px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.notific-OnName_img {
+    padding: 0px;
+    margin: 6px 0px;
+}
+
+.notific-OnName span {
+    font-size: 18px;
+    margin-inline-end: 5px;
+}
+
+.notific-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.notific-content {
+    width: 75%;
+    text-align: start;
+    display: flex;
+    flex-direction: column;
+    margin-top: 15px;
+}
+
+.img-content {
+    width: 25%;
+    text-align: center;
+    margin-top: 15px;
+}
+
+.img-content img {
+    width: 2.25em;
+    height: 2.25em;
+}
+
+.notific-content span {
+    font-size: 13px;
+    line-height: 18px;
+    color: #2e4a77;
+    text-align: start;
+    margin: 0px;
+    padding: 0px;
+}
+
+.Date-content {
+    margin-top: 5px;
+    padding: 0px;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 12px;
+    line-height: 16px;
+    text-align: center;
+    text-align: start;
+    color: #a7afbd;
+}
+
+.loading-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    //margin-top: 20px;
+    flex-direction: column;
+    margin-top: 15%;
+    flex-basis: 50%;
+}
+
+.olderNotification {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+    width: 100%;
+    padding-bottom: 20px;
+}
+
+.olderNotification p {
+    color: $theme-color;
+    cursor: pointer;
+    display: inline-flex;
+    margin: 0px auto;
+}
+
+.filecontainer {
+    //background-color: $theme-color-opacity-10;
+    background-color: rgba(35, 77, 155, 0.05);
+    border-radius: 10px;
+    flex-wrap: nowrap;
+    display: flex;
+    flex-direction: row;
+    width: 11.4rem;
+    max-width: 249px;
+    margin-top: 8px;
+    transition-duration: 0.4s;
+
+    &:hover {
+        background-color: $theme-color-opacity-10;
+        box-shadow: 0px 0px 5px 2px inset rgba(73, 73, 73, 0.03);
+        transition-duration: 0.4s;
+    }
+}
+
+.file-type-icon {
+    height: 36px;
+    background: #ffffff;
+    border-radius: 50%;
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-self: center;
+}
+
+.file-type-icon div {
+    width: 36px;
+    // height: 36px;
+    text-align: center;
+}
+
+.file-type-icon span {
+    margin: 0px auto;
+}
+
+.file-add-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    text-align: start;
+    padding: 10px 0px;
+}
+
+.file-name {
+    font-weight: 900;
+    font-size: 13px;
+    line-height: 18px;
+    color: #2e4a77;
+    opacity: 0.7;
+}
+
+.file-size {
+    font-size: 12px;
+    line-height: 16px;
+    color: #a7afbd;
+}
+
+.inline-color {
+    width: 18px;
+    height: 18px;
+    display: inline-block;
+    margin-bottom: -4px;
+    border-radius: 50%;
+}
+
+.reply-comment {
+    background: #f8fbfd;
+    border-radius: 8px;
+    margin-top: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-inline-end: 10px;
+    align-items: center;
+    width: 96%;
+    margin: 0px auto;
+    padding: 0px 2px;
+}
+
+.reply-comment input {
+    background: #f8fbfd;
+    text-align: start;
+    height: 34px;
+    padding: 0px 5px;
+    border: none;
+    resize: none;
+    outline: none;
+    border-radius: 8px;
+    width: 90%;
+    font-size: 13px;
+    color: #2e4a77;
+}
+
+.rotate-icon {
+    transform: rotate(180deg);
+}
+
+.seventask-icon-chat-send {
+    cursor: pointer;
+}

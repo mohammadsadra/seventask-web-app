@@ -1,0 +1,13 @@
+<body >
+<h5>
+  {{ 'Project.deleteProjectMsg1' | translate}}
+  <span style="color: rgba(248, 111, 140, 1);font-weight: bold">"{{projectData.name}}"</span>  {{ 'Project.deleteProjectMsg2' | translate}}
+</h5>
+<p>
+<!--  "{{messageData.body}}"-->
+</p>
+<div class="button-row">
+  <button class="btn confirm-btn" (click)="deleteProject()" mat-dialog-close="true">{{ 'Project.delete' | translate}}</button>
+  <button class="btn" style="background: rgba(66,120,223,0.5); color: white" [mat-dialog-close]="true">{{ 'Project.cancel' | translate}}</button>
+</div>
+</body>

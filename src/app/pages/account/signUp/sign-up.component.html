@@ -1,0 +1,112 @@
+<body *ngIf="!signUpSuccessful || !emailSent" class="main-content">
+<app-header [header_text]="'Already have an account?'" [button_text]="'Sign-in'"
+            [button_link]="'../signIn'"></app-header>
+
+<div *ngIf="!signUpSuccessful || !emailSent" class="sign-up-container">
+  <div class="login-page-new__main-container col-12 col-sm-10 col-md-8  col-lg-6 col-xl-4">
+    <div class="sign-up-form-container">
+      <div class="sign-up-form-title">Join Seventask!</div>
+      <form [formGroup]="signUpForm">
+        <div class="form-group">
+          <label class="sign-up-input-label">Username</label>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">
+              <mat-icon>perm_identity</mat-icon>
+            </span>
+            </div>
+            <input dir="auto" (keyup)="onUsernameSearch($event)" inputmode="text" type="text" class="form-control Input" placeholder="John" aria-label="Mail"
+                   aria-describedby="basic-addon1"
+                   formControlName="username">
+          </div>
+          <p class="mat-error"
+             *ngIf="(signUpForm.controls.username.errors?.required || signUpForm.controls.username.errors?.pattern) && signUpForm.controls.username.touched">
+            Please enter your username correctly</p>
+          <p class="mat-error"
+             *ngIf="(signUpForm.controls.username.errors?.duplicateUsernames) && signUpForm.controls.username.touched">
+            This username is already taken.</p>
+        </div>
+        <div class="sign-up-form-row">
+          <label class="sign-up-input-label">Email</label>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon2">
+              <mat-icon>mail</mat-icon>
+            </span>
+            </div>
+            <input dir="auto" (mouseleave)="onEmailSearch($event)" (keyup)="onEmailSearch($event)" inputmode="email" type="email" class="form-control Input" placeholder="example@email.com" aria-label="Mail"
+                   aria-describedby="basic-addon2"
+                   formControlName="email">
+          </div>
+          <p class="mat-error"
+             *ngIf="(signUpForm.controls.email.errors?.email || signUpForm.controls.email.errors?.required) && signUpForm.controls.email.touched">
+            Please enter your email correctly</p>
+          <p class="mat-error"
+             *ngIf="(signUpForm.controls.email.errors?.duplicateEmails) && (signUpForm.controls.email.touched)">
+            This email has already registered.</p>
+        </div>
+        <div class="sign-up-form-row">
+          <label class="sign-up-input-label">Choose Password</label>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+            <span class="input-group-text " id="basic-addon3">
+              <mat-icon>lock</mat-icon>
+            </span>
+            </div>
+            <input [type]="hide ? 'password' : 'text'" class="form-control" placeholder="Enter your password"
+                   aria-label="Mail"
+                   aria-describedby="basic-addon3"
+                   claas="PasswordInput"
+                   formControlName="password">
+            <span class="input-group-text visibilitySpan" id="visibility">
+            <mat-icon matSuffix (click)="hide = !hide" class="matIcon"
+                      style="cursor: pointer;">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </span>
+          </div>
+          <p class="mat-error"
+             *ngIf="signUpForm.controls.password.errors?.required && signUpForm.controls.password.touched">
+            Please enter your password</p>
+        </div>
+        <button [disabled]="signUpForm.invalid || (signUpSuccessful && !emailSent)" (click)="submitSignUpForm()" class="sign-up-form-button"
+                type="submit" id="login-submit">
+          <div class="sign-up-form-button-text">
+            <mat-progress-spinner style="position: center" [diameter]="20" *ngIf="signUpSuccessful && !emailSent"
+                                  class="example-margin"
+                                  color="accent"
+                                  mode="indeterminate"
+                                  value="50">
+            </mat-progress-spinner>
+            <div *ngIf="!signUpSuccessful || emailSent">Play with 7Task</div>
+          </div>
+        </button>
+
+        <div routerLink="/sso" id="sign-in-sso-link__a" class="login-sso">or login with
+          <span>SSO</span>
+        </div>
+      </form>
+    </div>
+    <div class="sign-up-text-container-under-form">
+      <div class="sign-up-text-under-form-bot-text">
+        <a href="https://app.seventask.com" class="hrefLinkUnderOfCard">
+          Terms of
+          Service
+        </a> and <a href="https://app.seventask.com" class="hrefLinkUnderOfCard">Privacy Policy</a> .
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+<app-confirm-account *ngIf="signUpSuccessful && emailSent" [email]="signUpForm.controls.email.value"
+                     [password]="signUpForm.controls.password.value">
+</app-confirm-account>
+
+<swal
+  #sweetAlert
+  title="sign-up failed"
+  text="Something went wrong"
+  icon="error"
+  [showCancelButton]="false"
+  [focusCancel]="true">
+</swal>

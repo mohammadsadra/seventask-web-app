@@ -1,0 +1,49 @@
+<script src="https://apis.google.com/js/platform.js" defer>
+  function onSignIn(googleUser) {
+    let profile = googleUser.getBasicProfile();
+  }
+</script>
+<meta name="7Task"
+      content="592198124436-24rg7bm3850gk8q14h5o6anrmuhtmojp.apps.googleusercontent.com.apps.googleusercontent.com">
+<body class="main-content">
+
+<div class="sso-container">
+  <div class=" col-12 col-sm-10 col-md-8  col-lg-6 col-xl-4">
+    <div class="login-page-new__main-container">
+      <div class="sso_main-form">
+        <div *ngIf="!loggedIn || !user" class="sso_main-form-title">Let's go!</div>
+        <button *ngIf="!loggedIn || !user" (click)="signInWithGoogle()"
+                class="sso_main-form-button"
+                type="submit">
+          <div class="login-page-new__main-form-button-text">Login with google</div>
+        </button>
+        <div *ngIf="loggedIn &&user" class="sso_main-form-title">Let's go!</div>
+        <button *ngIf="loggedIn &&user" (click)="signOutBySSO()" id="login-submit" class="sso_main-form-button"
+                type="submit">
+          <div class="login-page-new__main-form-button-text">sign-out</div>
+        </button>
+      </div>
+
+<!--      <div *ngIf="user" class="login-page-new__main-form">-->
+<!--        <div class="login-page-new__main-form-title">Information!</div>-->
+<!--        &lt;!&ndash;      <button (click)="signIn()" data-onsuccess="onSignIn" id="login-submit" class="login-page-new__main-form-button"&ndash;&gt;-->
+<!--        &lt;!&ndash;              type="submit">&ndash;&gt;-->
+<!--        &lt;!&ndash;        <div class="login-page-new__main-form-button-text">Login with google</div>&ndash;&gt;-->
+<!--        &lt;!&ndash;      </button>&ndash;&gt;-->
+<!--        <img src="{{user.photoUrl}}">-->
+<!--        <h4>{{user.name}}</h4>-->
+<!--        <h4>{{user.email}}</h4>-->
+<!--      </div>-->
+
+      <div class="login-page-new__main-bot">
+        <div class="login-page-new__main-bot-text">Let's make the world more productive with 7Task.</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+</body>
+
+

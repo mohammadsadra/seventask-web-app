@@ -1,0 +1,51 @@
+@import "src/variables";
+@font-face {
+  font-family: 'seventask-chat2-icons';
+  src:  url('../assets/fonts/seventask-chat2-icons/seventask-chat2-icons.eot?9uenyc');
+  src:  url('../assets/fonts/seventask-chat2-icons/seventask-chat2-icons.eot?9uenyc#iefix') format('embedded-opentype'),
+  url('../assets/fonts/seventask-chat2-icons/seventask-chat2-icons.ttf?9uenyc') format('truetype'),
+  url('../assets/fonts/seventask-chat2-icons/seventask-chat2-icons.woff?9uenyc') format('woff'),
+  url('../assets/fonts/seventask-chat2-icons/seventask-chat2-icons.svg?9uenyc#seventask-chat2-icons') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="seventask-chat2-"], [class*=" seventask-chat2-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'seventask-chat2-icons' !important;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.seventask-chat2-unpin:before {
+  content: "\e900";
+  color: $theme-color;
+}
+.seventask-chat2-threedots-vertical:before {
+  content: "\e901";
+  color: $theme-color;
+}
+.seventask-chat2-pin:before {
+  content: "\e903";
+  color: $theme-color;
+}
+.seventask-chat2-attachment:before {
+  content: "\e904";
+  color: $theme-color;
+}
+.seventask-chat2-Replay:before {
+  content: "\e905";
+  color: $theme-color;
+}
+.seventask-chat2-Cancel-Circle:before {
+  content: "\e906";
+  color: $theme-color;
+}

@@ -1,0 +1,310 @@
+<app-timetrack *ngIf="activeTab === 'timeTrack'"></app-timetrack>
+<div class="main-container" *ngIf="activeTab === 'profile'">
+  <form [formGroup]="editForm">
+    <!--    <div *ngIf="activeTab === 'profile'">-->
+    <div>
+      <div class="d-flex flex-row align-items-center page-title">{{ 'Settings.profile' | translate }}</div>
+
+      <!--  Profile Information (Profile photo and full name)  -->
+      <div class="d-flex flex-row">
+        <div class="profile-pic-container"
+             (mouseenter)="showEditButton= true;"
+             (mouseleave)="showEditButton= false;">
+          <div [style.z-index]="showEditButton ? 1 : -1"
+               class="change-pic"
+               (click)="editPhoto()">
+            <div class="edit-button">
+              <span class="seventask-icon-edit-edit"></span>
+              {{ 'Settings.edit' | translate }}
+            </div>
+          </div>
+          <img [src]="userProfileImageGuid !== null ?
+            domainName + '/en-US/File/get?id=' + userProfileImageGuid + '&quality=100':
+            '../../../assets/images/default-profile.png'"
+               alt="Profile pic"
+               class="profile-pic">
+        </div>
+        <div class="information d-flex flex-column">
+          <div class="full-name-title d-flex flex-row">
+            {{ 'Settings.fullName' | translate }}:
+            <seventask-spinner [loadingType]="4" *ngIf="requestIsPending.nickName !== null"></seventask-spinner>
+          </div>
+          <div class="user-input">
+            <div class="d-flex flex-row">
+              <input dir="auto" type="text" class="username" formControlName="NickName" [value]="userNickName"/>
+              <div *ngIf="editForm.controls.NickName.valid
+              && editForm.controls.NickName.value.toString().trim() !== userNickName
+              && editForm.controls.NickName.value.toString().trim() !== ''"
+                   class="change-button d-flex flex-row align-items-center justify-content-center"
+                   (click)="changeNickName()">
+                {{ 'Settings.change' | translate }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--  Language Selection Section  -->
+      <div class="d-flex flex-row align-items-center option">
+        <img class="option-icon"
+             src="../../../assets/icons/Settings/language-icon.svg"
+             [ngClass]="textDirection"/>
+        <div class="option-title">{{ 'Settings.language' | translate }}:</div>
+      </div>
+      <div class="options">
+        <span class="label-item"
+              *ngFor="let language of languages"
+              [ngClass]="language === selectedLanguage ? 'selected-label' : ''"
+              (click)="languageHandler(language); selectedLanguage= language">
+          {{ language | translate }}
+        </span>
+      </div>
+
+      <!--  Dark Mode Section  -->
+      <!--      <div class="d-flex flex-row align-items-center option">-->
+      <!--        <img class="option-icon" src="assets/icons/Settings/dark-mode.svg"/>-->
+      <!--        <div class="option-title">{{ 'Settings.darkMode' | translate }}:</div>-->
+
+      <!--        <mat-slide-toggle class="dark-mode-toggle"-->
+      <!--                          (change)="selectedDarkMode = !selectedDarkMode">-->
+      <!--        </mat-slide-toggle>-->
+      <!--      </div>-->
+
+      <!--  Theme Color Selection Section  -->
+      <div class="d-flex flex-row align-items-center option">
+        <img class="option-icon"
+             src="../../../assets/icons/Settings/color-theme.svg"
+             [ngClass]="textDirection"/>
+        <div class="option-title">{{ 'Settings.colorTheme' | translate }}:</div>
+      </div>
+      <div class="d-flex flex-row options">
+        <div class="color-theme-options"
+             *ngFor="let color of themeColors"
+             [ngStyle]="'#' + settingsData.themeColor === color ? {'box-shadow': '0 0 0 5px'+color} : {}"
+             (click)="changeThemeColor(color)">
+          <div class="color-item"
+               [ngStyle]="{'background': color}"
+               [ngClass]="textDirection"></div>
+        </div>
+      </div>
+
+      <!--        Text Size Section  -->
+      <!--      <div class="d-flex flex-row align-items-center option">-->
+      <!--        <div class="option-title">{{ 'Settings.textSize' | translate }}:</div>-->
+      <!--      </div>-->
+      <!--      <div class="d-flex flex-row options">-->
+      <!--        <img src="../../../assets/icons/Settings/small-font.svg" alt="small-font" style="margin-inline-end: 20px">-->
+      <!--        <mat-slider min="0" max="1" step="0.05" [(value)]="settingsData.zoomRatio"-->
+      <!--                    (change)="setTextSize()"></mat-slider>-->
+      <!--        <img src="../../../assets/icons/Settings/large-font.svg" alt="large-font" style="margin-inline-start: 20px">-->
+      <!--      </div>-->
+    </div>
+
+    <div class="d-flex flex-column">
+      <div class="d-flex flex-row align-items-center option">
+        <img class="option-icon" style="margin-inline-end: 10px" src="assets/icons/notification-gray.svg">
+        <div class="option-title">{{ 'Settings.notifications' | translate }}:</div>
+      </div>
+      <div class="d-flex flex-row">
+        <div (click)="enableNotifications()" [style.background-color]="notificationPermission === 'granted' ? '#5ff10d47' : notificationPermission !== 'denied' ? '#E6EEFA' : '#f003'"
+             [style.cursor]="notificationPermission === 'default' ? 'pointer' : 'default'"
+             class="notification-state-container">
+          <span *ngIf="notificationPermission !== 'default'">{{this.notificationPermission}}</span>
+          <span *ngIf="notificationPermission === 'default'">{{'Settings.enableNotification' | translate}}</span>
+        </div>
+        <div class="d-flex align-items-end justify-content-center notification-help">
+          {{ 'Settings.notificationsHelp' | translate }}
+        </div>
+      </div>
+    </div>
+
+    <!--    <div *ngIf="activeTab === 'calendar'">-->
+    <div>
+      <div class="d-flex flex-row align-items-center page-title">{{ 'Settings.calendar' | translate }}</div>
+      <div class="d-flex flex-row align-items-stretch">
+        <div class="d-flex flex-column">
+          <!--      Calendar Type Section-->
+          <div class="d-flex flex-row align-items-center option">
+            <img class="option-icon"
+                 src="../../../assets/icons/Settings/calendar-type.svg"
+                 [ngClass]="textDirection"/>
+            <div class="option-title">{{ 'Settings.type' | translate }}:</div>
+            <seventask-spinner [loadingType]="4"
+                               *ngIf="requestIsPending.firstCalendarType !== null"></seventask-spinner>
+          </div>
+          <div class="options">
+            <span class="label-item"
+                  *ngFor="let calendarType of calendarTypes"
+                  [ngClass]="calendarType === calendarTypes[settingsData.firstCalendar-1] ? 'selected-label' : ''"
+                  [class.is-pending]="requestIsPending.firstCalendarType === calendarType"
+                  (click)="setFirstCalendar(calendarType)">
+              {{ 'Settings.' + calendarType | translate }}
+            </span>
+          </div>
+        </div>
+
+        <!--    Second Calendar Section-->
+        <div class="d-flex flex-column" style="margin-inline-start: 40px">
+          <div class="d-flex flex-row option">
+            <div class="option-title d-flex flex-row" style="width: 230px;">
+              {{ 'Settings.secondCalendar' | translate }}:
+              <seventask-spinner [loadingType]="4"
+                                 *ngIf="requestIsPending.secondCalendarType !== null || requestIsPending.toggleSecondCalendar !== null">
+              </seventask-spinner>
+            </div>
+            <mat-slide-toggle
+              class="second-calendar-toggle"
+              (change)="toggleCalendar();"
+              [checked]="settingsData.isSeondCalendarOn">
+            </mat-slide-toggle>
+          </div>
+          <div class="options"
+               *ngIf="settingsData.isSeondCalendarOn">
+            <span class="label-item"
+                  *ngFor="let calendarType of filterCalendarOptions(calendarTypes[settingsData.firstCalendar-1])"
+                  [ngClass]="settingsData.secondCalendar !== null &&
+              calendarType === calendarTypes[settingsData.secondCalendar-1] ? 'selected-label' : ''"
+                  [class.is-pending]="requestIsPending.secondCalendarType === calendarType"
+                  (click)="setSecondCalendar(calendarType)">
+              {{ 'Settings.' + calendarType | translate }}
+            </span>
+          </div>
+        </div>
+      </div>
+      <!--  First Day Of The Work-->
+      <div class="d-flex flex-row align-items-center option">
+        <img class="option-icon"
+             src="../../../assets/icons/Settings/first-day-of-the-work.svg"/>
+        <div class="option-title">{{ 'Settings.firstDayOfTheWork' | translate }}:</div>
+        <seventask-spinner [loadingType]="4" *ngIf="requestIsPending.firstDayOfWork !== null"></seventask-spinner>
+      </div>
+      <div class="options">
+        <span class="label-item"
+              *ngFor="let day of days"
+              [ngClass]="day === days[settingsData.firstWeekDay-1] ? 'selected-label' : ''"
+              [class.is-pending]="requestIsPending.firstDayOfWork === day"
+              (click)="setFirstDayOfTheWeek(day)">
+          {{ 'Settings.' + day | translate }}
+        </span>
+      </div>
+      <!--  Holidays-->
+      <div class="d-flex flex-row align-items-center option">
+        <img class="option-icon"
+             src="../../../assets/icons/Settings/holiday.svg"
+             [ngClass]="textDirection"/>
+        <div class="option-title">{{ 'Settings.holidays' | translate }}:</div>
+        <seventask-spinner [loadingType]="4" *ngIf="requestIsPending.holiday.length !== 0"></seventask-spinner>
+      </div>
+      <div class="options">
+        <span class="label-item"
+              *ngFor="let day of days"
+              [ngClass]="settingsData.weekends.includes(days.indexOf(day)+1) ? 'selected-label' : ''"
+              [class.is-pending]="requestIsPending.holiday.includes(day)"
+              (click)="setHolidays(day)">
+          {{ 'Settings.' + day | translate }}
+        </span>
+      </div>
+    </div>
+
+
+    <!--  Security Page  -->
+    <!--    <div *ngIf="activeTab === 'security'">-->
+    <div>
+      <div class="d-flex flex-row align-items-center page-title">{{ 'Settings.security' | translate }}</div>
+      <!--  Change Password Section  -->
+      <div class="d-flex flex-column">
+        <div class="d-flex flex-row align-items-center option">
+          <img class="option-icon"
+               src="../../../assets/icons/Settings/password.svg"
+               [ngClass]="textDirection"/>
+          <div class="option-title">{{ 'Settings.changePassword' | translate }}:</div>
+          <seventask-spinner [loadingType]="4" *ngIf="requestIsPending.changePassword !== null"></seventask-spinner>
+        </div>
+        <div class="password-input d-flex flex-column">
+          <div class="user-input">
+            <div class="change-password">
+              <div class="user-input input-row">
+                <input formControlName="OldPassword" type="password"
+                       class="user-password"
+                       placeholder="{{ 'Settings.oldPassword' | translate }}"
+                       aria-label="Password"
+                       aria-describedby="basic-addon1">
+              </div>
+            </div>
+
+            <div class="change-password">
+              <div class="d-flex flex-row user-input">
+                <div class="input-row">
+                  <input [type]="!showNewPassword ? 'password' : 'text'" formControlName="NewPassword" type="password"
+                         class="user-password"
+                         placeholder="{{ 'Settings.newPassword' | translate }}"
+                         aria-label="Password"
+                         aria-describedby="basic-addon1">
+
+                  <img src="../../../assets/icons/visibility.svg"
+                       [src]="!showNewPassword ? 'assets/icons/visibility_off.svg' : 'assets/icons/visibility.svg'"
+                       (click)="showNewPassword= !showNewPassword"
+                       width="25px"
+                       style="cursor: pointer;">
+                </div>
+
+                <div *ngIf="editForm.controls.NewPassword.valid && editForm.controls.OldPassword.value"
+                     class="change-button d-flex flex-row align-items-center justify-content-center"
+                     (click)="changePassword()">
+                  {{ 'Settings.change' | translate }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--  Current Session Section  -->
+      <!--      <div class="d-flex flex-row align-items-center option">-->
+      <!--        <div class="option-title">{{ 'Settings.currentSession' | translate }}:</div>-->
+      <!--      </div>-->
+
+      <!--      <div class="info-box">-->
+      <!--        <div class="info-item">-->
+      <!--          <div class="info">Desktop 2.7.4</div>-->
+      <!--          <div class="info">PC 64bit, windows 10</div>-->
+      <!--        </div>-->
+      <!--      </div>-->
+
+      <!--  Active Sessions Section  -->
+      <!--      <div class="d-flex flex-row align-items-center option">-->
+      <!--        <div class="option-title">{{ 'Settings.activeSessions' | translate }}:</div>-->
+      <!--      </div>-->
+
+      <!--      <div class="d-flex align-items-center">-->
+      <!--        <div class="info-box">-->
+      <!--          <div class="info-item">-->
+      <!--            <div class="info">Desktop 2.7.5</div>-->
+      <!--            <div class="info">PC 32bit, Linux</div>-->
+      <!--          </div>-->
+      <!--          <div class="termination">{{ 'Settings.terminate' | translate }}</div>-->
+      <!--        </div>-->
+      <!--        <div class="info-box">-->
+      <!--          <div class="info-item">-->
+      <!--            <div class="info">Desktop 2.7.6</div>-->
+      <!--            <div class="info">PC 64bit, Linux</div>-->
+      <!--          </div>-->
+      <!--          <div class="termination">{{ 'Settings.terminate' | translate }}</div>-->
+      <!--        </div>-->
+      <!--        <div class="info-box">-->
+      <!--          <div class="info-item">-->
+      <!--            <div class="info">Desktop 2.7.7</div>-->
+      <!--            <div class="info">PC 32bit, windows 10</div>-->
+      <!--          </div>-->
+      <!--          <div class="termination">{{ 'Settings.terminate' | translate }}</div>-->
+      <!--        </div>-->
+      <!--      </div>-->
+    </div>
+  </form>
+</div>
+
+<div class="modal" [ngClass]="isUploading ? 'show' : 'hide'">
+  <div class="my-overlay">
+    <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+  </div>
+</div>

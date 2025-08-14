@@ -1,0 +1,203 @@
+@import "variables";
+.selected-project{
+  box-shadow: 0 0 5px 1px #306BDD;
+}
+
+.all-team {
+  padding: 30px;
+  margin-bottom: 20px;
+}
+
+.team{
+  //padding-left: 6%;
+}
+.item-title {
+  height: 25px;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 18px;
+  text-align: start;
+  color: #A7AFBD;
+  opacity: 0.5;
+}
+
+.team-title{
+  font-size: 18px;
+  color: #A7AFBD;
+  opacity: 0.5;
+}
+
+.team-project-container {
+  padding: 12px 0 40px 0;
+  margin: 0 -7.5px;
+}
+
+.project{
+  cursor: pointer;
+  margin: 10px 30px 10px 0;
+}
+.project-header {
+  /* Rectangle 57 */
+
+  width: 340px;
+  height: 41px;
+
+  /* Green */
+  background-color:rgba(0, 0, 0, 0.1);
+  //background: rgba(30, 193, 195, 0.1);
+  border-radius: 20px 20px 0px 0px;
+
+  text-align: center;
+  justify-content: center;
+  padding: 5px 0 5px 0;
+}
+
+.project-header-title {
+  /* Seven Task Project */
+  height: 22px;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 16px;
+
+  background: transparent !important;
+
+  text-align: center;
+
+  color: #1EC1C3 ;
+}
+
+.project-body {
+  /* Rectangle 58 */
+
+  width: 340px;
+  height: 181px;
+
+  /* Task Background */
+  background-color: #FFFFFF;
+  /* Task Stroke */
+  border: 1px solid #F0F4F4;
+  box-sizing: border-box;
+  border-radius: 0px 0px 20px 20px;
+}
+
+.mood {
+  /* Rectangle 56 */
+  width: 65px !important;
+  height: 28px;
+
+  /* Green */
+  background-color: rgba(30, 193, 195, 0.1);
+  border-radius: 5px;
+
+}
+
+.chill-logo {
+  padding: 6px;
+}
+
+.chill-title {
+  /* Chill */
+  width: 25px;
+  height: 16px;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  //margin-left: 2px;
+  margin-inline-start: 2px;
+  color: #1EC1C3;
+}
+
+.notification-row-item-title {
+  height: 16px;
+  width: 89px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  color: #A7AFBD;
+}
+
+.notification-row-item-number {
+  color: $theme-color;
+}
+
+.notification-row-logo {
+  margin-bottom: 12px;
+}
+
+.deadLine {
+  /* Tomroow */
+  height: 16px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  color: #2E4A77;
+  opacity: 0.3;
+  text-align: center;
+}
+
+.watchTimer {
+  margin-inline-end: 8px;
+}
+.user_img_msg{
+  height: 28px;
+  width: 28px;
+  display: inline-block;
+  border: none;
+  box-sizing: border-box;
+  text-align: center;
+  justify-content: center;
+  color: #FFFFFF;
+  //margin-left: -10px;
+  margin-inline-start: -10px;
+  //padding-top: 4px;
+}
+.member {
+  /* Ellipse 1 */
+
+  width: 28px;
+  height: 28px;
+  display: inline-block;
+
+  /* White */
+  border: 2px solid #FFFFFF;
+  border-radius: 50%;
+  box-sizing: border-box;
+  text-align: center;
+  justify-content: center;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  color: #FFFFFF;
+  //margin-left: -10px;
+  margin-inline-start:-10px;
+  padding-top: 4px;
+}
+.border{
+  border: 2px solid #FFFFFF;
+}
+.mood-circle{
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin: 0 5px 0 5px;
+}
+.all-team .p-2{
+  padding: 0!important;
+}
+.no-data-message{
+  font-style: normal;
+  font-weight: bold;
+  font-size: 25px;
+  color: #2E4A77;
+  opacity: 0.7;
+  margin-top: 20px;
+}
+.loading-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  //margin-top: 20px;
+  flex-direction: column;
+  margin-top: 15%;
+  flex-basis: 50%;
+}

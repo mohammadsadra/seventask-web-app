@@ -1,0 +1,30 @@
+<div class="cropModal">
+  <input dir="auto" type="file" id="profileImageUpload" style="display: none" accept='image/*' [multiple]="false"
+        (change)="fileChangeEvent($event)"/>
+  <div class="toolbar">
+    <div class="toolbar-icon-container">
+      <img src="../../../../assets/icons/add-circle.svg" (click)="addPhoto()" class="toolbar-icon">
+      <img src="../../../../assets/icons/rotate-right.svg" (click)="rotateRight()" class="toolbar-icon">
+    </div>
+    <div class="upload-image-container">
+      <button class="upload-image-cropper" [hidden]="!croppedImage" [disabled]="!croppedImage"
+              [mat-dialog-close]="imageData">
+        {{'Buttons.upload' | translate}}
+      </button>
+    </div>
+  </div>
+  <div *ngIf="!croppedImage" class="choose-photo-label"
+      (click)="addPhoto()">{{'Buttons.clickToChoosePhoto' | translate}}</div>
+  <image-cropper class="cropImage"
+                [imageChangedEvent]="imageChangedEvent"
+                [maintainAspectRatio]="true"
+                [aspectRatio]="1 / 1"
+                format="png"
+                (imageCropped)="imageCropped($event)"
+                (imageLoaded)="imageLoaded(null)"
+                (cropperReady)="cropperReady()"
+                (loadImageFailed)="loadImageFailed()"
+                [transform]="imgTransform"
+                [autoCrop]="true" [hidden]="!showCropper"
+  ></image-cropper>
+</div>

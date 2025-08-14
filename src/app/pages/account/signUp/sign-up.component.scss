@@ -1,0 +1,119 @@
+@import "src/variables";
+.main-content {
+  background-color: $main-color-lighter;
+  background-size: cover;
+  height: 100%;
+  background-repeat: repeat;
+  overflow-x: hidden;
+}
+
+.sign-up-container{
+  margin: auto;
+  flex-grow: 1;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 70px;
+  overflow: visible;
+  position: relative;
+}
+
+.sign-up-form-container{
+  //width: 480px;
+  background: #fff;
+  box-shadow: 0 25px 75px rgba(16,30,54,.25);
+  border-radius: 6px;
+  padding: 30px 60px 26px;
+  margin-top: 35px;
+  position: relative;
+}
+@media screen and (max-width: 400px) {
+
+  .sign-up-form-container{
+    padding: 20px 10px 10px !important;
+  }
+
+
+}
+
+.sign-up-form-title {
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 46px;
+  color: #292d34;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.sign-up-input-label {
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 11px;
+  color: #292d34;
+  padding: 0 0 8px 2px;
+  margin-bottom: 2px;
+}
+
+.sign-up-form-row {
+  width: 100%;
+  position: relative;
+  margin-bottom: 15px;
+}
+
+.sign-up-form-button{
+  transition: background-color .2s cubic-bezier(.785,.135,.15,.86) 0s;
+  height: 50px;
+  margin-top: 10px;
+  background: $main-color-darker;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 4px;
+  width: 100%;
+  margin-bottom: 25px;
+}
+
+.sign-up-form-button-text {
+  font-weight: 800;
+  font-size: 14px;
+  line-height: 1;
+  color: #fff;
+}
+
+.login-sso {
+  transition: color .2s cubic-bezier(.785,.135,.15,.86) 0s;
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 11px;
+  color: $main-color-darker;
+  text-decoration: underline;
+  text-align: center;
+  cursor: pointer;
+  display: block;
+}
+
+.sign-up-text-container-under-form {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 45px;
+}
+.sign-up-text-under-form-bot-text {
+  font-weight: 700;
+  font-size: 11px;
+  line-height: 11px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+input.ng-touched.ng-invalid {
+  border: 1px solid red;
+  box-shadow: 5px 5px 20px #ff5051;
+}
+button:disabled{
+  background-color: $main-color-lighter;
+}
+

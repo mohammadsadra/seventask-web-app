@@ -1,0 +1,59 @@
+<div class="running-tasks-wraper">
+    <div class="running-tasks-container">
+
+        <div class="runningNoData" *ngIf="runningTaskNoData === true &&
+            !showGetRunningTasksLoading">
+            <img src="assets/noDataImages/RunningTask-1.svg" style="width: 85%;">
+            <p class="noData-text">{{'RunningTask.noRunningTask' | translate}}</p>
+        </div>
+
+        <div *ngIf="showGetRunningTasksLoading" class="loading-container">
+            <seventask-spinner [loadingType]="1" *ngIf="showGetRunningTasksLoading"></seventask-spinner>
+            <!--  <div style="margin-top: 10px;color: #2E4A77;">{{'Task.loadingTasks' |translate}}</div>-->
+        </div>
+
+        <div *ngIf="runningTaskNoData != true &&
+            !showGetRunningTasksLoading">
+            <div *ngFor="let runtask of runningTasks; let index= index">
+                <div class="runningTask-item" *ngIf="runningTasks.length !== 0">
+                    <div class="Title-container">
+                        <div class="runningTitle" dir="auto"
+                            #tooltip="matTooltip"
+                            matTooltip="{{ runtask.title }}"
+                            matTooltipPosition="above"
+                            matTooltipClass="tooltiptext">
+                            {{ runtask.title | sliceTextForWidth :26 }}
+                        </div>
+                    </div>
+                    <div class="Time-btn-container">
+                        <div class="runningTime" *ngIf="runtask.isPaused === false">
+                            {{ timerShow | timeTracker : runtask.timeTrackStartDate
+                            :
+                            runtask.totalTimeInMinutes }}
+                        </div>
+                        <div class="runningTime" *ngIf="runtask.isPaused === true">
+                            {{ 0 | timeTracker : runtask.timeTrackStartDate :
+                            runtask.totalTimeInMinutes }}
+                        </div>
+                        <div class="runningIcons">
+                            <span
+                                style="cursor:pointer;">
+                                <img src="../../../../../../../assets/icons/runningTaskStop.svg"
+                                    (click)="stopTimeTracker(runtask)" />
+                            </span>
+                            <span
+                                style="cursor:pointer;">
+                                <img *ngIf="runtask.isPaused == false"
+                                    src="../../../../../../../assets/icons/runningTaskPause.svg"
+                                    (click)="pausedTimeTracker(runtask)" />
+                                <img *ngIf="runtask.isPaused == true"
+                                    src="../../../../../../../assets/icons/runningTaskPlay.svg"
+                                    (click)="startTimeTracker(runtask)" />
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

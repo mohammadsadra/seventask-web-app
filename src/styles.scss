@@ -1,0 +1,283 @@
+@import 'mainTheme';
+@import '@ctrl/ngx-emoji-mart/picker';
+@import 'variables';
+@import 'fontStyles/seventask-file';
+@import 'fontStyles/seventask-taskCardEnable';
+@import 'fontStyles/seventask-taskCardDisable';
+@import 'fontStyles/seventask-header';
+@import 'fontStyles/seventask-pages';
+@import 'fontStyles/seventask-chat';
+@import 'fontStyles/seventask-chat2';
+@import 'fontStyles/seventask-calendar';
+@import 'fontStyles/seventask-timeTracker';
+@import 'fontStyles/seventask-archive';
+@import 'fontStyles/seventask-rightNavbar';
+@import 'fontStyles/seventask-addMember';
+@import 'fontStyles/seventask-checkbox';
+@import 'fontStyles/seventask-others';
+@import 'fontStyles/seventask-edit';
+@import 'fontStyles/seventask-share';
+@import 'fontStyles/seventask-priority';
+@import 'fontStyles/seventask-tool-icons';
+@import 'fontStyles/seventask-header-filter';
+@import 'fontStyles/seventask-view2';
+@import 'fontStyles/seventask-timeTrack.scss';
+@import 'fontStyles/seventask-tag';
+
+@font-face {
+  src: url('assets/fonts/Lato/Lato-Regular.ttf');
+  font-family: 'primaryFont-En';
+}
+
+@font-face {
+  src: url('assets/fonts/Lato/Lato-Light.ttf');
+  font-family: 'primaryFont-En';
+  font-weight: 100;
+}
+
+/* @font-face {
+  src: url('assets/fonts/Lato/Lato-Regular.ttf');
+  font-family: 'primaryFont-En';
+  font-weight: 500;
+} */
+
+@font-face {
+  src: url('assets/fonts/Lato/Lato-Bold.ttf');
+  font-family: 'primaryFont-En';
+  font-weight: 700;
+}
+
+@font-face {
+  src: url('assets/fonts/Lato/Lato-Black.ttf');
+  font-family: 'primaryFont-En';
+  font-weight: 800;
+}
+
+@font-face {
+  src: url('assets/fonts/arabic-fav/ArabFavWebRegular.woff');
+  font-family: 'primaryFont-Fa';
+}
+
+@font-face {
+  src: url('assets/fonts/arabic-fav/ArabFavWebLight.woff');
+  font-family: 'primaryFont-Fa';
+  font-weight: 100;
+}
+
+@font-face {
+  src: url('assets/fonts/arabic-fav/ArabFavWebMedium.woff');
+  font-family: 'primaryFont-Fa';
+  font-weight: 500;
+}
+
+@font-face {
+  src: url('assets/fonts/arabic-fav/ArabFavWebBold.woff');
+  font-family: 'primaryFont-Fa';
+  font-weight: 700;
+}
+
+@font-face {
+  src: url('assets/fonts/arabic-fav/ArabFavWebExtraBold.woff');
+  font-family: 'primaryFont-Fa';
+  font-weight: 800;
+}
+
+html,
+body {
+  height: 100%;
+  background-repeat: no-repeat;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  background-size: cover;
+  background-color: rgba(66, 120, 223, 0.01);
+  font-size: 16px;
+}
+
+body {
+  font-family: primaryFont-En, primaryFont-Fa;
+}
+
+//body:lang(es) {
+//  font-family: primaryFont-En;
+//}
+//
+//body:lang(fa-IR) {
+//  font-family: primaryFont-Fa, primaryFont-En;
+//  text-align: start;
+//}
+
+.my-overlay {
+  left: 0 !important;
+  top: 0 !important;
+  z-index: 10000 !important;
+  width: 100% !important;
+  height: 100% !important;
+  position: fixed !important;
+  background-color: white !important;
+  cursor: pointer !important;
+  color: $theme-color;
+  visibility: visible !important;
+  transition: visibility 0s, opacity 0.4s linear !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  //cursor: wait !important;
+}
+
+.my-overlay i.fa.fa-spinner.fa-spin,
+.spinner-big {
+  font-size: 100px !important;
+}
+
+.mat-dialog-container {
+  background: transparent !important;
+  padding: 0 !important;
+  border-radius: 20px !important;
+}
+
+* {
+  scrollbar-color: $theme-color-opacity-10 $theme-color-opacity-5;
+  scrollbar-width: thin;
+  //scrollbar-border-radius: 20px
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: $theme-color-opacity-20;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: $theme-color;
+}
+//Change here for Chrome, Safari and Opera
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 12px;
+  background-color: $theme-color-opacity-5 !important;
+  //display: none;
+  //border-radius: 50%;
+}
+
+/* Add a thumb */
+*::-webkit-scrollbar-thumb {
+  background: $theme-color-opacity-30 !important;
+  //border-radius: 50%;
+}
+//////////////////////////////////////////////
+
+.mat-tooltip {
+  font-size: 13px;
+}
+
+.mat-tooltip,
+.mat-menu-item,
+.mat-simple-snackbar,
+.mat-button-toggle-label-content,
+.mat-select-value,
+.mat-option,
+.mat-checkbox {
+  font-family: primaryFont-En, primaryFont-Fa !important;
+}
+
+img {
+  color: $theme-color !important;
+}
+
+.seventask-theme-color {
+  color: $theme-color;
+}
+
+.seventask-theme-background-color {
+  background-color: $theme-color;
+}
+
+input {
+  outline: none !important;
+  color: #2e4a77 !important;
+}
+
+::selection {
+  background: $theme-color-opacity-20;
+}
+
+.snack-bar-container {
+  background-color: $theme-color;
+  color: white !important;
+  border-radius: 20px !important;
+  font-family: primaryFont-Fa, primaryFont-En !important;
+
+  .mat-simple-snackbar-action {
+    color: white !important;
+    font-family: primaryFont-Fa, primaryFont-En !important;
+  }
+
+  .mat-simple-snackbar-action {
+    font-family: primaryFont-Fa, primaryFont-En !important;
+  }
+
+  .mat-button-wrapper {
+    font-family: primaryFont-Fa, primaryFont-En !important;
+  }
+}
+
+/*  --- tooltip --- */
+
+.ng-tooltip {
+  background-color: rgba(23, 25, 27, 0.65);
+  border-radius: 5px;
+  position: absolute;
+  max-width: 300px;
+  padding: 3px 3px;
+  color: #fff;
+  font-size: 12px;
+  z-index: 1000;
+  animation-name: example;
+  animation-duration: 0.4s;
+}
+
+.ng-tooltip-global {
+  position: absolute !important;
+  font-size: 12px !important;
+  z-index: 1000;
+}
+
+.ng-tooltip-show {
+  opacity: 1;
+}
+
+/* --- End tooltip --- */
+
+.smooth-rectangle {
+  --smooth-corners: 15, 4.38;
+  mask-image: paint(smooth-corners);
+  -webkit-mask-image: paint(smooth-corners);
+}
+
+.smooth-square {
+  --smooth-corners: 4, 4;
+  mask-image: paint(smooth-corners);
+  -webkit-mask-image: paint(smooth-corners);
+}
+
+.placeholder-rtl::-moz-placeholder {
+  text-align: right !important;
+}
+.placeholder-rtl::-ms-input-placeholder {
+  text-align: right !important;
+}
+.placeholder-rtl::-webkit-input-placeholder {
+  text-align: right !important;
+}
+
+

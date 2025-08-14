@@ -1,0 +1,7 @@
+<body [dir]="getTextDirection()" [lang]="language" 
+[@routeAnimations]="prepareRoute(outlet)"
+[@fadeInOut]="!changedLanguage ? 'show' : 'hide'">
+<!--<body [style.zoom]="zoomRatio * 200 +'%'" [dir]="getTextDirection()" [lang]="language">-->
+<router-outlet #outlet="outlet"></router-outlet>
+<!-- <seventask-spinner></seventask-spinner> -->
+</body>

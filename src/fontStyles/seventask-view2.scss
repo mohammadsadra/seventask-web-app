@@ -1,0 +1,39 @@
+@import "src/variables";
+@font-face {
+  font-family: 'view2';
+  src:  url('../assets/fonts/seventask-view2-icons/view2.eot?4cgaqx');
+  src:  url('../assets/fonts/seventask-view2-icons/view2.eot?4cgaqx#iefix') format('embedded-opentype'),
+  url('../assets/fonts/seventask-view2-icons/view2.ttf?4cgaqx') format('truetype'),
+  url('../assets/fonts/seventask-view2-icons/view2.woff?4cgaqx') format('woff'),
+  url('../assets/fonts/seventask-view2-icons/view2.svg?4cgaqx#view2') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="seventask-icon-header-view2-"], [class*=" seventask-icon-header-view2-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'view2' !important;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.seventask-icon-header-view2-gantt:before {
+  content: "\e900";
+  color: $theme-color;
+}
+.seventask-icon-header-view2-hierarchical:before {
+  content: "\e901";
+  color: $theme-color;
+}
+.seventask-icon-header-view2-table:before {
+  content: "\e902";
+  color: $theme-color;
+}

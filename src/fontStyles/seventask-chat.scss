@@ -1,0 +1,32 @@
+@import "src/variables";
+@font-face {
+  font-family: 'seventask-chat-icon';
+  src:  url('../assets/fonts/seventask-chat-icons/seventask-chat-icon.eot?9t2ujp');
+  src:  url('../assets/fonts/seventask-chat-icons/seventask-chat-icon.eot?9t2ujp#iefix') format('embedded-opentype'),
+  url('../assets/fonts/seventask-chat-icons/seventask-chat-icon.ttf?9t2ujp') format('truetype'),
+  url('../assets/fonts/seventask-chat-icons/seventask-chat-icon.woff?9t2ujp') format('woff'),
+  url('../assets/fonts/seventask-chat-icons/seventask-chat-icon.svg?9t2ujp#seventask-chat-icon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="seventask-icon-chat-"], [class*=" seventask-icon-chat-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'seventask-chat-icon' !important;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.seventask-icon-chat-send:before {
+  cursor: pointer;
+  content: "\e900";
+  color: $theme-color;
+}

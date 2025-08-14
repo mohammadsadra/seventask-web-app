@@ -1,0 +1,33 @@
+<div [style]="'direction: ' + textDirection"  class="main-container d-flex flex-column" style="text-align: start">
+
+  <div class="p-2 d-flex flex-row add-container-member align-items-center" (click)="chooseAddMemberOrDepartment('member');dialogRef.close()">
+    <div class="p-2 logo d-flex align-items-center justify-content-center">
+<!--      <img src="../../../../../assets/icons/Team/add-member-with-border.svg">-->
+      <span class="seventask-icon-add-add-member-with-border" style="font-size: 44px"></span>
+    </div>
+    <div class="p-2 info d-flex flex-column">
+      <div class="p-2 title">
+        {{ 'Team.addMember' | translate}}
+      </div>
+      <div class="p-2 description">
+        {{ 'Team.addMemberMessage' | translate}}
+      </div>
+    </div>
+  </div>
+
+  <div class="p-2 d-flex flex-row add-container align-items-center" (click)="chooseAddMemberOrDepartment('department');dialogRef.close()">
+    <div class="p-2  logo d-flex align-items-center justify-content-center">
+<!--      <img src="../../../../../assets/icons/Team/add-department-with-border.svg">-->
+      <span class="seventask-icon-task-card-enable-team" style="font-size: 30px"></span>
+    </div>
+    <div class="p-2 info d-flex flex-column">
+      <div class="p-2 title">
+        {{ 'Team.addDepartment' | translate}}
+      </div>
+      <div class="p-2 description">
+        {{ 'Team.addDepartmentMessage' | translate}}
+      </div>
+    </div>
+  </div>
+
+</div>

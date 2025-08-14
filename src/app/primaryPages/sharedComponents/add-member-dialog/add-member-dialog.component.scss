@@ -1,0 +1,184 @@
+@import "variables";
+.main{
+  min-height: 379px;
+  width: 339px;
+  background-color: #FFFFFF;
+}
+.tab-container{
+  height: 50px;
+  width: 339px;
+}
+.tab {
+  height: 19px;
+
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  color: rgba(46, 74, 119, 0.3);
+  cursor: pointer;
+  text-align: center;
+}
+
+.active-tab {
+  height: 19px;
+
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  color: $theme-color;
+  cursor: pointer;
+  text-align: center;
+}
+.add-team-container{
+  width: 339px;
+
+  height: 339px;
+  background: #F8FBFD;
+  border-radius: 20px 20px 0px 0px;
+}
+.add-team-container-in-team{
+  width: 339px;
+  height: 380px;
+  background: #F8FBFD;
+  border-radius: 20px 20px 0px 0px;
+}
+.search{
+  outline: none;
+  width: 309px;
+  height: 49px;
+  background: #FFFFFF;
+  border: 1px solid #F0F4F4;
+  box-sizing: border-box;
+  border-radius: 10px;
+  padding: 15px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  color: #2E4A77;
+}
+.add-mail-container{
+  width: 309px;
+  height: 49px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  padding: 15px;
+}
+.mail{
+  outline: none;
+  width: 250px;
+  height: 49px;
+  background: #FFFFFF;
+  border: 1px solid #F0F4F4;
+  box-sizing: border-box;
+  border-radius: 10px;
+  padding: 15px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  color: #2E4A77;
+}
+
+.add-mail{
+  width: 49px;
+  height: 49px;
+  border-radius: 10px;
+  border: 1px solid #F0F4F4;
+  background: #FFFFFF;
+  //margin-left: 5px;
+  margin-inline-start: 5px;
+  box-shadow: none;
+}
+
+.add-team-container .p-2{
+  padding: 0!important;
+}
+.members-container{
+  max-height: 330px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.member{
+  background: #F8FBFD;
+  border: none;
+  padding: 12.5px 15px 12.5px 15px;
+  cursor: pointer;
+  font-weight: normal;
+  font-size: 14px;
+  color: #A7AFBD;
+}
+.member:hover{
+  background-color: rgba(92, 96, 101, 0.1);
+}
+.mail-member{
+  background: #F8FBFD;
+  border: none;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  cursor: pointer;
+}
+.user_img {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-content: center;
+  vertical-align: center;
+  //margin: 0 10px 0 19px;
+  margin-inline-end: 10px;
+  margin-inline-start: 10px;
+  background: $theme-color-opacity-10;
+}
+.item-title{
+
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 19px;
+  color: #A7AFBD;
+  text-align: start;
+}
+.add-button-container{
+  min-height: 60px;
+  background: #FFFFFF;
+}
+.add-button{
+  margin-top: 15px;
+  margin-bottom: 15px;
+  width: 154px;
+  height: 44px;
+  text-align: center;
+  background: $theme-color;
+  border-radius: 10px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  color: #FFFFFF;
+  cursor: pointer;
+  box-shadow: none!important;
+  outline: none;
+}
+
+.loading-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  //margin-top: 20px;
+  flex-direction: column;
+  //margin-top: 15%;
+  flex-basis: 50%;
+}
+::ng-deep .mat-checkbox-layout{
+  margin: 0;
+}
+::ng-deep .mat-checkbox-checked .mat-checkbox-background {
+  background-color: $theme-color !important;
+}
+::ng-deep .mat-checkbox-frame,
+::ng-deep .mat-checkbox-background {
+  border-color: $theme-color !important;
+}
+
+::ng-deep.mat-checkbox-layout .mat-checkbox-label {
+  padding-inline-start: 8px;
+}

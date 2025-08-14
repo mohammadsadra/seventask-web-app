@@ -1,0 +1,31 @@
+@import "src/variables";
+@font-face {
+  font-family: 'seventask-share-icon';
+  src:  url('~src/assets/fonts/seventask-share-icons/seventask-share-icon.eot?juc5m5');
+  src:  url('~src/assets/fonts/seventask-share-icons/seventask-share-icon.eot?juc5m5#iefix') format('embedded-opentype'),
+  url('~src/assets/fonts/seventask-share-icons/seventask-share-icon.ttf?juc5m5') format('truetype'),
+  url('~src/assets/fonts/seventask-share-icons/seventask-share-icon.woff?juc5m5') format('woff'),
+  url('~src/assets/fonts/seventask-share-icons/seventask-share-icon.svg?juc5m5#seventask-share-icon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="seventask-icon-share-"], [class*=" seventask-icon-share-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'seventask-share-icon' !important;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.seventask-icon-share-redirect:before {
+  content: "\e900";
+  color: $theme-color;
+}

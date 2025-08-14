@@ -1,0 +1,29 @@
+<div *ngIf="loadingType === 1" class="lds-ellipsis">
+  <div [style.background-color]="color"></div>
+  <div [style.background-color]="color"></div>
+  <div [style.background-color]="color"></div>
+  <div [style.background-color]="color"></div>
+</div>
+
+<div *ngIf="loadingType === 2" class="lds-ring">
+  <div [style.border-color]="color + 'transparent transparent transparent !important'"></div>
+  <div [style.border-color]="color + 'transparent transparent transparent !important'"></div>
+  <div [style.border-color]="color + 'transparent transparent transparent !important'"></div>
+  <div [style.border-color]="color + 'transparent transparent transparent !important'"></div>
+</div>
+
+<div  *ngIf="loadingType === 3">
+  <img [style.width]="width" [style.height]="height"  src="../../../../assets/gifs/loading-blue-final.gif" alt="loading" />
+</div>
+
+<div class="page-overlay-wrapper" *ngIf="showSpinner" >
+  <div class="bee-spinner"></div>
+  <div class="sync">syncing...</div>
+</div>
+
+<div class="loading-spinner" *ngIf="loadingType === 4">
+  <span class="spinner"></span>
+</div>
+
+
+

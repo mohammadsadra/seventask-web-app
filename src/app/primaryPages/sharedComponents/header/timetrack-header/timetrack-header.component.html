@@ -1,0 +1,76 @@
+<div class="header-container d-flex flex-row" [class]="dirStatus != 'en-US'">
+  <div style="width: 18%;" (click)="openDatePickerDialog()" class="field-container">
+    {{selectedDate | seventaskDatePipe: 'YYYY/M/D' | async}}
+    <img style="margin-inline-start: 16px;opacity: 0.4" src="assets/icons/timeTrackDate.svg">
+  </div>
+
+  <div style="width: 10%;cursor: auto" class="field-container" [class.flex-row-reverse]="dirStatus != 'en-US'">
+    <!--    {{startTime.toDate() | date: 'HH:mm'}}-->
+    <input (change)="changeHourEdit($event,true)" [value]="startTime.hour()" style="opacity: 0.4" placeholder="00"
+           maxlength="2" [max]="23" oninput="this.value= this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
+           javascript: if (this.value.length > this.maxLength) this.value= this.value.slice(0, this.maxLength);
+           if (this.value > this.max && this.value.length >= this.maxLength) this.value= this.max" max="23"
+           type="number" #title class="field-input">
+    <span style="opacity: 0.4" class="seventask-theme-color">:</span>
+    <input style="opacity: 0.4" (change)="changeMinuteEdit($event, true)" [value]="startTime.minute()" placeholder="00"
+           maxlength="2" oninput="this.value= this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
+           javascript: if (this.value.length> this.maxLength)this.value = this.value.slice(0, this.maxLength);
+           javascript: if (this.value > 59) this.value = this.value = 59" max="59" type="number" #title
+           class="field-input">
+  </div>
+
+  <div style="margin-inline-start: 10px;opacity: 0.4">{{ 'TimeTrack.to'| translate}}</div>
+
+  <div style="width: 10%;;cursor: auto" class="field-container" [class.flex-row-reverse]="dirStatus != 'en-US'">
+    <!--    {{endTime.toDate() | date: 'HH:mm'}}-->
+    <input (change)="changeHourEdit($event, false)" [value]="endTime.hour()" style="opacity: 0.4" placeholder="00"
+           maxlength="2" [max]="23" oninput="this.value= this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
+           javascript: if (this.value.length > this.maxLength) this.value= this.value.slice(0, this.maxLength);
+           if (this.value > this.max && this.value.length >= this.maxLength) this.value= this.max" max="23"
+           type="number" #title class="field-input">
+
+    <span style="opacity: 0.4" class="seventask-theme-color">:</span>
+    <input style="opacity: 0.4" (change)="changeMinuteEdit($event,false)" [value]="endTime.minute()" placeholder="00"
+           maxlength="2" oninput="this.value= this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');javascript: if (this.value.length> this.maxLength)
+                  this.value
+                  = this.value.slice(0, this.maxLength);javascript: if (this.value > 59) this.value = this.value = 59"
+           max="59" type="number" #title class="field-input">
+  </div>
+
+  <div style="width: 40%" class="field-container">
+    <!--    [value]="this.selectedTask.statusId"-->
+    <mat-select (opened)="searchValue.value =''" placeholder="{{ 'TimeTrack.selectTask'| translate}}"
+                (selectionChange)="taskAddingTimeTrack = $event.value" class="select-task" name="tasks" id="tasks">
+      <input dir="auto" [class.placeholder-rtl]="textDirection === 'rtl'"
+             placeholder="{{'Placeholders.searchTasks' | translate}}"
+             #searchValue class="search-box">
+      <div style="overflow-y: auto;">
+        <mat-option *ngIf="showGetAllTasksLoading" style="height: 300px;"
+                    class="d-flex justify-content-center align-items-center" disabled>
+          <seventask-spinner class="d-flex justify-content-center align-items-center"
+                             [loadingType]="1"></seventask-spinner>
+        </mat-option>
+
+        <mat-option *ngIf="!showGetAllTasksLoading && (allTasks == null || allTasks.length == 0)" style="height: 300px;"
+                    class="d-flex justify-content-center align-items-center" disabled>
+          <div class="d-flex justify-content-center align-items-center"
+               style="margin-top: 20px;opacity: 0.3">{{ 'Task.noTaskFound' | translate}}</div>
+        </mat-option>
+
+        <mat-option dir="auto" style="text-align: start" *ngFor="let task of allTasks | search:searchValue.value"
+                    [value]="task.id">{{task.title}}
+        </mat-option>
+      </div>
+    </mat-select>
+  </div>
+
+  <div (click)="addTimeTrack()" class="add-button-container new-item hover-style-5 smooth-rectangle">
+    <div style="margin-inline-end: 15px">
+      <img src="../../../../../assets/icons/Project/Add.svg">
+    </div>
+    <div class="new-item-button-title">
+      {{'Task.add' | translate}}
+    </div>
+  </div>
+
+</div>

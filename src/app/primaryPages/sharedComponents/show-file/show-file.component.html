@@ -1,0 +1,16 @@
+<div class="filecontainer" (click)="goToHref(fileAddress)">
+    <div class="file-type-icon"><div>
+            <span class="{{fileIcons}}"></span>
+        </div>
+    </div>
+    <div class="file-add-wrapper">
+        <div class="file-name">
+            <a class="file-name-link" href="{{fileAddress}}" title="{{fullName}}">
+                {{fullName}}
+            </a>
+        </div>
+        <div class="file-size">
+            {{sizeFormat}}
+        </div>
+    </div>
+</div>

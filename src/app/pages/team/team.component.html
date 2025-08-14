@@ -1,0 +1,103 @@
+<div class="main-container">
+
+  <div class="team-list d-flex flex-column align-items-center
+    justify-content-center"  *ngIf="teams.length> 0" @listAnimation>
+    <div class="p-2 team-container d-flex flex-column" *ngFor="let team of teams"
+         [ngStyle]="{'background-color': team.color ? '#' + team.color : '#7CA0AC'}"
+         (click)="openTeamOverviewPage(team.id)">
+      <!--      <div class="p-2 background-logo-container align-self-end d-flex flex-row justify-content-center align-items-center  ml-auto">-->
+      <!--        <img class="p-2 background-logo" src="assets/icons/Project/Team.svg">-->
+      <!--      </div>-->
+
+      <div class="p-2 d-flex flex-row titles-logo-container">
+        <div class="p-2 d-flex align-items-center justify-content-center
+          logo-container">
+          <img class="p-2 logo" src="../../../assets/icons/team.svg">
+        </div>
+        <div class="p-2 d-flex flex-column titles-container">
+          <div class="p-2 team-name">{{team.name}}</div>
+          <div class="p-2 team-web">{{'Team.creator' | translate}}:
+            {{team.createdBy.nickName}}</div>
+        </div>
+      </div>
+      <div class="p-2 team-description" *ngIf="team.description">
+        {{team.description}}
+      </div>
+      <div class="p-2 team-description" *ngIf="!team.description">
+        {{'Team.noDescription' | translate}}
+      </div>
+      <div class="p-2 team-overview-container d-flex flex-row">
+
+        <div class="department-container flex-row d-flex">
+          <div class="p-2 white-line"></div>
+          <div class="p-2 d-flex flex-column">
+            <div class="p-2">
+              <img class="department-logo" src="../../../assets/icons/team.svg">
+            </div>
+            <div class="p-2 department-number">
+              {{team.numberOfDepartments | numToArabic}} {{'Team.departments' |
+              translate}}
+            </div>
+          </div>
+        </div>
+
+        <div class="department-container flex-row d-flex">
+          <div class="p-2 white-line"></div>
+          <div class="p-2 d-flex flex-column">
+            <div class="p-2">
+              <img class="department-logo"
+                   src="../../../assets/icons/Project/User-White.svg">
+            </div>
+            <div class="p-2 department-number">
+              {{team.numberOfMembers | numToArabic}} {{'Team.members' |
+              translate}}
+            </div>
+          </div>
+        </div>
+
+        <div class="department-container flex-row d-flex">
+          <div class="p-2 white-line"></div>
+          <div class="p-2 d-flex flex-column">
+            <div class="p-2">
+              <img class="department-logo" src="../../../assets/icons/folder-open.svg">
+            </div>
+            <div class="p-2 department-number">
+              {{team.numberOfProjects | numToArabic}} {{'Team.project' |
+              translate}}
+            </div>
+          </div>
+        </div>
+
+        <div class="department-container flex-row d-flex">
+          <div class="p-2 white-line"></div>
+          <div class="p-2 d-flex flex-column">
+            <div class="p-2">
+              <img class="department-logo" src="../../../assets/icons/Project/check.svg">
+            </div>
+            <div class="p-2 department-number">
+              {{team.numberOfTasks | numToArabic}} {{'Team.openTasks' |
+              translate}}
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <div *ngIf="teams.length == 0 && !showTeamsLoading"
+       style="margin-top: 200px;opacity: 0.3;"
+       class="d-flex justify-content-center align-items-center flex-column">
+    <img style="width: 15%" src="../../../assets/noDataImages/team.svg">
+    <div class="no-data-message">
+      {{'Team.noTeamMessage' | translate}}
+    </div>
+  </div>
+
+  <div *ngIf="showTeamsLoading" class="loading-container">
+    <seventask-spinner [loadingType]="3"></seventask-spinner>
+<!--    <div style="margin-top: 10px;color: #2E4A77;">{{'Team.loadingTeams' |translate}}</div>-->
+  </div>
+
+</div>

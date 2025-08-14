@@ -1,0 +1,12 @@
+<body >
+<h5>
+  {{'Chat.deleteMessageTxt' | translate}}
+</h5>
+<p>
+  "{{messageData.body}}"
+</p>
+<div class="button-row">
+  <button class="btn confirm-btn" (click)="deleteMsg()" mat-dialog-close="true">{{'Chat.delete' | translate}}</button>
+  <button class="btn" style="background: rgba(66,120,223,0.5); color: white" [mat-dialog-close]="true">{{'Chat.cancel' | translate}}</button>
+</div>
+</body>

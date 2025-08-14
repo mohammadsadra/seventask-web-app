@@ -1,0 +1,704 @@
+<div class="d-flex flex-column" [style.height.px]="height -100">
+  <div class="task-header-tab">
+    <ul class="tasknav">
+      <li class="tasknav-item"
+          [ngClass]="isSelected === 'General' ? 'activeTab' : ''"
+          (click)="tabSelectes('General')">{{ 'Task.general' | translate}}
+        <span style="display: none;">.</span>
+      </li>
+      <li class="tasknav-item"
+          [ngClass]="isSelected === 'Comments' ? 'activeTab' : ''"
+          (click)="tabSelectes('Comments')">{{'Task.comment' | translate}}
+        <span style="display: none;">.</span>
+      </li>
+      <li class="tasknav-item"
+          [ngClass]="isSelected === 'Workload' ? 'activeTab' : ''"
+          (click)="tabSelectes('Workload')">{{ 'Task.workload' | translate}}
+        <span style="display: none;">.</span>
+      </li>
+
+      <li class="tasknav-item"
+          [ngClass]="isSelected === 'Activity' ? 'activeTab' : ''"
+          (click)="tabSelectes('Activity')">{{ 'Task.activityLog' | translate}}
+        <span style="display: none;">.</span>
+      </li>
+    </ul>
+  </div>
+
+  <app-workload-chart *ngIf="isSelected === 'Workload'"></app-workload-chart>
+  <app-commnets-task *ngIf="isSelected === 'Comments'"></app-commnets-task>
+  <app-activity-log *ngIf="isSelected === 'Activity'"></app-activity-log>
+  <!-- End Header Box-->
+
+  <div class="main-container"
+       *ngIf="isSelected === 'General'"
+       [ngClass]="isSelected !== 'General'?'d-none':''">
+    <div [@inspectorAnimation]="inspectorAnimationOn ? 'in' : 'out'" class="general-wrapper">
+
+      <div [@fadeAnimation]="'in'" *ngIf="selectedTask != null" style="height: 100%">
+        <form [formGroup]="editForm">
+          <div class="d-flex flex-column" style="height: 100%">
+            <div
+              (mouseleave)="editTitle= false" (mouseenter)="editTitle= true"
+              class="field" id="task-title">
+              <div
+                class="title">
+                <img [class]="iconRotationDegree === 180 ?
+                  'title-label-rtl':'title-label'"
+                     [style]="'transform: rotate(' + iconRotationDegree + 'deg)'"
+                     src="../../../../../assets/icons/Task/task-title.svg">
+                <div style="cursor: pointer;"
+                     class="flex-grow-1"
+                     #tooltip="matTooltip"
+                     matTooltip="{{ 'Task.copy' | translate }}"
+                     [matTooltipPosition]="'above'"
+                     matTooltipClass="m-0 tooltip-color"
+                     (click)="clipboardCopy()"
+                     [cdkCopyToClipboard]="selectedTask.title">
+                  {{ 'Task.taskTitle' | translate}}
+                </div>
+                <div style="margin-inline-start: auto" class="d-flex flex-row">
+                  <!--              [@showHideButton]="editTitle && !editTitleClicked ? 'show' : 'hide'"-->
+                  <span *ngIf="editTitle && !editTitleClicked"
+                        (click)="editTitleClicked= true; editForm.controls.Title.setValue(selectedTask.title);"
+                        style="margin-inline-start: auto"
+                        class="smooth-square logo-container justify-content-center align-items-center
+                    d-flex">
+                    <span class="seventask-icon-edit-edit" style="font-size: 12px"></span>
+                  </span>
+
+                  <span (click)="editTitleClicked= false"
+                        class="smooth-square logo-container justify-content-center align-items-center
+                    d-flex" style="margin: 0px 5px 0 5px"
+                        *ngIf="editTitleClicked === true">
+                    <span class="seventask-icon-edit-cancel-medium" style="font-size: 12px"></span>
+                  </span>
+
+                  <button [disabled]="this.editForm.controls.Title.value ===''"
+                          (click)="modifyTitle()"
+                          [style.cursor]="this.editForm.controls.Title.value === '' ?
+                    'default' : 'pointer'"
+                          class="smooth-square justify-content-center align-items-center d-flex"
+                          [class]="this.editForm.controls.Title.value === '' ?
+                    'disabled-logo-container' : 'logo-container'"
+                          *ngIf="editTitleClicked === true">
+                    <span class="seventask-icon-edit-tick-thick" style="font-size: 12px"></span>
+                  </button>
+                </div>
+              </div>
+              <!--      <input style="overflow-x: paged-y;overflow-wrap: break-word;border: none;outline: none" type="text" [value]="selectedTask.title">-->
+              <!--          [@myTrigger] *ifChanges="selectedTask.title"-->
+              <div class="title-content">
+                <div style="padding-inline-start: 5px" dir="auto"
+                     *ngIf="editTitleClicked === false && changeTitleAnimationFinished">
+                  <div dir="auto" *ngFor="let line of selectedTask.title.split('\n')"
+                       style="line-height: 25px;">
+                    {{line}}
+                    <div *ngIf="line == ''">
+                      <br>
+                    </div>
+                  </div>
+                </div>
+                <!--                autoselect-->
+                <textarea (keydown.enter)="modifyTitle()" autofocus dir="auto" #title *ngIf="editTitleClicked"
+                          formControlName="Title"
+                          id="title-edit"
+                          class="title-container"></textarea>
+              </div>
+            </div>
+
+            <!--      <div class="field" id="featured-image">-->
+            <!--        <div class="title">-->
+            <!--          <img class="title-label" src="../../../../../assets/icons/Task/Inspector/featured-image.svg">-->
+            <!--          Featured Image-->
+            <!--        </div>-->
+            <!--        <div class="title-content">-->
+            <!--          image-->
+            <!--        </div>-->
+            <!--      </div>-->
+
+            <div (mouseleave)="editDescription= false"
+                 (mouseenter)="editDescription=true" class="field" id="Description">
+              <div
+                class="title">
+                <img [class]="iconRotationDegree === 180
+                  ?'title-label-rtl':'title-label'"
+                     [style]="'transform: rotate(' + iconRotationDegree + 'deg)'"
+                     src="../../../../../assets/icons/Task/Inspector/description.svg">
+                <div
+                  [ngStyle]="selectedTask.description === null ? '': {'cursor': 'pointer'}"
+                  class="flex-grow-1"
+                  #tooltip="matTooltip"
+                  matTooltip="{{ 'Task.copy' | translate }}"
+                  [matTooltipPosition]="'above'"
+                  matTooltipClass="m-0 tooltip-color"
+                  [matTooltipDisabled]="selectedTask.description === null ? true : false"
+                  (click)="clipboardCopy(selectedTask.description)"
+                  [cdkCopyToClipboard]="selectedTask.description"
+                  [cdkCopyToClipboardAttempts]="1">{{ 'Task.description' | translate}}</div>
+
+                <div style="margin-inline-start: auto" class="d-flex flex-row">
+                  <!--              [@showHideButton]="editDescription && !editDescriptionClicked ? 'show' : 'hide'"-->
+                  <span *ngIf="editDescription && !editDescriptionClicked"
+                        (click)="editDescriptionClicked=true;editForm.controls.Description.setValue(selectedTask.description);"
+                        style="margin-inline-start: auto"
+                        class="smooth-square logo-container justify-content-center align-items-center d-flex">
+                    <span class="seventask-icon-edit-edit" style="font-size: 12px"></span>
+                  </span>
+
+                  <span (click)="editDescriptionClicked= false" style="cursor:
+                    pointer"
+                        style="margin-inline-start: auto"
+                        class="smooth-square logo-container justify-content-center align-items-center
+                    d-flex"
+                        style="margin: 0px 5px 0 5px"
+                        *ngIf="editDescriptionClicked === true">
+                    <span class="seventask-icon-edit-cancel-medium" style="font-size: 12px"></span>
+                  </span>
+
+                  <span (click)="modifyDescription()" style="cursor: pointer"
+                        style="margin-inline-start: auto"
+                        class="smooth-square logo-container justify-content-center align-items-center
+                    d-flex"
+                        *ngIf="editDescriptionClicked === true">
+                    <span class="seventask-icon-edit-tick-thick" style="font-size: 12px"></span>
+                  </span>
+                </div>
+              </div>
+              <div
+                class="title-content">
+                <div style="padding-inline-start: 5px;" dir="auto"
+                     *ngIf="editDescriptionClicked === false && selectedTask.description != null && changeDescriptionAnimationFinished">
+                  <!--              <div *ngFor="let line of selectedTask.description.split('\n')">-->
+                  <!--                {{line}}-->
+                  <!--              </div>-->
+                  <div style="line-height: 25px;" dir="auto" *ngFor="let line of selectedTask.description.split('\n')">
+                    <span [innerHTML]="(line | linkFinder:'#2e4a77')"
+                          style="line-height: 25px;"></span>
+                    <div style="line-height: 25px;" *ngIf="line == ''">
+                      <br>
+                    </div>
+                  </div>
+                  <!--              {{selectedTask.description}}-->
+                </div>
+                <textarea (keydown.enter)="modifyDescription()" autofocus dir="auto"
+                          *ngIf="editDescriptionClicked" formControlName="Description"
+                          id="description-edit"
+                          class="description-container"></textarea>
+              </div>
+            </div>
+
+            <div class="field" id="check-list">
+
+              <div (mouseleave)="editChecklist= false" (mouseenter)="editChecklist=true" class="assignee">
+                <div class="checklist">
+
+                  <div class="checklist-title-container">
+                    <img class="title-label"
+                         src="../../../../../assets/icons/Task/Inspector/checkList.svg">
+                    <div class="checklist-title">
+                      {{'Task.checklists' | translate}}
+                    </div>
+                    <!--                [@showHideButton]="editChecklist ? 'show' : 'hide'"-->
+                    <div *ngIf="editChecklist" class="checklist-icon-container">
+                      <span (click)="openAddItemDialog(selectedTask.checkListItems)"
+                            class="seventask-icon-add-add add-checklist-icon"></span>
+                    </div>
+                  </div>
+
+                  <div class="checklist-item-container">
+
+                    <div class="checklist-item" (mouseleave)="isRemovingChecklistItem[j]= false"
+                         (mouseenter)="isRemovingChecklistItem[j]= true"
+                         *ngFor="let item of selectedTask.checkListItems; let j= index">
+
+                      <mat-checkbox style="padding-top: 2px" class="mr-2 mt-1 checkbox-items"
+                                    (change)="modifyChecklistItem($event , item)"
+                                    [checked]="item.isChecked"></mat-checkbox>
+
+                      <div class="d-flex flex-grow-1 checklixt-item-text mt-1" dir="auto"
+                           *ngIf="!changeToInput[j]">
+                        {{item.title}}
+                      </div>
+
+                      <div *ngIf="changeToInput[j]" class="d-flex flex-row w-100 checklist-input-wrapper">
+
+                        <input type="text" dir="auto"
+                               class="check-list-input border-0 flex-grow-1" [value]="item.title"
+                               (blur)="!checkListClick ? editChecklistItem($event.target.value , item , j) : ''"
+                               #checkListInput/>
+
+                        <span
+                          style="margin-inline-start: auto ; cursor: pointer"
+                          class="logo-container justify-content-center
+                          align-items-center d-flex"
+                          (click)="editChecklistItem(checkListInput.value, item , j); checkListClick= false">
+                          <span class="seventask-icon-edit-tick-thick" style="font-size: 12px"></span>
+                        </span>
+
+                      </div>
+                      <div class="item-icon-container">
+                        <!--                    [@showHideButton]="isRemovingChecklistItem[j] ? 'show' : 'hide'"-->
+
+                        <div
+                          (click)="removeChecklistItem(item)"
+                          *ngIf="isRemovingChecklistItem[j] && !changeToInput[j]"
+                          class="add-assignee-icon ml-1 mr-1">
+                          <span class="seventask-icon-edit-cancel-narrow remove-checklist-item"></span>
+                        </div>
+
+                        <div (click)="changeToInput[j]= true"
+                             *ngIf="isRemovingChecklistItem[j] && !changeToInput[j]"
+                             class="add-assignee-icon">
+                          <span class="seventask-icon-edit-edit" style="font-size: 12px"></span>
+                        </div>
+
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+
+            <div class="field" id="assignees">
+              <div (mouseleave)="editAssignee= false" (mouseenter)="editAssignee=
+                true" class="title">
+                <img class="title-label"
+                     src="../../../../../assets/icons/Task/Inspector/assignee.svg">
+                {{'Task.assignees' | translate}}
+                <!--            [@showHideButton]="editAssignee ? 'show' : 'hide'"-->
+                <div *ngIf="editAssignee"
+                     (click)="openAddMemberDialog()"
+                     class="add-assignee-icon">
+                  <span style="font-size: 12px" class="seventask-icon-add-add"></span>
+                </div>
+              </div>
+              <div (mouseleave)="isRemovingAssignee[k]= false"
+                   (mouseenter)="isRemovingAssignee[k]= true"
+                   *ngFor="let assignee of selectedTask.usersAssignedTo;let k= index"
+                   class="title-content">
+                <div class="assignee">
+                  <!--              [@showHideButton]="isRemovingAssignee[k] ? 'show' : 'hide'"-->
+                  <div *ngIf="isRemovingAssignee[k]">
+                    <span (click)="removeAssignee(assignee.userId)"
+                          class="seventask-icon-edit-cancel-narrow remove-assignee-icon"></span>
+                  </div>
+
+                  <div *ngIf="assignee.profileImageGuid == null"
+                       class="member-without-image"
+                       style="background-color: #1EC1C3">{{assignee.nickName.charAt(0)}}</div>
+                  <img #tooltip="matTooltip" [matTooltip]="assignee.nickName"
+                       [matTooltipPosition]="'below'"
+                       matTooltipHideDelay="100"
+                       *ngIf="assignee.profileImageGuid != null"
+                       [src]="domainName + '/en-US/File/get?id='
+                    +assignee.profileImageGuid + '&quality=100'"
+                       style="background-color: #86A8E7" class="member">
+
+
+                  <div class="assignee-name">{{assignee.nickName}}</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="field" id="attachment">
+
+              <div (mouseleave)="editAttachment= false" (mouseenter)="editAttachment= true" class="title">
+                <img class="title-label"
+                     src="../../../../../assets/icons/Task/Inspector/dependency.svg">
+                {{'Task.attachments' | translate}}
+                <!--                <div *ngIf="filesToUpload.length!==0" class="d-flex justify-content-center align-items-center">-->
+                <!--                  <mat-progress-bar mode="determinate" [value]="progress"></mat-progress-bar>-->
+                <!--                  <div class="progress-percent">-->
+                <!--                    {{progress}}%-->
+                <!--                  </div>-->
+                <!--                </div>-->
+                <!--            [@showHideButton]="editAttachment ? 'show' : 'hide'"-->
+                <div *ngIf="editAttachment"
+                     (click)="clickSelectFile()"
+                     class="add-assignee-icon">
+                  <span style="font-size: 12px" class="seventask-icon-add-add"></span>
+                </div>
+                <app-upload-file mode="hidden" [componentId]="'fileInInspector'" [multiple]="true"
+                                 [uploadButtonDisplay]="'none'"
+                                 [inputButtonDisplay]="'none'" [auto_upload_File]="true"
+                                 (filesInformation)="uploadFile($event)"></app-upload-file>
+              </div>
+
+              <div (mouseleave)="isRemovingAttachment= ''"
+                   (mouseenter)="isRemovingAttachment= file.fileContainerGuid"
+                   *ngFor="let file of selectedTask.attachments,let k=index"
+                   class="uploaded-files">
+                <div class="file-row">
+                  <!--              [@showHideButton]="isRemovingAttachment == file.fileContainerGuid ? 'show' : 'hide'"-->
+                  <span style="margin-inline-end: 14px;margin-top: 8px"
+                        [style.visibility]="isRemovingAttachment == file.fileContainerGuid ? 'visible' : 'hidden'"
+                        (click)="removeAttachment(file.fileContainerGuid)"
+                        class="seventask-icon-edit-cancel-narrow remove-assignee-icon"></span>
+
+                  <app-show-file [data]="file"
+                                 type="file"></app-show-file>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="field" id="labels">
+
+              <div class="title">
+                <img class="title-label" src="assets/icons/Task/labels.svg">
+                {{'Task.tags' | translate}}
+                <!--                <div *ngIf="editTags"-->
+                <!--                     (click)="clickSelectFile()"-->
+                <!--                     class="add-assignee-icon">-->
+                <!--                  <span style="font-size: 12px" class="seventask-icon-add-add"></span>-->
+                <!--                </div>-->
+              </div>
+
+              <div style="flex-direction: row" class="tag-input-row">
+                <span style="margin-inline-end: 7px" class="seventask-icon-add-add-circle"></span>
+
+                <input [class.placeholder-rtl]="iconRotationDegree == 180"
+                       dir="auto" placeholder="{{'Placeholders.addTag' | translate}}" #newTag
+                       (keydown.enter)="addTagToTask(this.selectedTask.id, newTag.value.trim());newTag.value=''"
+                       (blur)="newTag.value=''"
+                       class="tag-input">
+              </div>
+
+              <div class="tags-container">
+                <div class="tag-container" *ngFor="let tag of selectedTask.tags;let m=index"
+                     (mouseenter)="isHoveringTag=m"
+                     (mouseleave)="isHoveringTag=null">
+                  <div (click)="filterByTag(tag.title)" class="filter-cursor" style="position: relative;">
+                    <div class="delete-tag-button" *ngIf="isHoveringTag === m" style="cursor: default"
+                         (click)="deleteTag($event, selectedTask.id,tag.title)">
+                      <span class="seventask-icon-edit-cancel-medium" style="font-size: 10px"></span>
+                    </div>
+                    {{tag.title}}
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!--      <div class="field" id="list">-->
+            <!--        <div class="title">-->
+            <!--          <img class="title-label" src="../../../../../assets/icons/Task/Inspector/list.svg">-->
+            <!--          List-->
+            <!--        </div>-->
+            <!--        <div class="title-content">-->
+            <!--          Website presentation-->
+            <!--        </div>-->
+            <!--      </div>-->
+
+            <div (mouseleave)="editTeam= false" (mouseenter)="editTeam=true"
+                 class="field" id="team">
+              <div class="title">
+                <img class="title-label"
+                     src="../../../../../assets/icons/Project/Team-right-nav.svg">
+                {{ 'Task.team' | translate}}
+                <!--            [@showHideButton]="editTeam ? 'show' : 'hide'"-->
+                <div *ngIf="editTeam"
+                     (click)="openEditTeamDialog()"
+                     class="smooth-square smooth-square add-assignee-icon">
+                  <span class="seventask-icon-edit-edit" style="font-size: 12px"></span>
+                </div>
+              </div>
+              <div
+                (click)="goToTeam(this.selectedTask.teamId)" style="cursor: pointer" dir="auto" class="title-content">
+                {{selectedTask.teamName}}
+              </div>
+            </div>
+
+            <div (mouseleave)="editProject= false" (mouseenter)="editProject=true"
+                 class="field" id="project">
+              <div class="title">
+                <img class="title-label"
+                     src="../../../../../assets/icons/Task/Inspector/project.svg">
+                {{'Task.project' | translate}}
+                <!--            [@showHideButton]="editProject ? 'show' : 'hide'"-->
+                <div *ngIf="editProject"
+                     (click)="openEditTeamDialog()"
+                     class="smooth-square add-assignee-icon">
+                  <span class="seventask-icon-edit-edit" style="font-size: 12px"></span>
+                </div>
+              </div>
+              <div (click)="goToProject(this.selectedTask.projectId)" style="cursor: pointer"
+                   *ngIf="selectedTask.projectId != null" class="project-title">
+                <span class="seventask-theme-color" dir="auto">
+                  {{selectedTask.projectName}}
+                </span>
+                <span class="seventask-icon-share-redirect" style="margin-inline-start: auto;"></span>
+              </div>
+            </div>
+
+            <div class="field" id="priority">
+              <div class="title">
+                <img class="title-label" src="../../../../../assets/icons/Task/priority.svg">
+                {{'Task.priority' | translate}}
+              </div>
+              <div class="title-content priority-button-toggle">
+
+                <!--  put in space below        [(ngModel)]="selectedTask.priorityTitle"-->
+                <mat-button-toggle-group
+                  [value]="selectedTask.priorityId.toString()"
+                  style="margin-top: 0;width: 100%;"
+                  #priority="matButtonToggleGroup">
+                  <mat-button-toggle style="text-align: start;" [disableRipple]="true" class="priority-button"
+                                     (change)="onValChange($event.value)" value="1">
+                    <span style="font-size: 15px"
+                          class="seventask-icon-priority-low priority-icon"></span>
+                    <span>
+                      {{'Task.low' | translate}}
+                    </span>
+                  </mat-button-toggle>
+                  <mat-button-toggle [disableRipple]="true"
+                                     style="margin-inline-start: -5px;margin-inline-end: 5px;text-align: start;"
+                                     (change)="onValChange($event.value)"
+                                     value="3" class="priority-button">
+                    <span style="font-size: 15px"
+                          class="seventask-icon-priority-medium priority-icon"></span>
+                    {{'Task.medium' | translate}}
+                  </mat-button-toggle>
+                  <mat-button-toggle [disableRipple]="true" style="text-align: start;"
+                                     (change)="onValChange($event.value)"
+                                     value="5" class="priority-button">
+                    <span style="font-size: 15px"
+                          class="seventask-icon-priority-high priority-icon"></span>
+                    {{'Task.high' | translate}}
+                  </mat-button-toggle>
+                </mat-button-toggle-group>
+              </div>
+            </div>
+
+            <div class="field" id="status">
+              <div class="title">
+                <img class="title-label" src="../../../../../assets/icons/Task/status.svg">
+                {{ 'Task.status' | translate}}
+              </div>
+
+              <div>
+                <!--          {{selectedTask.statusTitle}}-->
+                <mat-select [value]="this.selectedTask.statusId"
+                            (selectionChange)="changeStatus($event)" class="edit-status"
+                            name="statuses"
+                            id="statuses">
+                  <mat-option class="edit-status-option"
+                              *ngFor="let status of statuses" [value]="status.id">{{status.title}}</mat-option>
+                </mat-select>
+                <br>
+              </div>
+
+            </div>
+
+            <div class="field">
+              <div class="title" (mouseenter)="editStartDate=true" (mouseleave)="editStartDate=false">
+                <img class="title-label" src="../../../../../assets/icons/Task/task-date.svg">
+                {{'Calendar.Event.startDate' | translate}}
+                <div class="icons-container">
+                  <div style="cursor: pointer"
+                       style="margin-inline-start: auto"
+                       class="smooth-square logo-container justify-content-center align-items-center
+                    d-flex"
+                       style="margin: 0px 5px 0 5px"
+                       (click)="deleteTaskDate('start')"
+                       *ngIf="editStartDate && selectedTask.startDate !== null">
+                    <span class="seventask-icon-edit-cancel-medium" style="font-size: 12px"></span>
+                  </div>
+                  <div *ngIf="editStartDate"
+                       (click)="openEditDateDialog('start')"
+                       class="smooth-square smooth-square add-assignee-icon">
+                    <span class="seventask-icon-edit-edit" style="font-size: 12px"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="title-content">
+                {{selectedTask.startDate | seventaskDatePipe: 'YYYY/M/D HH:mm' | async}}
+              </div>
+            </div>
+
+            <div class="field">
+              <div class="title" (mouseenter)="editEndDate=true" (mouseleave)="editEndDate=false">
+                <img class="title-label" src="../../../../../assets/icons/Task/task-date.svg">
+                {{'Calendar.Event.endDate' | translate}}
+                <div class="icons-container">
+                  <div style="cursor: pointer"
+                       style="margin-inline-start: auto"
+                       class="smooth-square logo-container justify-content-center align-items-center
+                    d-flex"
+                       style="margin: 0px 5px 0 5px"
+                       (click)="deleteTaskDate('end')"
+                       *ngIf="editEndDate && selectedTask.endDate !== null">
+                    <span class="seventask-icon-edit-cancel-medium" style="font-size: 12px"></span>
+                  </div>
+                  <div *ngIf="editEndDate"
+                       (click)="openEditDateDialog('end')"
+                       class="smooth-square smooth-square add-assignee-icon">
+                    <span class="seventask-icon-edit-edit" style="font-size: 12px"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="title-content">
+                {{selectedTask.endDate | seventaskDatePipe: 'YYYY/M/D HH:mm' | async}}
+              </div>
+            </div>
+
+            <div class="field" id="reminders">
+
+              <div (mouseleave)="editReminders=false" (mouseenter)="editReminders=true" class="title">
+                <img class="title-label"
+                     src="../../../../../assets/icons/Task/Inspector/reminder.svg">
+                {{'Task.reminders' | translate}}
+
+                <div style="margin-inline-start: auto;" *ngIf="!gotReminders">
+                  <mat-spinner
+                    class="mat-spinner-small mat-spinner-showNumber ml-1 mr-1"
+                    strokeWidth="3" [diameter]="20">
+                  </mat-spinner>
+                </div>
+
+                <div *ngIf="editReminders && gotReminders"
+                     (click)="openAddReminderDialog()"
+                     class="add-assignee-icon">
+                  <span style="font-size: 12px" class="seventask-icon-task-header-add"></span>
+                </div>
+              </div>
+
+              <div *ngFor="let reminder of reminders"
+                   (mouseleave)="isRemovingReminder=''"
+                   (mouseenter)="isRemovingReminder=reminder.reminderId"
+                   class="reminders-container">
+
+                <div class="reminder">
+                  <span style="margin-inline-end: 14px;margin-top: 8px"
+                        [style.visibility]="isRemovingReminder==reminder.reminderId ? 'visible' : 'hidden'"
+                        (click)="removeReminder(reminder.reminderId)"
+                        class="seventask-icon-edit-cancel-narrow remove-assignee-icon">
+                  </span>
+
+                  <div class="reminder-details">
+                    <div class="reminder-linked-member" *ngFor="let member of reminder.reminderLinkedUsers">
+                      {{ member.nickName }}
+                    </div>
+
+                    <div class="reminder-date">
+                      {{ reminder.remindOn | seventaskDatePipe: 'YYYY/M/D HH:mm' | async }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="field" id="estimated-time">
+              <div (mouseleave)="addEstimation= false" (mouseenter)="addEstimation= true" class="title">
+                <img class="title-label" src="../../../../../assets/icons/Task/Inspector/progressbar.svg">
+                {{'Task.estimatedTime' | translate}}
+                <div *ngIf="!currentUserHasEstimation() && !addEstimationClicked"
+                     [@showHideButton]="addEstimation && !addEstimationClicked ? 'show' : 'hide'"
+                     (click)="addEstimationClicked= true"
+                     class="add-assignee-icon">
+                  <span style="font-size: 12px" class="seventask-icon-add-add"></span>
+                </div>
+                <span (click)="cancelAddingEstimationTime()"
+                      class="smooth-square logo-container justify-content-center align-items-center
+                  d-flex" style="margin: 0px 5px 0 5px;margin-inline-start: auto;"
+                      *ngIf="addEstimationClicked === true">
+                  <span class="seventask-icon-edit-cancel-medium" style="font-size: 12px"></span>
+                </span>
+                <button
+                  [disabled]="this.editForm.controls.estimationHour.value == null && this.editForm.controls.estimationMinute.value == null"
+                  (click)="addNewEstimation()"
+                  [style.cursor]="this.editForm.controls.estimationHour.value == null && this.editForm.controls.estimationMinute.value == null ?'default' :
+                  'pointer'"
+                  class="smooth-square justify-content-center align-items-center d-flex"
+                  [class]="this.editForm.controls.estimationHour.value == null && this.editForm.controls.estimationMinute.value == null ?
+                  'disabled-logo-container'
+                  : 'logo-container'"
+                  *ngIf="addEstimationClicked === true">
+                  <span class="seventask-icon-edit-tick-thick" style="font-size: 12px"></span>
+                </button>
+              </div>
+              <div style="margin-bottom: 20px;" *ngIf="addEstimationClicked" class="estimation-input-container">
+                <input placeholder="00" maxlength="2"
+                       oninput="this.value= this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');javascript: if (this.value.length> this.maxLength)
+                this.value =
+                this.value.slice(0, this.maxLength);"
+                       max="99" type="number" #title formControlName="estimationHour" class="estimation-input">
+                <span class="seventask-theme-color" style="margin-inline-end: 10px;font-weight: bold">:</span>
+                <input placeholder="00" maxlength="2"
+                       oninput="this.value= this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');javascript: if (this.value.length> this.maxLength)
+                this.value =
+                this.value.slice(0, this.maxLength);javascript: if (this.value > 59) this.value = this.value = 59"
+                       max="59" type="number" #title formControlName="estimationMinute" class="estimation-input">
+              </div>
+              <div (mouseleave)="isRemovingEstimation[k]= false"
+                   (mouseenter)="isRemovingEstimation[k]= true"
+                   *ngFor="let estimation of selectedTask.estimations,let k=index" class="estimation-row">
+                <!--            [@showHideButton]="isRemovingEstimation[k] ? 'show' : 'hide'"-->
+                <span [style.visibility]="estimation.user.userId === currentUser ? 'visible' : 'hidden'"
+                      *ngIf="isRemovingEstimation[k]"
+                      (click)="removeEstimation()"
+                      class="seventask-icon-edit-cancel-narrow remove-assignee-icon"></span>
+                <div *ngIf="estimation.user.profileImageGuid == null"
+                     class="member-without-image"
+                     style="background-color: #1EC1C3">{{estimation.user.nickName.charAt(0)}}</div>
+                <img #tooltip="matTooltip" [matTooltip]="estimation.user.nickName"
+                     [matTooltipPosition]="'below'"
+                     matTooltipHideDelay="100"
+                     *ngIf="estimation.user.profileImageGuid != null"
+                     [src]="domainName + '/en-US/File/get?id='
+                  +estimation.user.profileImageGuid + '&quality=100'"
+                     style="background-color: #86A8E7" class="member">
+                <!--          {{estimation.estimationTimeInMinute * 1000 * 60| date:'HH:mm':'UTC'}}-->
+                <div class="estimation-input-container">
+                  <input (change)="changeHourEdit($event,estimation)"
+                         [value]="floor(estimation.estimationTimeInMinute / 60)"
+                         [disabled]="!editEstimationClicked || estimation.user.userId !== currentUser" placeholder="00"
+                         maxlength="2"
+                         oninput="this.value= this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');javascript: if (this.value.length> this.maxLength)
+                  this.value
+                  = this.value.slice(0, this.maxLength);"
+                         max="99" type="number" #title class="estimation-input">
+                  <span class="seventask-theme-color" style="margin-inline-end: 10px;font-weight: bold">:</span>
+                  <input (change)="changeMinuteEdit($event,estimation)" [value]="estimation.estimationTimeInMinute % 60"
+                         [disabled]="!editEstimationClicked || estimation.user.userId !== currentUser" placeholder="00"
+                         maxlength="2"
+                         oninput="this.value= this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');javascript: if (this.value.length> this.maxLength)
+                  this.value
+                  = this.value.slice(0, this.maxLength);javascript: if (this.value > 59) this.value = this.value = 59"
+                         max="59" type="number" #title class="estimation-input">
+                  <span *ngIf="!editEstimationClicked"
+                        [style.visibility]="estimation.user.userId === currentUser? 'visible' : 'hidden'"
+                        [@showHideButton]="isRemovingEstimation[k]? 'show' : 'hide'"
+                        (click)="editEstimationClicked= true"
+                        style="margin-inline-start: auto"
+                        class="smooth-square logo-container justify-content-center align-items-center d-flex">
+                    <span class="seventask-icon-edit-edit" style="font-size: 12px"></span>
+                  </span>
+                  <button [disabled]="estimationHourEdit == null && estimationMinuteEdit == null"
+                          (click)="editEstimation(estimation)"
+                          [style.cursor]="estimationHourEdit == null && estimationMinuteEdit == null ?'default' : 'pointer'"
+                          class="smooth-square justify-content-center align-items-center d-flex"
+                          [class]="estimationHourEdit == null && estimationMinuteEdit == null ? 'disabled-logo-container' : 'logo-container'"
+                          *ngIf="editEstimationClicked && estimation.user.userId === currentUser">
+                    <span class="seventask-icon-edit-tick-thick" style="font-size: 12px"></span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div *ngIf="selectedTask == null" style="opacity: 1">
+        <img src="../../../../../assets/noDataImages/click.svg" width="85%" style="margin: 5px">
+        <div class="null-inspector">{{ 'Task.clickTaskMsg' | translate}}</div>
+      </div>
+
+    </div>
+  </div>
+
+</div>

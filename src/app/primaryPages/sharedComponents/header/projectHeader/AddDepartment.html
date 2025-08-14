@@ -1,0 +1,37 @@
+<div [style]="'direction: ' + textDirection" class="add-team-container d-flex flex-column">
+  <div class="p-2 search" style=" margin: 20px 15px 20px 15px">
+    <form [formGroup]="search">
+      <input [class.placeholder-rtl]="textDirection === 'rtl'"
+             dir="auto" class="search" placeholder="{{ 'Placeholders.searchForDepartment' | translate}}"
+             formControlName="searchField" (keyup)="searchFieldChanged()">
+    </form>
+  </div>
+
+  <div class="p-2 members-container">
+    <div class="member" *ngFor="let department of teamDepartments"
+         (click)="department.check ? department.check = false: department.check = true" [id]="department.id">
+      <div class="d-flex flex-row align-items-center" style="padding-inline-start: 15px">
+        <span class="seventask-icon-checkbox-empty-checkbox" style="margin-inline-end: 15px"
+              *ngIf="!department.check"></span>
+        <span class="seventask-icon-checkbox-checked-checkbox" style="margin-inline-end: 15px"
+              *ngIf="department.check"></span>
+        <div class="p-2 team-title">
+          {{department.name}}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="add-button-container p-2 mt-auto d-flex flex-column align-items-center">
+    <div class="add-button p-2 d-flex flex-row align-items-center justify-content-center"
+         (click)="addDepartment();dialogRef.close()">
+      <div class="p-2" style="margin-inline-end: 5px">
+        <img src="../../../../../assets/icons/Project/Add.svg">
+      </div>
+      <div class="p-2">
+        {{ 'Project.addDepartment' | translate}}
+      </div>
+    </div>
+  </div>
+
+</div>

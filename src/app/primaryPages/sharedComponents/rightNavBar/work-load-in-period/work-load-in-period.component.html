@@ -1,0 +1,101 @@
+<div class="d-flex flex-column workLoad-container">
+    <!-- navigation -->
+    <div class="workLoad-header-tab" style="overflow-x: hidden;">
+        <ul class="workLoadnav">
+            <li class="workLoadnav-item" [ngClass]="isSelected === 'byTeam' ? 'activeTab' : ''" (click)="isSelected = 'byTeam'">
+                {{ 'Workload.byTeam' | translate }}
+                <span style="display: none;">.</span>
+            </li>
+            <!-- <li class="workLoadnav-item" [ngClass]="isSelected === 'byProject' ? 'activeTab' : ''" (click)="isSelected = 'byProject'">
+                {{ 'Workload.byProject' | translate }}
+                <span style="display: none;">.</span>
+            </li> -->
+        </ul>
+    </div>
+    <!-- content -->
+    <div class="workLoad-tasks-container">
+
+        <div class="workLoad-tasks-content">
+            <div class="byTeam-container d-flex flex-column">
+                <!-- byTeam -->
+                <div class="select-date-box d-flex flex-column justify-content-between">
+                    <div class="select-date-header d-flex flex-row justify-content-between">
+                        <div class="top-box-header align-self-center">
+                            {{ 'Workload.reportPeriod' | translate }}
+                        </div>
+
+                    </div>
+                    <!--  -->
+                    <div class="select-date-wrapper d-flex flex-row">
+                        <div class="date-input-box" (click)="openDatePickerDialog(0)">
+                            {{selectedDate[0] | seventaskDatePipe: 'YYYY/M/D' | async}}
+                        </div>
+                        <div class="text-between d-flex flex-column justify-content-center">
+                            <span class="align-self-center">{{ 'TimeTrack.to'| translate }}</span>
+                        </div>
+                        <div class="date-input-box" (click)="openDatePickerDialog(1)">
+                            {{selectedDate[1] | seventaskDatePipe: 'YYYY/M/D' | async}}
+                        </div>
+                    </div>
+                    <div class="erorr-display text-danger align-self-start">
+                        <span *ngIf="checkLess">
+                            {{ 'Workload.errorLess' | translate }}
+                        </span>
+                    </div>
+                </div>
+                <!--  -->
+                <div class="workload-chart-container" *ngIf="!showGetWorkloadLoading && totalTime > 0">
+                    <!-- Work Load -->
+                    <div class="workload-container" *ngIf="workLoads !== null && totalTime> 0 && !showGetWorkloadLoading">
+                        <div class="workload-chart-wraper">
+                            <div class="first-level-chart">
+                                <div *ngFor="let division of workLoads; let num= index">
+                                    <div class="workload-repeat-shape" [style.backgroundColor]="dataColor[num]" [style]="clipPath[num][0]">
+                                    </div>
+                                </div>
+
+                                <div class="second-level-chart">
+                                    <h6>{{ 'Workload.totalTime' | translate }}</h6>
+                                    <span>{{totalTime | timeInHours : changelocate}}</span>
+                                    <h4>{{ 'Workload.hours' | translate }}</h4>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Work Load -->
+                    <!-- Work Load detail -->
+                    <div *ngFor="let workLoad of workLoads;let i=index" class="content-repeat">
+                        <div *ngIf="workLoad.spentTime > 0" [style.backgroundColor]="dataColor[i]" class="workload-user-image">
+
+                            <div class="showfristChar">
+                                <strong>
+                                    {{workLoad.teamName ? workLoad.teamName.charAt(0) : 'P'}}
+                                </strong>
+                            </div>
+                        </div>
+                        <div *ngIf="workLoad.spentTime > 0" class="workload-user-info">
+                            <div [style.color]="dataColor[i]">{{workLoad.teamName ? workLoad.teamName : ('Task.personalTasks' | translate)}}</div>
+                            <div class="workload-time-person">
+                                {{ 'Workload.timeSpent' | translate }}: {{ workLoad.spentTime | timeInHours : changelocate}} {{ 'Workload.hours' | translate }}
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Work load detail -->
+                </div>
+                <!-- no Work load -->
+                <div *ngIf="!showGetWorkloadLoading && totalTime === 0" style="opacity:1;padding-inline-start:10px;padding-inline-end: 10px;padding-top: 20px">
+                    <img src="assets/noDataImages/RunningTask-1.svg" width="85%" style="margin:5px" />
+                    <div class="null-inspector">{{ 'Workload.noWorkload' | translate }}</div>
+                </div>
+                <!--  -->
+                <div *ngIf="showGetWorkloadLoading" class="loading-container">
+                    <seventask-spinner [loadingType]="1" *ngIf="showGetWorkloadLoading"></seventask-spinner>
+                    <!--  <div style="margin-top: 10px;color: #2E4A77;">{{'Task.loadingTasks' |translate}}</div>-->
+                </div>
+                <!-- End byTeam -->
+            </div>
+        </div>
+    </div>
+    <!--  -->
+</div>

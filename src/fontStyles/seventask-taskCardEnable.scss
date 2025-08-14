@@ -1,0 +1,63 @@
+@import "src/variables";
+@font-face {
+  font-family: 'seventask-task-card-enable-icon';
+  src:  url('../assets/fonts/seventask-taskCardEnable-icons/seventask-task-card-enable-icon.eot?aztrgt');
+  src:  url('../assets/fonts/seventask-taskCardEnable-icons/seventask-task-card-enable-icon.eot?aztrgt#iefix') format('embedded-opentype'),
+  url('../assets/fonts/seventask-taskCardEnable-icons/seventask-task-card-enable-icon.ttf?aztrgt') format('truetype'),
+  url('../assets/fonts/seventask-taskCardEnable-icons/seventask-task-card-enable-icon.woff?aztrgt') format('woff'),
+  url('../assets/fonts/seventask-taskCardEnable-icons/seventask-task-card-enable-icon.svg?aztrgt#seventask-task-card-enable-icon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="seventask-icon-task-card-enable-"], [class*=" seventask-icon-task-card-enable-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'seventask-task-card-enable-icon' !important;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.seventask-icon-task-card-enable-calender:before {
+  content: "\e900";
+  color: $theme-color;
+}
+.seventask-icon-task-card-enable-checkList:before {
+  content: "\e901";
+  color: $theme-color;
+}
+.seventask-icon-task-card-enable-description:before {
+  content: "\e902";
+  color: $theme-color;
+}
+.seventask-icon-task-card-enable-list:before {
+  content: "\e903";
+  color: $theme-color;
+}
+.seventask-icon-task-card-enable-progressbar:before {
+  content: "\e904";
+  color: $theme-color;
+}
+.seventask-icon-task-card-enable-project:before {
+  content: "\e905";
+  color: $theme-color;
+}
+.seventask-icon-task-card-enable-reminder:before {
+  content: "\e906";
+  color: $theme-color;
+}
+.seventask-icon-task-card-enable-team:before {
+  content: "\e907";
+  color: $theme-color;
+}
+.seventask-icon-task-card-enable-timeTrack:before {
+  content: "\e908";
+  color: $theme-color;
+}

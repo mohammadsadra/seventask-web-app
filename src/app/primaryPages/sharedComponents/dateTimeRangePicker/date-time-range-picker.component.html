@@ -1,0 +1,35 @@
+<div class="main-container">
+  <div class="selected-datetime d-flex flex-row justify-content-center">
+    <div class="datetime-field d-flex flex-row">
+      <div class="datetime-title">
+        {{ 'Calendar.NewEvent.start' | translate }}&nbsp;
+      </div>
+      <div id="startTime-input" class="datetime-input d-flex flex-row" (click)="datetimeSelector = 'start'"
+           [class.focus-mode]="datetimeSelector === 'start'">
+        <input dir="ltr" class="input-field" type="text" [value]="selectedStartTimeString"
+               (input)="onInputChange($event, 'start')"
+               [placeholder]="dateFormat">
+      </div>
+    </div>
+    <div class="datetime-field d-flex flex-row">
+      <div class="datetime-title">
+        {{ 'Calendar.NewEvent.end' | translate }}&nbsp;
+      </div>
+      <div id="endTime-input" class="datetime-input" (click)="datetimeSelector = 'end'"
+           [class.focus-mode]="datetimeSelector === 'end'">
+        <input dir="ltr" class="input-field" type="text" [value]="selectedEndTimeString"
+               (input)="onInputChange($event, 'end')"
+               [placeholder]="dateFormat">
+      </div>
+    </div>
+  </div>
+  <div class="datetime-picker" *ngIf="datetimeSelector !== null">
+    <app-date-time-picker [datePicker]="true"
+                          [timePicker]="true"
+                          [havePresets]="true"
+                          [defaultStartDate]="selectedStartTime"
+                          [defaultEndDate]="selectedEndTime"
+                          (selectDate)="selectDate($event)">
+    </app-date-time-picker>
+  </div>
+</div>

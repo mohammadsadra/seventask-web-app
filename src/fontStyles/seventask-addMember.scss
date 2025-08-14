@@ -1,0 +1,66 @@
+@import "src/variables";
+@font-face {
+  font-family: 'seventask-add-member-icon';
+  src:  url('../assets/fonts/seventask-addMember-icons/seventask-add-member-icon.eot?bq0tfi');
+  src:  url('../assets/fonts/seventask-addMember-icons/seventask-add-member-icon.eot?bq0tfi#iefix') format('embedded-opentype'),
+  url('../assets/fonts/seventask-addMember-icons/seventask-add-member-icon.ttf?bq0tfi') format('truetype'),
+  url('../assets/fonts/seventask-addMember-icons/seventask-add-member-icon.woff?bq0tfi') format('woff'),
+  url('../assets/fonts/seventask-addMember-icons/seventask-add-member-icon.svg?bq0tfi#seventask-add-member-icon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="seventask-icon-add-"], [class*=" seventask-icon-add-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'seventask-add-member-icon' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.seventask-icon-add-add-member-with-border:before {
+  content: "\e900";
+  color: $theme-color;
+}
+.seventask-icon-add-Add:before {
+  content: "\e901";
+  color: #fff;
+}
+.seventask-icon-add-AddMember:before {
+  content: "\e902";
+  color: $theme-color;
+}
+.seventask-icon-add-Add-Member-New:before {
+  content: "\e903";
+  color: $theme-color;
+}
+.seventask-icon-add-add1:before {
+  content: "\e906";
+  color: $theme-color;
+}
+.seventask-icon-add-Add-right-nav .path1:before {
+  content: "\e904";
+  color: $theme-color;
+  opacity: 0.1;
+}
+.seventask-icon-add-Add-right-nav .path2:before {
+  content: "\e905";
+  margin-left: -1em;
+  color: $theme-color;
+}
+.seventask-icon-add-add:before {
+  content: "\e907";
+  color: inherit;
+}
+.seventask-icon-add-add-circle:before {
+  content: "\e908";
+  color: $theme-color;
+}
